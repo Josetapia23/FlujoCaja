@@ -13,7 +13,8 @@ export default function Imputs({
   secureTextEntry,
   keyboardType,
   datos,
-  setDatos, }) {
+  setDatos,
+  margin }) {
 
   return (
 
@@ -24,7 +25,7 @@ export default function Imputs({
       rules={rules}//Reglas del imput requerido o obligatorio
       render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
         <>
-          <View style={[styles.container, { borderColor: error ? "red" : colores.color5 }]}>
+          <View style={[styles.container, { borderColor: error ? "red" : colores.color5, marginHorizontal:margin }]}>
             <Image
               style={styles.iconos}
               source={imagen}
@@ -56,7 +57,6 @@ export default function Imputs({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    marginHorizontal: 50,
     marginVertical: 5,
     backgroundColor: colores.color7,
     paddingHorizontal: 10,

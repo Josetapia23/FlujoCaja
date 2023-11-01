@@ -1,20 +1,22 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native'
-import React, {useState, useContext } from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { useForm } from 'react-hook-form'
-import Imputs from '../componentes/Imputs'
-import { AuthContext } from '../context/AuthContext'
-import Spinner from 'react-native-loading-spinner-overlay'
-import { colores } from '../componentes/Colors'
+/* eslint-disable prettier/prettier */
+import { View, Text, StyleSheet, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
+import React, {useState, useContext } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useForm } from 'react-hook-form';
+import Imputs from '../componentes/Imputs';
+import { AuthContext } from '../context/AuthContext';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { colores } from '../componentes/Colors';
+import Botones from '../componentes/Botones';
 
-const iconUsuario = require('../../assets/iconos/iconUsuario.png')
-const icoEdad = require('../../assets/iconos/edad.png')
+const iconUsuario = require('../../assets/iconos/iconUsuario.png');
+const icoEdad = require('../../assets/iconos/edad.png');
 const icoEmail = require('../../assets/iconos/iconEmail.png');
 const icoContrasena = require('../../assets/iconos/iconContrasena.png');
 
-const EMAIL_REGEX = /^(([^<>()\[\]\.,;:\s@\”]+(\.[^<>()\[\]\.,;:\s@\”]+)*)|(\”.+\”))@(([^<>()[\]\.,;:\s@\”]+\.)+[^<>()[\]\.,;:\s@\”]{2,})$/
-const NOMBRES_REGEX = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']{1,40}$/ //letras y espacios
-const EDAD_REGEX = /^[0-9]{1,2}$/
+const EMAIL_REGEX = /^(([^<>()\[\]\.,;:\s@\”]+(\.[^<>()\[\]\.,;:\s@\”]+)*)|(\”.+\”))@(([^<>()[\]\.,;:\s@\”]+\.)+[^<>()[\]\.,;:\s@\”]{2,})$/;
+const NOMBRES_REGEX = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']{1,40}$/; //letras y espacios;
+const EDAD_REGEX = /^[0-9]{1,2}$/;
 
 const Registro2 = () => {
     const [nombre, setNombre] = useState('')
@@ -75,6 +77,7 @@ const Registro2 = () => {
                                 },
                                 required: 'El Nombre es obligatorio',
                             }}
+                            margin={50}
                         />
                         <Imputs
                             imagen={icoEdad}
@@ -96,6 +99,7 @@ const Registro2 = () => {
                                     message: "Debe ser mayor de 15 años"
                                 }
                             }}
+                            margin={50}
                         />
                         <Imputs
                             imagen={icoEmail}
@@ -112,6 +116,7 @@ const Registro2 = () => {
                                 },
                                 required: 'El Email es obligatorio',
                             }}
+                            margin={50}
                         />
                         {txtErrorEmail && (
                             <Text style={{
@@ -132,6 +137,7 @@ const Registro2 = () => {
                                 minLength: { value: 5, message: "Contraseña debe contener 5 caracteres minimos" }
                             }}
                             secureTextEntry
+                            margin={50}
                         />
                         <Imputs
                             imagen={icoContrasena}
@@ -146,17 +152,13 @@ const Registro2 = () => {
                                 validate: value => value === conRep || 'La contraseña no coincide'
                             }}
                             secureTextEntry
+                            margin={50}
                         />
                         <View>
-                          <View style={styles.containerButtoms}>
-                              <TouchableOpacity style={styles.btnIngreso}
-                              onPress={
-                                  handleSubmit(registrar)
-                              }
-                              >
-                                  <Text style={styles.txtInferior}>Registrarse</Text>
-                              </TouchableOpacity>
-                          </View>
+                          <Botones
+                          name='Registrarse'
+                          funcion={handleSubmit(registrar)}
+                          margin={130}/>
                           <TouchableOpacity
                               style={styles.enlace}
                               onPress={() => { navigation.navigate("Login") }} >
@@ -177,7 +179,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colores.color6,
     paddingTop: 20,
-    alignItems: 'center'
+    alignItems: 'center',
 },
 imgLogo: {
   width: 220,
@@ -191,27 +193,26 @@ txtRegistarse: {
     color: colores.color4,
     marginBottom: 20,
     marginHorizontal: 25,
-    fontFamily: 'Roboto-Bold'
+    fontFamily: 'Roboto-Bold',
 },
 btnIngreso: {
     marginTop: 20,
     backgroundColor: colores.color4,
     textAlign: 'center',
     borderRadius: 10,
-    marginHorizontal: 130
+    marginHorizontal: 130,
 },
 txtInferior: {
     padding: 10,
     textAlign: 'center',
     fontSize: 20,
     color: '#fff',
-    padding: 10,
-    fontFamily: 'Roboto-Medium'
+    fontFamily: 'Roboto-Medium',
 },
 enlace: {
     marginTop: 60,
     marginHorizontal: 100,
-    paddingBottom:30
+    paddingBottom:30,
 },
 btnEnlaces: {
     color: colores.color5,

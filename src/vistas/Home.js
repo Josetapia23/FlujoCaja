@@ -6,6 +6,7 @@ import { AuthContext } from '../context/AuthContext'
 import { useNavigation } from '@react-navigation/native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Alert } from 'react-native'
+import Botones from '../componentes/Botones'
 
 
 const Home = () => {
@@ -35,10 +36,10 @@ const xx = useNavigation();
     <View style={styles.container}>
             <Spinner visible={isLoading} />
             <Text>{`Hola ${userInfo.nombre}`}</Text>
-            <TouchableOpacity onPress={salir}
-            style={{backgroundColor:colors.color4, padding:5, borderRadius:10}}>
-                <Text style={{color:'black', fontSize:30}}>Cerrar Sesion</Text>
-            </TouchableOpacity>
+            <Botones
+            name='Cerrar Sesion'
+            funcion={salir}
+            margin={100}/>
     </View>
   )
 }

@@ -12,6 +12,8 @@ import Registro from '../vistas/Registro'
 import { AuthContext } from '../context/AuthContext';
 import SplashScreens from '../vistas/SplashScreens';
 import Graficos from '../vistas/Graficos';
+import Ingresos from '../vistas/Ingresos';
+import Despliegue from '../vistas/Despliegue';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +35,7 @@ const Navegacion = () => {
                           <>
                             <Stack.Screen name="Home" component={TabGroup} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Graficos" component={Graficos} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Ingresos" component={Ingresos} options={{ headerShown: false,}}/>
                           </>
                       )
         }
@@ -57,14 +60,16 @@ function TabGroup() {
                     if (route.name === 'Inicio') {
                         iconName = 'home-outline';
                     }else if(route.name === 'Graficos'){
-                      iconName = 'home-outline';
-                    }
+                      iconName = 'chart-areaspline';
+                    }else if(route.name === 'Despliegue'){
+                        iconName = 'currency-usd';
+                      }
                     // Retorna el componente de ícono
                     return <AntDesign name={iconName} size={35} color={iconColor} />;
                 },
             })}
             tabBarOptions={{
-                activeTintColor: '#191970', // Color de ícono activo
+                //activeTintColor: '#191970',  Color de ícono activo
                 style: {
                     alignItems: 'center',
                 },
@@ -72,6 +77,7 @@ function TabGroup() {
         >
             
             <Tab.Screen name="Inicio" component={Home} options={{ headerShown: false }} />
+            <Tab.Screen name="Despliegue" component={Despliegue} options={{ headerShown: false }} />
             <Tab.Screen name="Graficos" component={Graficos} options={{ headerShown: false }} />
         </Tab.Navigator>
     );

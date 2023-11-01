@@ -7,6 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { colores, colors } from '../componentes/Colors';
 import { ScrollView } from 'react-native';
+import Botones from '../componentes/Botones';
 
 
 const icoEmail = require('../../assets/iconos/iconEmail.png');
@@ -82,6 +83,7 @@ const Login = () => {
                             },
                             required: 'Email Requerido',
                         }}
+                        margin={50}
                     />
                     <Imputs
                         imagen={icoContrasena}
@@ -96,6 +98,7 @@ const Login = () => {
                             maxLength: { value: 14, message: "Contraseña debe contener 14 caracteres maximo" }
                         }}
                         control={control}
+                        margin={50}
                     />
                     {activo && (
                         <Text style={{
@@ -107,16 +110,11 @@ const Login = () => {
                         </Text>)
                     }
                     <View>
-                        <View >
-                            <TouchableOpacity style={styles.btnIngreso}
-                                onPress={
-                                    handleSubmit(Login)
-                                    //setEnviar(true)
-                                }
-                            ><Text style={styles.txtInferior}>Ingresar</Text>
-                            </TouchableOpacity>
-
-                        </View>
+                        <Botones 
+                            name='Ingresar'
+                            funcion={handleSubmit(Login)}
+                            margin={130}
+                            />
                         <TouchableOpacity
                             onPress={() => { xx.navigate("Registro") }}
                             style={styles.enlace}
