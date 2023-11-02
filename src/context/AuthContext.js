@@ -8,6 +8,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userInfo, setUserInfo] = useState({});
+  const [companyInfo, setCompanyInfo] = useState({});
   const [errorMessage, setErrorMessage] = useState(false);
   const [txtErrorEmail, setTxtErrorEmail] = useState('');
   const [ok, setOk] = useState(false);
@@ -16,13 +17,15 @@ export const AuthProvider = ({children}) => {
   const [tokenUsuario, setTokenUsuario] = useState(0);
   const [splashLoading, setSplashLoading] = useState(false);
 
+  const registroEmpr = 'Si';
+
   //Registro, Logeo y Variable de sesion (En esta parte)
   const register = (nombre, edad, email, contrasena) => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/registro.php',
+          'http://10.1.80.122/flujoCaja/registro.php',
           {
             nombre,
             edad,
@@ -48,6 +51,7 @@ export const AuthProvider = ({children}) => {
             setTxtErrorEmail(true);
             reject(userInfo.message); // Rechaza la promesa si hay un error en el registro
             // Aquí puedes mostrar el mensaje de error al usuario o realizar una acción adicional
+            //https://www.plataforma50.com/pruebas/gestionP/login.php
           }
 
           if (email === userInfo.email) {
@@ -67,16 +71,18 @@ export const AuthProvider = ({children}) => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
       axios
-        .post('https://www.plataforma50.com/pruebas/gestionP/login.php', {
+        .post('http://10.1.80.122/flujoCaja/login.php', {
           email,
           contrasena,
         })
         .then(res => {
           // const device = OneSignal.User.pushSubscription.getPushSubscriptionId();
           // AsyncStorage.setItem("tokenDispositivo", device);
+          //https://www.plataforma50.com/pruebas/gestionP/login.php
           let userInfo = res.data;
           setIsLoading(false);
           setUserInfo(userInfo);
+          console.log(userInfo)
           AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
           if (userInfo.email == email && userInfo.contrasena == contrasena) {
             setTokenUsuario(1);
@@ -96,6 +102,53 @@ export const AuthProvider = ({children}) => {
           console.error('Error del Axios' + error);
           setIsLoading(false);
           reject(error); // Rechaza la promesa en caso de error
+        });
+    });
+  };
+
+  const registerEmpresa = (nombreEmpresa, nit, direccion, telefonoEmpresa, idUser, registroEmpresa) => {
+    return new Promise((resolve, reject) => {
+      setIsLoading(true);
+      axios
+        .post(
+          'https://www.plataforma50.com/pruebas/gestionP/registro.php',
+          {
+            nombreEmpresa,
+            nit,
+            direccion,
+            telefonoEmpresa,
+            idUser,
+            registroEmpresa:registroEmpr
+          },
+        )
+        .then(res => {
+          let companyData = res.data;
+          setCompanyInfo(companyData);
+          console.log(companyData);
+          setIsLoading(false);
+          AsyncStorage.setItem('companyInfo', JSON.stringify(companyData));
+          if (companyData.result === 'success') {
+            // Registro exitoso, muestra un mensaje o realiza una acción adicional
+            console.log('Registro de empresa exitoso');
+            resolve(); // Resuelve la promesa si el registro es exitoso
+          } else if (companyData.result === 'error') {
+            // Error en el registro, muestra un mensaje de error
+            console.log('Error en el registro:', userInfo.message);
+            setErrorMessage(companyData.message); // Almacena el mensaje de error en el estado
+            reject(companyData.message); // Rechaza la promesa si hay un error en el registro
+            // Aquí puedes mostrar el mensaje de error al usuario o realizar una acción adicional
+          }
+
+          if (nit === companyData.nit) {
+            console.log('El Nit ya existe');
+            setTxtErrorEmail('El email existe');
+            setTxtErrorNit('El email existe');
+          }
+        })
+        .catch(error => {
+          console.error('Error al registrar usuario con axios:', error.message);
+          setIsLoading(false);
+          reject(error.message); // Rechaza la promesa si hay un error en la solicitud
         });
     });
   };

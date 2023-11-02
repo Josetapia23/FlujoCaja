@@ -41,6 +41,11 @@ if (isset($data["email"]) && isset($data["contrasena"])) {
         // Credenciales inválidas
         $response = array('success' => false, 'message' => 'Credenciales inválidas');
     }
+
+    // $sqlEmprendimiento = "SELECT * FROM emprendimiento WHERE email = '$email' && contrasena = '$contrasena'";
+    // $resultLogin = $conn->query($sqlLogin);
+
+
 } else {
     // Si los campos "email" y "contrasena" no están presentes en los datos
     $response = array('success' => false, 'message' => 'Faltan campos requeridos');

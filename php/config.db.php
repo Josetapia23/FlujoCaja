@@ -1,10 +1,10 @@
 <?php
 
 //$servername = "www.plataforma50.com";
-$servername = "107.180.57.13";
-$username = "aprendiz23";
-$password = "aprendiz23*";
-$dbname = "tecnoparque_2023";
+$servername = "localhost";
+$username = "";
+$password = "";
+$dbname = "manejocaja";
 
 // Permitir solicitudes desde cualquier origen
 header('Access-Control-Allow-Origin: *');
