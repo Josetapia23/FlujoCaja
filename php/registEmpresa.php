@@ -4,7 +4,7 @@ require('config.db.php');
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
-if (empty($data["nombreEmpresa"]) || empty($data["nit"]) || empty($data["direccion"]) || empty($data["telefonoEmpresarial"]) || empty($data["emailEmpresarial"]) || empty($data["idUser"]) || empty($data["registroEmpresa"])) {
+if (empty($data["nombreEmpresa"]) || empty($data["nit"]) || empty($data["direccion"]) || empty($data["telefonoEmpresarial"]) || empty($data["emailEmpresarial"]) || empty($data["idUser"]) || empty($data["idDepartamento"])  || empty($data["idMunicipio"])  || empty($data["registroEmpresa"])) {
     $response = array('result' => 'error', 'message' => 'Faltan campos requeridos.');
 } else {
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -19,6 +19,8 @@ if (empty($data["nombreEmpresa"]) || empty($data["nit"]) || empty($data["direcci
         $telefono = $conn->real_escape_string($data["telefonoEmpresarial"]);
         $idUser = $conn->real_escape_string($data["idUser"]);
         $registroEmpresa = $conn->real_escape_string($data["registroEmpresa"]);
+        $idDepartamento = $conn->real_escape_string($data["idDepartamento"]);
+        $idMunicipio = $conn->real_escape_string($data["idMunicipio"]);
 
         $conn->autocommit(false); // Iniciar transacción
 
@@ -31,25 +33,35 @@ if (empty($data["nombreEmpresa"]) || empty($data["nit"]) || empty($data["direcci
         if ($stmtCheckNit->num_rows > 0) {
             $response = array('result' => 'error', 'message' => 'Este nit ya le pertenece a una empresa.');
         } else {
-            $sqlInsertEmpresa = "INSERT INTO emprendimiento (nombreEmprendimiento, nit, direccion, telefonoEmpresarial, emailEmpresarial,idUser) VALUES (?, ?, ?, ?, ?, ?)";
-            $stmtInsertEmpresa = $conn->prepare($sqlInsertEmpresa);
-            $stmtInsertEmpresa->bind_param("sssssi", $nombre, $nit, $direccion, $telefono, $emailEmpresarial, $idUser);
+            $sqlLineas = "SELECT COUNT(*) AS count FROM municipios WHERE departamento_id = ? AND id_municipio = ?";
+            $stmtLineas = $conn->prepare($sqlLineas);
+            $stmtLineas->bind_param("ii", $idDepartamento, $idMunicipio);
+            $stmtLineas->execute();
+            $stmtLineas->store_result();
 
-            if ($stmtInsertEmpresa->execute()) {
-                $sqlUpdateUser = "UPDATE usuarios SET RegistroEmpresa='SI' WHERE id=?";
-                $stmtUpdateUser = $conn->prepare($sqlUpdateUser);
-                $stmtUpdateUser->bind_param("i", $idUser);
-
-                if ($stmtUpdateUser->execute()) {
-                    $conn->commit(); // Confirmar transacción
-                    $response = array('result' => 'success', 'message' => 'Registro exitoso y usuario modificado.');
+            if ($stmtLineas->num_rows > 0) {
+                $sqlInsertEmpresa = "INSERT INTO emprendimiento (nombreEmprendimiento, nit, direccion, telefonoEmpresarial, emailEmpresarial, idUser, idDepar, idMuni) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmtInsertEmpresa = $conn->prepare($sqlInsertEmpresa);
+                $stmtInsertEmpresa->bind_param("sssssiii", $nombre, $nit, $direccion, $telefono, $emailEmpresarial, $idUser, $idDepartamento, $idMunicipio);
+            
+                if ($stmtInsertEmpresa->execute()) {
+                    $sqlUpdateUser = "UPDATE usuarios SET RegistroEmpresa='SI' WHERE id=?";
+                    $stmtUpdateUser = $conn->prepare($sqlUpdateUser);
+                    $stmtUpdateUser->bind_param("i", $idUser);
+            
+                    if ($stmtUpdateUser->execute()) {
+                        $conn->commit(); // Confirmar transacción
+                        $response = array('result' => 'success', 'message' => 'Registro exitoso y usuario modificado.');
+                    } else {
+                        $conn->rollback(); // Revertir transacción en caso de error
+                        $response = array('result' => 'error', 'message' => 'Error al modificar el usuario: ' . $stmtUpdateUser->error);
+                    }
                 } else {
                     $conn->rollback(); // Revertir transacción en caso de error
-                    $response = array('result' => 'error', 'message' => 'Error al modificar el usuario: ' . $stmtUpdateUser->error);
+                    $response = array('result' => 'error', 'message' => 'Error al insertar datos en la tabla "emprendimiento": ' . $stmtInsertEmpresa->error);
                 }
             } else {
-                $conn->rollback(); // Revertir transacción en caso de error
-                $response = array('result' => 'error', 'message' => 'Error al insertar datos en la tabla "emprendimiento": ' . $stmtInsertEmpresa->error);
+                $response = array('result' => 'error', 'message' => 'El municipio no pertenece al departamento especificado.');
             }
         }
         $conn->autocommit(true); // Restaurar modo autocommit

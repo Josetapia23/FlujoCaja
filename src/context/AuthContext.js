@@ -71,7 +71,7 @@ export const AuthProvider = ({children}) => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
       axios
-        .post('http://10.1.80.122/flujoCaja/login.php', {
+        .post('http://10.1.80.104/flujoCaja/login.php', {
           email,
           contrasena,
         })
