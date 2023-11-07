@@ -2,7 +2,7 @@
 
 //$servername = "www.plataforma50.com";
 $servername = "localhost";
-$username = "";
+$username = "root";
 $password = "";
 $dbname = "manejocaja";
 

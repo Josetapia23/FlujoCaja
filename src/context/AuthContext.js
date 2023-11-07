@@ -2,6 +2,7 @@
 import React, {createContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 export const AuthContext = createContext();
 
@@ -17,7 +18,6 @@ export const AuthProvider = ({children}) => {
   const [tokenUsuario, setTokenUsuario] = useState(0);
   const [splashLoading, setSplashLoading] = useState(false);
 
-  const registroEmpr = 'Si';
 
   //Registro, Logeo y Variable de sesion (En esta parte)
   const register = (nombre, edad, email, contrasena) => {
@@ -71,7 +71,7 @@ export const AuthProvider = ({children}) => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
       axios
-        .post('http://10.1.80.104/flujoCaja/login.php', {
+        .post('http://10.1.80.145/flujoCaja/login.php', {
           email,
           contrasena,
         })
@@ -90,6 +90,30 @@ export const AuthProvider = ({children}) => {
             resolve(userInfo); // Resuelve la promesa en caso de éxito
             console.log('Ingreso');
             AsyncStorage.setItem('id', userInfo.id);
+            axios
+              .post('http://10.1.80.145/flujoCaja/getDatosEmpresa.php', { id: userInfo.id })
+              .then(respuesta => {
+                // Procesa la respuesta adicional
+                let emprendimientoData = respuesta.data;
+                console.log('Información adicional:', emprendimientoData);
+                if(emprendimientoData.success== true){
+                    //AsyncStorage.setItem('emprendimientoInfo', JSON.stringify(emprendimientoData));
+                    setCompanyInfo({
+                      "pasar":"si",
+                      "datos": emprendimientoData.emprendimiento
+                    });
+                }else{
+                  //AsyncStorage.setItem('emprendimientoInfo', "Sin datos");
+                  setCompanyInfo({
+                    "pasar":"no"
+                  })
+                }
+                //console.log(companyInfo);
+              })
+              .catch(error => {
+                console.error('Error al obtener información adicional:', error);
+                reject(error); // Rechaza la promesa en caso de error al obtener información adicional
+              });
           } else {
             setSuccess(null);
             setActivo(true);
@@ -106,19 +130,22 @@ export const AuthProvider = ({children}) => {
     });
   };
 
-  const registerEmpresa = (nombreEmpresa, nit, direccion, telefonoEmpresa, idUser, registroEmpresa) => {
+  const registerEmpresa = (nombreEmpresa, nit, direccion, telefonoEmpresarial, emailEmpresarial, idUser, idDepartamento, idMunicipio, registroEmpresa) => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/registro.php',
+          'http://10.1.80.145/flujoCaja/registEmpresa.php',
           {
             nombreEmpresa,
             nit,
             direccion,
-            telefonoEmpresa,
+            telefonoEmpresarial,
+            emailEmpresarial,
             idUser,
-            registroEmpresa:registroEmpr
+            idDepartamento,
+            idMunicipio,
+            registroEmpresa
           },
         )
         .then(res => {
@@ -129,6 +156,7 @@ export const AuthProvider = ({children}) => {
           AsyncStorage.setItem('companyInfo', JSON.stringify(companyData));
           if (companyData.result === 'success') {
             // Registro exitoso, muestra un mensaje o realiza una acción adicional
+            //https://www.plataforma50.com/pruebas/gestionP/registro.php
             console.log('Registro de empresa exitoso');
             resolve(); // Resuelve la promesa si el registro es exitoso
           } else if (companyData.result === 'error') {
@@ -160,10 +188,13 @@ export const AuthProvider = ({children}) => {
       //await AsyncStorage.removeItem('seno');
       //await AsyncStorage.removeItem('tokenDispositivo');
       await AsyncStorage.removeItem('id');
+      await AsyncStorage.removeItem('companyInfo');
+      await AsyncStorage.removeItem('emprendimientoInfo');
 
       setTokenUsuario(0);
       setUserInfo({});
       setIsLoading(false);
+      setCompanyInfo({});
       console.log('salio');
     } catch (e) {
       console.error('Error ' + e);
@@ -199,6 +230,7 @@ export const AuthProvider = ({children}) => {
         txtErrorEmail,
         isLoading,
         userInfo,
+        companyInfo,
         tokenUsuario,
         ok,
         success,
@@ -207,6 +239,7 @@ export const AuthProvider = ({children}) => {
         register,
         login,
         logout,
+        registerEmpresa,
       }}>
       {children}
     </AuthContext.Provider>

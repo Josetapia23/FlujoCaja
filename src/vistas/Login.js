@@ -73,6 +73,7 @@ const Login = () => {
                         name="email"
                         placeholder="Email"
                         datos={email}
+                        keyboardType='email-address'
                         setDatos={setEmail}
                         control={control}
                         rules={{
