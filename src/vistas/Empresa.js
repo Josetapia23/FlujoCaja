@@ -9,7 +9,10 @@ import { useForm } from 'react-hook-form';
 import Imputs from '../componentes/Imputs';
 import Botones from '../componentes/Botones';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native';
+import AntDesign from 'react-native-vector-icons/MaterialCommunityIcons';
+
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EMAIL_REGEX = /^(([^<>()\[\]\.,;:\s@\”]+(\.[^<>()\[\]\.,;:\s@\”]+)*)|(\”.+\”))@(([^<>()[\]\.,;:\s@\”]+\.)+[^<>()[\]\.,;:\s@\”]{2,})$/;
 const NOMBRES_REGEX = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']{1,40}$/; //letras y espacios;
@@ -31,15 +34,20 @@ const Empresa = () => {
   const [telefonoEmpresarial, setTelefono] = useState('');
   const [emailEmpresarial, setEmail] = useState('');
   const registroEmpr = 'Si';
-  const [datosEmpresa, setDatosEmpresa] = ({});
+  const [datosEmpresa, setDatosEmpresa] = useState({});
 
-  const estado = userInfo.RegistroEmpresa;
-  const idUser = userInfo.id;
 
-  useEffect(() => {
-    setDatosEmpresa(companyInfo.datos);
-    const pasar = companyInfo.pasar;
-  }, []);
+  const estado = null;
+
+  // const estado = userInfo.RegistroEmpresa;
+   const idUser = userInfo.id;
+   const pasar = companyInfo.pasar;
+  
+
+   useEffect(() => {
+     setDatosEmpresa(companyInfo.datos);
+
+   }, []);
   
   //const correoEmpresa = companyInfo.datos.emailEmpresarial;
   //const nitEmpresa = companyInfo.datos;
@@ -51,7 +59,7 @@ const Empresa = () => {
 
   const cargarDepartamentos = () => {
     axios
-      .post('http://10.1.80.145/flujoCaja/deparMunicipios.php', {
+      .post('http://192.168.216.76/flujoCaja/deparMunicipios.php', {
         idDepar: idDepartamento,
       })
       .then((res) => {
@@ -116,13 +124,25 @@ const navegacion = useNavigation();
   return (
     <View>
       <Spinner visible={isLoading} />
-      {estado !== null ?  (
-        <View style={styles.containForm}>
-        <Text>Municipiooooooo</Text>
-        <Text style={{color:'red'}}>{datosEmpresa.nombreEmprendimiento}</Text>
-        
-        {/* Otros componentes */}
-      </View>
+      {pasar == 'si' ?  
+      (
+        <SafeAreaView style={styles.containForm}>
+          <View>
+            <Text></Text>
+            <AntDesign name='account-circle' size={150} color={colores.color1}/>
+
+            <Text style={{color:'black'}}>{userInfo.nombre}</Text>
+            <Text style={{color:'black'}}>{userInfo.email}</Text>
+          <View>
+          </View>
+            <AntDesign name='domain' size={150} color={colores.color1}/>
+            <Text style={{color:'black'}}>{datosEmpresa.nombreEmprendimiento}</Text>
+            <Text style={{color:'black'}}>{datosEmpresa.nit}</Text>
+            <Text style={{color:'black'}}>{datosEmpresa.direccion}</Text>
+            <Text style={{color:'black'}}>{datosEmpresa.telefonoEmpresarial}</Text>
+            <Text style={{color:'black'}}>{datosEmpresa.emailEmpresarial}</Text>
+          </View>
+      </SafeAreaView>
       ) : (
         <>
           <View>
@@ -298,7 +318,7 @@ export default Empresa;
 
 const styles = StyleSheet.create({
   containForm: {
-    
+    alignItems:'center',
   },
   modal: {
     flex:1,

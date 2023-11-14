@@ -14,7 +14,6 @@ import SplashScreens from '../vistas/SplashScreens';
 import Graficos from '../vistas/Graficos';
 import Ingresos from '../vistas/Ingresos';
 import Despliegue from '../vistas/Despliegue';
-import Perfil from '../vistas/Perfil';
 import Empresa from '../vistas/Empresa';
 
 const Stack = createNativeStackNavigator();
@@ -65,8 +64,6 @@ function TabGroup() {
                       iconName = 'chart-areaspline';
                     }else if(route.name === 'Despliegue'){
                         iconName = 'currency-usd';
-                    }else if(route.name === 'Perfil'){
-                        iconName = 'account-tie';
                     }else if(route.name === 'Empresa'){
                         iconName = 'domain';
                     }
@@ -85,7 +82,6 @@ function TabGroup() {
             <Tab.Screen name="Inicio" component={Home} options={{ headerShown: false }} />
             <Tab.Screen name="Despliegue" component={Despliegue} options={{ headerShown: false }} />
             <Tab.Screen name="Graficos" component={Graficos} options={{ headerShown: false }} />
-            <Tab.Screen name="Perfil" component={Perfil} options={{ headerShown: false }} />
             <Tab.Screen name="Empresa" component={Empresa} options={{ headerShown: false }} />
         </Tab.Navigator>
     );
