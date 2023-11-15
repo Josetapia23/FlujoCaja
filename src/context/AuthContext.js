@@ -2,7 +2,6 @@
 import React, {createContext, useEffect, useState} from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 
 export const AuthContext = createContext();
 
@@ -90,30 +89,6 @@ export const AuthProvider = ({children}) => {
             resolve(userInfo); // Resuelve la promesa en caso de éxito
             console.log('Ingreso');
             AsyncStorage.setItem('id', userInfo.id);
-            axios
-              .post('http://192.168.216.76/flujoCaja/getDatosEmpresa.php', { id: userInfo.id })
-              .then(respuesta => {
-                // Procesa la respuesta adicional
-                let emprendimientoData = respuesta.data;
-                console.log('Información adicional:', emprendimientoData);
-                if(emprendimientoData.success== true){
-                    //AsyncStorage.setItem('emprendimientoInfo', JSON.stringify(emprendimientoData));
-                    setCompanyInfo({
-                      "pasar":"si",
-                      "datos": emprendimientoData.emprendimiento
-                    });
-                }else{
-                  //AsyncStorage.setItem('emprendimientoInfo', "Sin datos");
-                  setCompanyInfo({
-                    "pasar":"no"
-                  })
-                }
-                //console.log(companyInfo);
-              })
-              .catch(error => {
-                console.error('Error al obtener información adicional:', error);
-                reject(error); // Rechaza la promesa en caso de error al obtener información adicional
-              });
           } else {
             setSuccess(null);
             setActivo(true);
@@ -129,6 +104,42 @@ export const AuthProvider = ({children}) => {
         });
     });
   };
+
+  const obtenerEmpresa = () => {
+    return new Promise((resolve, reject) => {
+      setIsLoading(true);
+    axios
+    .post('http://192.168.216.76/flujoCaja/getDatosEmpresa.php', { id: userInfo.id })
+    .then(respuesta => {
+      // Procesa la respuesta adicional
+      let emprendimientoData = respuesta.data;
+      console.log('Información adicional:', emprendimientoData);
+      if(emprendimientoData.success== true){
+          //AsyncStorage.setItem('emprendimientoInfo', JSON.stringify(emprendimientoData));
+          setCompanyInfo({
+            "pasar":"si",
+            "datos": emprendimientoData.emprendimiento
+          });
+      }else{
+        //AsyncStorage.setItem('emprendimientoInfo', "Sin datos");
+        setCompanyInfo({
+          "pasar":"no"
+        })
+      }
+      //console.log(companyInfo);
+      setIsLoading(false);
+    })
+    .catch(error => {
+      console.error('Error al obtener información adicional:', error);
+      setIsLoading(false);
+      reject(error); // Rechaza la promesa en caso de error al obtener información adicional
+    });
+  })
+  };
+
+  useEffect(() => {
+    obtenerEmpresa();
+  }, [userInfo]);
 
   const registerEmpresa = (nombreEmpresa, nit, direccion, telefonoEmpresarial, emailEmpresarial, idUser, idDepartamento, idMunicipio, registroEmpresa) => {
     return new Promise((resolve, reject) => {
@@ -157,7 +168,12 @@ export const AuthProvider = ({children}) => {
           if (companyData.result === 'success') {
             // Registro exitoso, muestra un mensaje o realiza una acción adicional
             //https://www.plataforma50.com/pruebas/gestionP/registro.php
+            setCompanyInfo({
+              "pasar":"si",
+              "datos": companyData.emprendimiento
+            });
             console.log('Registro de empresa exitoso');
+            
             resolve(); // Resuelve la promesa si el registro es exitoso
           } else if (companyData.result === 'error') {
             // Error en el registro, muestra un mensaje de error
@@ -174,7 +190,7 @@ export const AuthProvider = ({children}) => {
           }
         })
         .catch(error => {
-          console.error('Error al registrar usuario con axios:', error.message);
+          console.error('Error al registrar Empresa con axios:', error.message);
           setIsLoading(false);
           reject(error.message); // Rechaza la promesa si hay un error en la solicitud
         });
@@ -222,7 +238,6 @@ export const AuthProvider = ({children}) => {
   useEffect(() => {
     isLogged();
   }, []); //Fin
-
   return (
     <AuthContext.Provider
       value={{

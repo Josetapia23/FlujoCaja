@@ -1,0 +1,43 @@
+<?php
+// Datos de conexión a la base de datos
+require('config.db.php');
+
+// Obtener los datos enviados por la solicitud
+$json = file_get_contents('php://input');
+$data = json_decode($json, true);
+
+// Crear una conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Verificar la conexión
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
+// Datos para el inicio de sesión
+if (isset($data["id"])) {
+    $id = $conn->real_escape_string($data["id"]);
+    $listaConceptos = array();
+
+    // Verificar las credenciales en la tabla "usuarios"
+    $sqlGetConceptos = "SELECT id, nombreConcepto FROM `conceptos` WHERE idUser = '$id'"; // Limitar a 1 resultado
+    $resultConceptos = $conn->query($sqlGetConceptos);
+
+    while ($row = $resultConceptos->fetch_assoc()) {
+        $listaConceptos[] = $row;
+    }
+       
+    $response = array('result' => 'success', 'listConceptos' => $listaConceptos);
+   
+} else {
+    // Si los campos "id" no están presentes en los datos
+    $response = array('result' => 'error', 'message' => 'Faltan campos requeridos');
+}
+
+// Enviar la respuesta como JSON con código de estado 200 (OK)
+http_response_code(200);
+header('Content-Type: application/json');
+echo json_encode($response);
+
+$conn->close();
+?>

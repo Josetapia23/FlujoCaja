@@ -43,7 +43,16 @@ if (empty($data["nombreEmpresa"]) || empty($data["nit"]) || empty($data["direcci
                 $sqlInsertEmpresa = "INSERT INTO emprendimiento (nombreEmprendimiento, nit, direccion, telefonoEmpresarial, emailEmpresarial, idUser, idDepar, idMuni) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 $stmtInsertEmpresa = $conn->prepare($sqlInsertEmpresa);
                 $stmtInsertEmpresa->bind_param("sssssiii", $nombre, $nit, $direccion, $telefono, $emailEmpresarial, $idUser, $idDepartamento, $idMunicipio);
-            
+                $data = array(
+                    'nombreEmprendimiento' => $nombre,
+                    'nit' => $nit,
+                    'direccion' => $direccion,
+                    'telefonoEmpresarial' => $telefono,
+                    'emailEmpresarial' => $emailEmpresarial,
+                    'idUser' => $idUser,
+                    'idDepar' => $idDepartamento,
+                    'idMuni' => $idMunicipio
+                );
                 if ($stmtInsertEmpresa->execute()) {
                     $sqlUpdateUser = "UPDATE usuarios SET RegistroEmpresa='SI' WHERE id=?";
                     $stmtUpdateUser = $conn->prepare($sqlUpdateUser);
@@ -51,7 +60,7 @@ if (empty($data["nombreEmpresa"]) || empty($data["nit"]) || empty($data["direcci
             
                     if ($stmtUpdateUser->execute()) {
                         $conn->commit(); // Confirmar transacción
-                        $response = array('result' => 'success', 'message' => 'Registro exitoso y usuario modificado.');
+                        $response = array('result' => 'success', 'message' => 'Registro exitoso y usuario modificado.', 'emprendimiento'=>$data);
                     } else {
                         $conn->rollback(); // Revertir transacción en caso de error
                         $response = array('result' => 'error', 'message' => 'Error al modificar el usuario: ' . $stmtUpdateUser->error);

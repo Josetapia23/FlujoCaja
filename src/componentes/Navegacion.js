@@ -15,6 +15,7 @@ import Graficos from '../vistas/Graficos';
 import Ingresos from '../vistas/Ingresos';
 import Despliegue from '../vistas/Despliegue';
 import Empresa from '../vistas/Empresa';
+import Gastos from '../vistas/Gastos';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,7 +37,11 @@ const Navegacion = () => {
                           <>
                             <Stack.Screen name="Home" component={TabGroup} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Graficos" component={Graficos} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Despliegue" component={Despliegue} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Empresa" component={Empresa} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Ingresos" component={Ingresos} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Gastos" component={Gastos} options={{ headerShown: false,}}/>
+                          
                           </>
                       )
         }

@@ -25,6 +25,7 @@ if (isset($data["id"])) {
     if ($resultEmprendimiento->num_rows > 0) {
         // Si se encontró un emprendimiento relacionado con el usuario
         $emprendimiento = $resultEmprendimiento->fetch_assoc();
+        //$sqlNombreMunicipio = "SELECT m.municipio from emprendimiento e, municipios m where e.idMuni=m.id_municipio"; // Limitar a 1 resultado
         $response = array('success' => true, 'emprendimiento' => $emprendimiento);
     } else {
         // No se encontró ningún emprendimiento relacionado con el usuario

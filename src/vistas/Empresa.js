@@ -34,7 +34,6 @@ const Empresa = () => {
   const [telefonoEmpresarial, setTelefono] = useState('');
   const [emailEmpresarial, setEmail] = useState('');
   const registroEmpr = 'Si';
-  const [datosEmpresa, setDatosEmpresa] = useState({});
 
 
   const estado = null;
@@ -42,12 +41,9 @@ const Empresa = () => {
   // const estado = userInfo.RegistroEmpresa;
    const idUser = userInfo.id;
    const pasar = companyInfo.pasar;
-  
+  const datosEmpresa = companyInfo.datos;
 
-   useEffect(() => {
-     setDatosEmpresa(companyInfo.datos);
 
-   }, []);
   
   //const correoEmpresa = companyInfo.datos.emailEmpresarial;
   //const nitEmpresa = companyInfo.datos;
@@ -120,6 +116,7 @@ const registrarEmpresa = () => {
       });
 }
 
+console.log(pasar, datosEmpresa, idUser);
 const navegacion = useNavigation();
   return (
     <View>
@@ -150,7 +147,6 @@ const navegacion = useNavigation();
               transparent={true} // Para que el fondo sea transparente y muestre el color de fondo personalizado
             >
               <View style={styles.modal}>
-                
                   <View style={styles.modalView}>
                   <ScrollView >
                       <View 

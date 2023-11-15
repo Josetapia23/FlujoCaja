@@ -13,24 +13,25 @@ const perdida = require('../../assets/iconos/perdida.png');
 const Despliegue = () => {
     const navegacion = useNavigation()
   return (
-        <ImageBackground source={require('../../assets/images/fondoPesos.jpg')} 
-        style={styles.backgroundImage}>
             <SafeAreaView style={styles.container}>
-                    <ImgPress img={ingresos} funcion={navegacion.navigate('Ingresos')}/>
-                    <ImgPress img={perdida} funcion={navegacion.navigate('Gastos')}/>
+                <View style={styles.view}>
+                    <ImgPress img={ingresos} funcion={() => navegacion.navigate('Ingresos')}/>
+                    <ImgPress img={perdida} funcion={() => navegacion.navigate('Gastos')}/>
+                </View>
             </SafeAreaView>
-        </ImageBackground>
   )
 }
 
 export default Despliegue
 
 const styles = StyleSheet.create({
-    backgroundImage: {
-        flex: 1,
-        resizeMode: 'cover'
-    },
     container:{
         flex: 1,
+        backgroundColor:colores.color6,
     },
+    view:{
+        alignItems:'center',
+        justifyContent:'space-around',
+        height:400
+    }
 })
