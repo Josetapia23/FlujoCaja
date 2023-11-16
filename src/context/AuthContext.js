@@ -24,7 +24,7 @@ export const AuthProvider = ({children}) => {
       setIsLoading(true);
       axios
         .post(
-          'http://192.168.216.76/flujoCaja/registro.php',
+          'http://10.1.80.138/flujoCaja/registro.php',
           {
             nombre,
             edad,
@@ -70,7 +70,7 @@ export const AuthProvider = ({children}) => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
       axios
-        .post('http://192.168.216.76/flujoCaja/login.php', {
+        .post('http://10.1.80.138/flujoCaja/login.php', {
           email,
           contrasena,
         })
@@ -109,7 +109,7 @@ export const AuthProvider = ({children}) => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
     axios
-    .post('http://192.168.216.76/flujoCaja/getDatosEmpresa.php', { id: userInfo.id })
+    .post('http://10.1.80.138/flujoCaja/getDatosEmpresa.php', { id: userInfo.id })
     .then(respuesta => {
       // Procesa la respuesta adicional
       let emprendimientoData = respuesta.data;
@@ -146,7 +146,7 @@ export const AuthProvider = ({children}) => {
       setIsLoading(true);
       axios
         .post(
-          'http://192.168.216.76/flujoCaja/registEmpresa.php',
+          'http://10.1.80.138/flujoCaja/registEmpresa.php',
           {
             nombreEmpresa,
             nit,
