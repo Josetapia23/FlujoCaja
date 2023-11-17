@@ -16,14 +16,18 @@ import Imput2 from '../componentes/Imput2';
 
 const Ingresos = () => {
   const [visible, setVisible] = useState(false);
-  //const [nombreIngreso, setNombreIngreso] = useState('');
+  const [visible2, setVisible2] = useState(false);
+  const [nombreCateg, setNombreCat] = useState('');
   const [errorNombre, setErrorNombre] = useState('');
   const [listaConceptos , setListaConceptos] = useState([]);
   const { isLoading, userInfo, registerEmpresa, companyInfo} = useContext(AuthContext);
   const [idConcepto, setIdConcepto] = useState('');
+  const [descripcion, setDescripcion] = useState('Descripcion');
+  const [tipo, setTipo] = useState(1);
   //const [idUser, setIdUser] = useState(0);
 
   const idUser = userInfo.id;
+  const datosEmpresa = companyInfo.datos;
 
   useEffect(()=>{
     //setIdUser(userInfo.id)
@@ -39,6 +43,7 @@ const Ingresos = () => {
           'http://10.1.80.138/flujoCaja/getNombresIngresos.php',
           {
             id: idUser,
+            tipo: tipo
           },
         )
         .then(res => {
@@ -66,7 +71,7 @@ const Ingresos = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://10.1.80.138/flujoCaja/addIngreso.php',
+          'http://10.1.80.138/flujoCaja/addCategoria.php',
           {
             nombreIngreso: getValues('nombre'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
             idTipo: 1,
@@ -106,6 +111,45 @@ const Ingresos = () => {
     });
   };
 
+  const addMonto = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          'http://10.1.80.138/flujoCaja/addMovimiento.php',
+          {
+            monto: getValues('monto'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
+            descripcion: descripcion,
+            idTipo: 1,
+            idUser: idUser,
+            idConcepto:idConcepto,
+            idEmprendimiento: datosEmpresa.id
+          },
+        )
+        .then(res => {
+          if (res.data.result === 'success') {
+            setVisible2(false);
+            setErrorNombre('');
+            console.log('Monto registrado exitosamente');
+            reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
+            resolve('Registro exitoso');
+          } else if (res.data.result === 'error') {
+            setErrorNombre(res.data.message);
+            setErrorNombre('');
+            console.log('Error en el registro:', res.data.message);
+            reject('Error en el registro: ' + res.data.message);
+          }else {
+            // Otro caso no manejado
+            setErrorNombre('');
+            console.log('Respuesta inesperada del servidor:', res.data);
+            reject('Error inesperado del servidor');
+          }
+        })
+        .catch(error => {
+          console.error('Error al registrar usuario con axios:', error.message);
+          reject('Error al registrar usuario con axios: ' + error.message);
+        });
+    });
+  };
 
 
   const eliminarConcepto = (id) => {
@@ -138,14 +182,11 @@ const Ingresos = () => {
     });
   }
 
-  const montoConcepto = (id) => {
-    console.log('..')
-  }
 
   const AlertaEliminar = (id) =>{
     Alert.alert(
       'Confirmar Eliminación',
-      '¿Estás seguro de que quieres eliminar este concepto?',
+      '¿Estás seguro de que quieres eliminar esta categoria?',
       [
         {
           text: 'Cancelar',
@@ -154,6 +195,28 @@ const Ingresos = () => {
         {
           text: 'Eliminar',
           onPress: () => eliminarConcepto(id),
+          style: 'destructive',
+        },
+      ],
+      { cancelable: false }
+    );
+  }
+  const AlertaMonto = () =>{
+    Alert.alert(
+      'Confirmar Monto',
+      `El monto es de ${getValues('monto')}
+      descripcion: ${descripcion}
+      idUser: ${idUser}
+      idConcepto: ${idConcepto}
+      idEmprendimiento: ${datosEmpresa.id}`,
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Ingresar',
+          onPress: () => addMonto(),
           style: 'destructive',
         },
       ],
@@ -178,6 +241,12 @@ const guardar = async () => {
   console.log('se presiono guardar')
 }
 
+const guardarMonto = async () => {
+  await addMonto();
+  reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
+  console.log('se presiono guardarMonto')
+}
+
 const add = () =>{
   setVisible((prevVisible) => !prevVisible)
   setErrorNombre('');
@@ -189,14 +258,14 @@ const ItemConcepto = ({nombre, onPressEliminar, onPressConcepto, id}) => {
   return (
     <View style={styles.cardView}>
         <TouchableOpacity onPress={()=>{
-          onPressConcepto(id)
+          onPressConcepto(id, nombre)
         }}>
             <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:23, color:colores.color8}}>{nombre}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={()=>{
           onPressEliminar(id)
         }}>
-            <Material name='delete-circle-outline' size={40} color='red'/>
+            <Material name='delete-circle-outline' size={35} color='#b75555'/>
         </TouchableOpacity>
     </View>
   )
@@ -208,9 +277,16 @@ const renderItem = ({item}) =>{
     nombre = {item.nombreConcepto}
     id = {item.id}
     onPressEliminar={AlertaEliminar}
-    onPressConcepto={montoConcepto}
+    onPressConcepto={activarModal2}
     />
   )
+}
+
+const activarModal2 = (id, nombre) => {
+  console.log("El id de ",nombreCateg," es:",id,);
+  setVisible2(true);
+  setIdConcepto(id);
+  setNombreCat(nombre);
 }
 
 const navegacion = useNavigation();
@@ -218,14 +294,23 @@ const navegacion = useNavigation();
     <SafeAreaView>
       <View>
         <View style={styles.BarraSuperior}>
-          <ImgPress2 funcion={()=>{}}>
+          <View style={{alignItems:'center'}}>
+          <ImgPress2 funcion={()=>{navegacion.navigate('Historiales')}}>
             <Material name='database-search' size={35} color={colores.color4}/>
           </ImgPress2>
-          <Text style={styles.txtSuperior}>Ingresos</Text>
+          <Text style={{color:'black', fontSize:10}}>Historial</Text>
+          </View>
+          <Text style={styles.txtSuperior}>Lista De Ingresos</Text>
+            <View style={{alignItems:'center'}}>
           <ImgPress2 funcion={add}>
-            <Material name='plus-thick' size={35} color={colores.color4}/>
+              <Material name='plus-thick' size={35} color={colores.color4}/>
           </ImgPress2>
+              <Text style={{color:'black', fontSize:10}}>Añadir</Text>
+            </View>
         </View>
+        {listaConceptos.length<=0? (
+          <Text style={styles.txtInformativo}>No tienes categorias de ingresos registradas </Text>
+        ) : (
         <View style={{marginTop:40, marginBottom:10}}>
           <ScrollView style={{height: '84%'}}> 
             <FlatList
@@ -235,12 +320,11 @@ const navegacion = useNavigation();
               keyExtractor={item => item.id}/>
           </ScrollView> 
         </View>
+        )}
+      </View>
 
-          
-            
-        
-      
-          <Modal 
+
+      <Modal 
           visible={visible}>
             <View style={styles.modal}>
               <View style={styles.modalView}>
@@ -252,7 +336,7 @@ const navegacion = useNavigation();
                 >
                     <Text style={{fontSize:20}}>X</Text>
                 </TouchableOpacity>
-                <Text style={styles.txtTitulo}>Nuevo Ingreso</Text>
+                <Text style={styles.txtTitulo}>Nueva categoria de ingresos</Text>
                 
                 <View 
                     style={{paddingBottom:30}}
@@ -275,9 +359,46 @@ const navegacion = useNavigation();
                 margin={50}/>
               </View>
             </View>
+      </Modal>
+
+
+      <Modal 
+          visible={visible2}>
+            <View style={styles.modal}>
+              <View style={styles.modalView}>
+                <TouchableOpacity style={styles.closeButton}
+                onPress={()=>{
+                  setVisible2(false);
+                  reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
+                }}
+                >
+                <Text style={{fontSize:20}}>X</Text>
+                </TouchableOpacity>
+                <Text style={styles.txtTitulo}>{`Nuevo monto de ${nombreCateg}`}</Text>
+                
+                <View 
+                    style={{paddingBottom:30}}
+                    >
+                    <Text style={styles.txt}>Nuevo monto:<Text style={{color:'red'}}>*</Text></Text>
+                    <Imput2
+                    imagen={require('../../assets/iconos/lista.png')}
+                              name="monto"
+                              placeholder=" Ingrese el monto"
+                              control={control}
+                              rules={{
+                                  required: 'Monto de ingreso requerido',
+                              }}
+                              keyboardType='numeric'
+                          />
+                    <Text style={{color:'red'}}>{errorNombre}</Text>
+                </View>
+                <Botones 
+                name='Guardar'
+                funcion={handleSubmit(AlertaMonto)}
+                margin={50}/>
+              </View>
+            </View>
           </Modal>
-        
-      </View>
     </SafeAreaView>
   );
 }
@@ -302,8 +423,10 @@ const styles = StyleSheet.create({
   },
   txtSuperior:{
     fontFamily:'Roboto-Medium',
-    fontSize:40,
-    color:colores.color1
+    fontSize:30,
+    color:colores.color1,
+    width:200,
+    textAlign:'center'
   },
   modal: {
     flex:1,
@@ -357,5 +480,13 @@ cardView:{
   elevation: 4,
   flexDirection:'row',
   justifyContent:'space-between'
+  },
+  txtInformativo:{
+    paddingTop:20,
+    color:colores.color3,
+    textAlign:'center', 
+    fontFamily:'Roboto-Medium', 
+    fontSize:18,
+    paddingHorizontal:30
   }
 })
