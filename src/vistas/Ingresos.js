@@ -11,6 +11,7 @@ import Botones from '../componentes/Botones';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import Imput2 from '../componentes/Imput2';
+import SplashScreens from '../vistas/SplashScreens';
 
 
 
@@ -24,6 +25,7 @@ const Ingresos = () => {
   const [idConcepto, setIdConcepto] = useState('');
   const [descripcion, setDescripcion] = useState('Descripcion');
   const [tipo, setTipo] = useState(1);
+  const [cargando, setCargando] = useState(false);
   //const [idUser, setIdUser] = useState(0);
 
   const idUser = userInfo.id;
@@ -37,10 +39,11 @@ const Ingresos = () => {
 
 
   const getConceptos = () => {
+    setCargando(true);
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://10.1.80.138/flujoCaja/getNombresIngresos.php',
+          'https://www.plataforma50.com/pruebas/gestionP/getNombresIngresos.php',
           {
             id: idUser,
             tipo: tipo
@@ -51,27 +54,36 @@ const Ingresos = () => {
             // Registro exitoso
             setListaConceptos(res.data.listConceptos)
             console.log(res.data.listConceptos)
+            setCargando(false);
+
           } else if (res.data.result === 'error') {
             // Error en la consulta
             console.log('Error en el registro:', res.data.message);
             reject('Error en el registro: ' + res.data.message);
+            setCargando(false);
+
           } else {
             console.log('Respuesta inesperada del servidor:', res.data);
             reject('Error inesperado del servidor');
+            setCargando(false);
+
           }
         })
         .catch(error => {
           console.error('Error de axios:', error.message);
           reject('Error con axios: ' + error.message);
+            setCargando(false);
+
         });
     });
   };
 
   const addIngreso = () => {
+    setCargando(true);
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://10.1.80.138/flujoCaja/addCategoria.php',
+          'https://www.plataforma50.com/pruebas/gestionP/addCategoria.php',
           {
             nombreIngreso: getValues('nombre'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
             idTipo: 1,
@@ -87,35 +99,46 @@ const Ingresos = () => {
             console.log('Registro exitoso');
             reset({ nombre: '' }); // Esto reseteará el campo 'nombre' del formulario
             resolve('Registro exitoso');
+            setCargando(false);
+
           } else if (res.data.result === 'error') {
             // Error en el registro
             setErrorNombre('');
             console.log('Error en el registro:', res.data.message);
             reject('Error en el registro: ' + res.data.message);
+            setCargando(false);
+
           } else if (res.data.result === 'error1') {
             // Nombre ya existe
             setErrorNombre(res.data.message);
             console.log('Este nombre ya existe:', res.data.message);
             reject('Este nombre ya existe: ' + res.data.message);
+            setCargando(false);
+
           } else {
             // Otro caso no manejado
             setErrorNombre('');
             console.log('Respuesta inesperada del servidor:', res.data);
             reject('Error inesperado del servidor');
+            setCargando(false);
+
           }
         })
         .catch(error => {
           console.error('Error al registrar usuario con axios:', error.message);
           reject('Error al registrar usuario con axios: ' + error.message);
+            setCargando(false);
+
         });
     });
   };
 
   const addMonto = () => {
+    setCargando(true);
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://10.1.80.138/flujoCaja/addMovimiento.php',
+          'https://www.plataforma50.com/pruebas/gestionP/addMovimiento.php',
           {
             monto: getValues('monto'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
             descripcion: descripcion,
@@ -132,31 +155,40 @@ const Ingresos = () => {
             console.log('Monto registrado exitosamente');
             reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
             resolve('Registro exitoso');
+            setCargando(false);
+
           } else if (res.data.result === 'error') {
             setErrorNombre(res.data.message);
             setErrorNombre('');
             console.log('Error en el registro:', res.data.message);
             reject('Error en el registro: ' + res.data.message);
+            setCargando(false);
+
           }else {
             // Otro caso no manejado
             setErrorNombre('');
             console.log('Respuesta inesperada del servidor:', res.data);
             reject('Error inesperado del servidor');
+            setCargando(false);
+
           }
         })
         .catch(error => {
           console.error('Error al registrar usuario con axios:', error.message);
           reject('Error al registrar usuario con axios: ' + error.message);
+            setCargando(false);
+
         });
     });
   };
 
 
   const eliminarConcepto = (id) => {
+    setCargando(true); // Comienza la carga
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://10.1.80.138/flujoCaja/deleteConcepto.php',
+          'https://www.plataforma50.com/pruebas/gestionP/deleteConcepto.php',
           {
             id
           },
@@ -166,18 +198,26 @@ const Ingresos = () => {
             // Registro exitoso
             getConceptos();
             console.log('registro eliminado')
+          setCargando(false); // Comienza la carga
+
           } else if (res.data.result === 'error') {
             // Error en la consulta
             console.log('Error al eliminar:', res.data.message);
             reject('Error en el registro: ' + res.data.message);
+          setCargando(false); // Comienza la carga
+
           } else {
             console.log('Respuesta inesperada del servidor:', res.data);
             reject('Error inesperado del servidor');
+          setCargando(false); // Comienza la carga
+
           }
         })
         .catch(error => {
           console.error('Error de axios:', error.message);
           reject('Error con axios: ' + error.message);
+          setCargando(false); // Comienza la carga
+
         });
     });
   }
@@ -308,19 +348,30 @@ const navegacion = useNavigation();
               <Text style={{color:'black', fontSize:10}}>Añadir</Text>
             </View>
         </View>
-        {listaConceptos.length<=0? (
-          <Text style={styles.txtInformativo}>No tienes categorias de ingresos registradas </Text>
-        ) : (
-        <View style={{marginTop:40, marginBottom:10}}>
-          <ScrollView style={{height: '84%'}}> 
-            <FlatList
-              style={styles.listaConceptos}
-              data={listaConceptos}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}/>
-          </ScrollView> 
-        </View>
-        )}
+
+        {
+          cargando ? (
+            <View style={{marginTop:150}}>
+              <SplashScreens />
+            </View>            
+          ) : (
+            listaConceptos.length <= 0 ? (
+              <Text style={styles.txtInformativo}>No tienes categorías de ingresos registradas </Text>
+            ) : (
+              <View style={{ marginTop: 40, marginBottom: 10 }}>
+                <ScrollView style={{ height: '84%' }}>
+                  <FlatList
+                    style={styles.listaConceptos}
+                    data={listaConceptos}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id}
+                  />
+                </ScrollView>
+              </View>
+            )
+          )
+        }
+
       </View>
 
 

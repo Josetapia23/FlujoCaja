@@ -55,7 +55,7 @@ const Empresa = () => {
 
   const cargarDepartamentos = () => {
     axios
-      .post('http://10.1.80.138/flujoCaja/deparMunicipios.php', {
+      .post('https://www.plataforma50.com/pruebas/gestionP/deparMunicipios.php', {
         idDepar: idDepartamento,
       })
       .then((res) => {
@@ -116,7 +116,7 @@ const registrarEmpresa = () => {
       });
 }
 
-console.log(pasar, datosEmpresa, idUser);
+//console.log(pasar, datosEmpresa, idUser);
 const navegacion = useNavigation();
   return (
     <View>

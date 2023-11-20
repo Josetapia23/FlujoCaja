@@ -24,7 +24,7 @@ export const AuthProvider = ({children}) => {
       setIsLoading(true);
       axios
         .post(
-          'http://10.1.80.138/flujoCaja/registro.php',
+          'https://www.plataforma50.com/pruebas/gestionP/registro.php',
           {
             nombre,
             edad,
@@ -70,7 +70,7 @@ export const AuthProvider = ({children}) => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
       axios
-        .post('http://10.1.80.138/flujoCaja/login.php', {
+        .post('https://www.plataforma50.com/pruebas/gestionP/login.php', {
           email,
           contrasena,
         })
@@ -109,7 +109,7 @@ export const AuthProvider = ({children}) => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
     axios
-    .post('http://10.1.80.138/flujoCaja/getDatosEmpresa.php', { id: userInfo.id })
+    .post('https://www.plataforma50.com/pruebas/gestionP/getDatosEmpresa.php', { id: userInfo.id })
     .then(respuesta => {
       // Procesa la respuesta adicional
       let emprendimientoData = respuesta.data;
@@ -130,7 +130,7 @@ export const AuthProvider = ({children}) => {
       setIsLoading(false);
     })
     .catch(error => {
-      console.error('Error al obtener información adicional:', error);
+      console.error('Error al obtener información adicional:', error.response || error.message || error);
       setIsLoading(false);
       reject(error); // Rechaza la promesa en caso de error al obtener información adicional
     });
@@ -146,7 +146,7 @@ export const AuthProvider = ({children}) => {
       setIsLoading(true);
       axios
         .post(
-          'http://10.1.80.138/flujoCaja/registEmpresa.php',
+          'https://www.plataforma50.com/pruebas/gestionP/registEmpresa.php',
           {
             nombreEmpresa,
             nit,
