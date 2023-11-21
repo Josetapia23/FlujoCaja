@@ -338,7 +338,7 @@ const navegacion = useNavigation();
           <ImgPress2 funcion={()=>{navegacion.navigate('Historiales')}}>
             <Material name='database-search' size={35} color={colores.color4}/>
           </ImgPress2>
-          <Text style={{color:'black', fontSize:10}}>Historial</Text>
+          <Text style={{color:'black', fontSize:10}}>Buscar</Text>
           </View>
           <Text style={styles.txtSuperior}>Lista De Ingresos</Text>
             <View style={{alignItems:'center'}}>
