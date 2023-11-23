@@ -12,6 +12,7 @@ import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import Imput2 from '../componentes/Imput2';
 import SplashScreens from '../vistas/SplashScreens';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -54,6 +55,7 @@ const Ingresos = () => {
             // Registro exitoso
             setListaConceptos(res.data.listConceptos)
             console.log(res.data.listConceptos)
+            AsyncStorage.setItem("conceptos", JSON.stringify(res.data.listConceptos));
             setCargando(false);
 
           } else if (res.data.result === 'error') {
@@ -323,7 +325,7 @@ const renderItem = ({item}) =>{
 }
 
 const activarModal2 = (id, nombre) => {
-  console.log("El id de ",nombreCateg," es:",id,);
+  console.log("El id de ",nombre," es:",id,);
   setVisible2(true);
   setIdConcepto(id);
   setNombreCat(nombre);

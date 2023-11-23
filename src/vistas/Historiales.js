@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Modal, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { SafeAreaView } from 'react-native'
 import { colores, colors } from '../componentes/Colors'
@@ -12,15 +12,31 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import SplashScreens from './SplashScreens';
 import Tabla2 from '../componentes/Tabla2';
+import { Picker } from '@react-native-picker/picker';
+import DatePicker from 'react-native-modern-datepicker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 
 const Historiales = () => {
+    const [open, setOpen] = useState(false);
+    const [open2, setOpen2] = useState(false);
+    const [idConcepto, setIdConcepto] = useState('');
+    const [date, setDate] = useState('');
+    const [date2, setDate2] = useState('');
     const [tipo, setTipo] = useState(1);
     const [cargando, setCargando] = useState(false);
+    const [cargando2, setCargando2] = useState(false);
     const [montoTotal, setMontoTotal] = useState('');
-    const [listaMovimientos, setListaMovimientos] = useState([]);
-    const [listaMovimientos2, setListaMovimientos2] = useState([]);
+    const [montoTotal2, setMontoTotal2] = useState('');
+    const [montoTotal3, setMontoTotal3] = useState('');
+    const [selectedValue, setSelectedValue] = useState("filtros");
+    const [listaMovimientos, setListaMovimientos] = useState([]); //Ultimos 10 movimientos
+    const [listaMovimientos2, setListaMovimientos2] = useState([]); //Lista de movimientos del mes
+    const [listaMovimientos3, setListaMovimientos3] = useState([]); //Lista de movimientos del mes
+    const [listaMovimientos4, setListaMovimientos4] = useState([]); //Lista de movimientos del mes
+    const [listaConceptos, setListaConceptos] = useState([]); //Lista de movimientos del mes
     const {userInfo, companyInfo} = useContext(AuthContext);
     const idUser = userInfo.id;
     const datosEmpresa = companyInfo.datos;
@@ -29,18 +45,36 @@ const Historiales = () => {
     useEffect(()=>{
         //setIdUser(userInfo.id)
         listarMovimientos();
+        obtenerConceptos();
         console.log(idUser);
+        console.log(listaConceptos);
+        
       },[])
+
+      const obtenerConceptos = async () => {
+        try {
+          const conceptos = await AsyncStorage.getItem('conceptos');
+          if (conceptos !== null) {
+            // Tenemos datos
+            const listaConceptos = JSON.parse(conceptos);
+            setListaConceptos(listaConceptos);
+            console.log(listaConceptos);
+          }
+        } catch (error) {
+          console.log("Error al obtener conceptos: ", error);
+          // Manejar el error de obtener datos
+        }
+      };
 
     const listarMovimientos = () => {
         setCargando(true);
       return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://192.168.40.76/flujoCaja/lis_mov_ingresos.php',
+          'http://10.1.80.120/flujoCaja/lis_mov_ingresos.php',
           {
             idUser: idUser,
-            idTipo: tipo
+            idTipo: tipo,
           },
         )
         .then(res => {
@@ -73,8 +107,111 @@ const Historiales = () => {
     });
     }
 
+    const pressBuscar = () =>{
+      console.log(date, date2)
+      listarMovimientos2();
+    }
+
+    const listarMovimientos2 = () => {
+      setCargando(true);
+    return new Promise((resolve, reject) => {
+    axios
+      .post(
+        'http://10.1.80.120/flujoCaja/lis_mov_ingresos3.php',
+        {
+          idUser: idUser,
+          idTipo: tipo,
+          fecha1: date,
+          fecha2: date2,
+        },
+      )
+      .then(res => {
+        if (res.data.result === 'success') {
+          // Registro exitoso
+          setListaMovimientos3(res.data.listaMovimientos3);
+          setMontoTotal2(res.data.montoTotal);
+          console.log(res.data.listaMovimientos3);
+          setCargando(false);
+        } else if (res.data.result === 'error') {
+          // Error en la consulta
+          console.log('Error en la consulta de listar movimientos Ingresos1:', res.data.message);
+          reject('Error en el registro: ' + res.data.message);
+          setCargando(false);
+
+        } else {
+          console.log('Respuesta inesperada del servidor:', res.data);
+          reject('Error inesperado del servidor');
+          setCargando(false);
+
+        }
+      })
+      .catch(error => {
+        console.error('Error de axios para listar movimientos Ingresos2:', error.message);
+        reject('Error con axios: ' + error.message);
+          setCargando(false);
+
+      });
+  });
+  }
+
+  useEffect(()=>{
+    listarMovimientos3()
+  },[idConcepto])
+
+  const listarMovimientos3 = () => {
+    setCargando(true);
+  return new Promise((resolve, reject) => {
+  axios
+    .post(
+      'http://10.1.80.120/flujoCaja/lis_mov_ingresos3.php',
+      {
+        idUser: idUser,
+        idTipo: tipo,
+        idConcepto : idConcepto
+      },
+    )
+    .then(res => {
+      if (res.data.result === 'success') {
+        // Registro exitoso
+        setListaMovimientos3(res.data.listaMovimientos4);
+        setMontoTotal3(res.data.montoTotal2);
+        console.log(res.data.listaMovimientos4);
+        setCargando(false);
+      } else if (res.data.result === 'error') {
+        // Error en la consulta
+        console.log('Error en la consulta de listar movimientos Ingresos1:', res.data.message);
+        reject('Error en el registro: ' + res.data.message);
+        setCargando(false);
+
+      } else {
+        console.log('Respuesta inesperada del servidor:', res.data);
+        reject('Error inesperado del servidor');
+        setCargando(false);
+
+      }
+    })
+    .catch(error => {
+      console.error('Error de axios para listar movimientos Ingresos2:', error.message);
+      reject('Error con axios: ' + error.message);
+        setCargando(false);
+
+    });
+});
+}
 
 
+    const handleOnPress = () => {
+      setOpen(!open);
+  }
+  const handleOnPress2 = () => {
+      setOpen2(!open2);
+  }
+  function handleChange(fecha) {
+      setDate(fecha)
+
+  } function handleChange2(fecha) {
+      setDate2(fecha)
+  }
 
     const navegacion = useNavigation();
   return (
@@ -86,51 +223,181 @@ const Historiales = () => {
             <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7, textAlign:'center'}}>{`Historial de Ingresos\nTotal`}</Text>
         </View>
         <ScrollView>
-          <View>
-              <Text >FILTROS</Text>
-              <Tabla2 
-              datos={listaMovimientos2}
-              columnas={3}
-              Total={montoTotal}/>
-          </View>
-          <View>
                     {
                         cargando == true ? (
+                          <View style={{marginTop:100}}>
                             <SplashScreens/>
+                          </View>
                         ) :(
-                            listaMovimientos.length>0?
+                          <View>
+                            <Text style={styles.txtSubtitulos}>Filtros</Text>
+                            <View style={styles.filaFiltro}>
+                                <Text style={{width:'50%', paddingLeft:30}}>Seleccionar filtro:</Text>
+                                <Picker
+                                style={{width:'50%'}}
+                                  selectedValue={selectedValue}
+                                  onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                                >
+                                  <Picker.Item label="FILTROS" value="filtros" 
+                                    style={{color:colores.color9}}
+                                  />
+                                  <Picker.Item label="Mes Actual" value="mes" />
+                                  <Picker.Item label="Por Fecha" value="fecha" />
+                                  <Picker.Item label="Por Categoria" value="categoria" />
+                                </Picker>
+                            </View>
+                            {selectedValue == 'filtros'?
+                              (
+                                <Text style={{
+                                  color:'black', 
+                                  textAlign:'center',
+                                  marginTop:20}}>No se ha seleccionado nada</Text>
+                                
+                              ):
+                              (
+                                selectedValue == 'mes' ? 
+                                (
+                                  <Tabla2 
+                                  datos={listaMovimientos2} //Tabla que muestra movimientos del mes actual
+                                  columnas={3}
+                                  Total={montoTotal}/>
+                                ):
+                                (
+                                  selectedValue == 'fecha' ? 
+                                (<>
+                                  <View style={{flexDirection:'row', paddingHorizontal:70}}>
+                                    <View style={{alignItems:'center'}}>
+                                        <TouchableOpacity
+                                            style={[styles.contenedorSubmit2]}
+                                            onPress={handleOnPress}>
+                                            <Text style={{ color:colores.color5, fontSize: 20, padding: 3 }}>Fecha inicial</Text>
+                                        </TouchableOpacity>
+                                        <Text style={{ color: colores.color5, fontSize: 20, }}>{date}</Text>
+                                    </View>
+                                    <View style={{alignItems:'center'}}>
+                                        <TouchableOpacity
+                                            style={[styles.contenedorSubmit2]}
+                                            onPress={handleOnPress2}>
+                                            <Text style={{ color: colores.color5, fontSize: 20, padding: 3 }}>Fecha Final</Text>
+                                        </TouchableOpacity>
+                                        <Text style={{ color: colores.color5, fontSize: 20 }}>{date2}</Text>
+                                    </View>
+                                </View>
+                                <TouchableOpacity onPress={()=>{ pressBuscar()}}>
+                                  <Text style={{textAlign:'center'}}>Ver</Text>
+                                </TouchableOpacity>
+                                {
+                                  listaMovimientos3.length>0?
+                                  (
+                                    <Tabla2 
+                                  datos={listaMovimientos3} //Tabla que muestra movimientos del mes actual
+                                  columnas={3}
+                                  Total={montoTotal2}/>
+                                  ):
+                                  (
+                                    <Text></Text>
+                                  )
+                                }
+
+                                </>
+                                ):
+                                (
+                                  selectedValue == 'categoria' ? 
+                                  (
+                                    <>
+                                    <View style={styles.filaFiltro}>
+                                      <Text style={{width:'50%', paddingLeft:80}}>Seleccionar Categoria:</Text>
+                                      <Picker
+                                        style={{width:'50%', marginHorizontal:50, color:colores.color4, }}
+                                        selectedValue={idConcepto}
+                                        onValueChange={(itemValue) => setIdConcepto(itemValue)}
+                                        >
+                                        {listaConceptos.map((concepto) => (
+                                        <Picker.Item label={concepto.nombreConcepto} value={concepto.id} key={concepto.id} />
+                                        ))}
+                                      </Picker>
+                                    </View>
+                                    <Tabla2 columnas={2}
+                                      datos={sd}
+                                    />
+                                    </>
+                                  ):
+                                  (
+                                    <Text style={{color:'black'}}></Text>
+                                  )
+                                )
+                                )
+                                
+                              )
+                            }
+                            {listaMovimientos.length>0?
                             (
                                 listaMovimientos.length<10 ? (
-                                <View>
-                                    <Text style={{
-                                        textAlign:'center', 
-                                        color:colores.color3, 
-                                        fontFamily:'Roboto-Medium',
-                                        fontSize:25
-                                        }}>{`Ultimos ${listaMovimientos.length} movimientos`}</Text>
+                                <View style={{paddingTop:5}}>
+                                    <Text style={styles.txtSubtitulos}>{`Ultimos ${listaMovimientos.length} movimientos`}</Text>
                                     <Tablas datos={listaMovimientos}
                                     categoria={'Categorias'} />
                                 </View>
                                 ):(
-                                <View>
-                                    <Text style={{
-                                        textAlign:'center', 
-                                        color:colores.color3, 
-                                        fontFamily:'Roboto-Medium',
-                                        fontSize:25
-                                        }}>Ultimos 10 movimientos</Text>
+                                <View style={{paddingTop:5}}>
+                                    <Text style={styles.txtSubtitulos}>Ultimos 10 movimientos</Text>
                                     <Tablas datos={listaMovimientos}
                                     categoria={'Categorias'} />
                                 </View>
                                 )
                             ):(
-                                <Text>No hay Movimientos registrados</Text>
+                                <Text style={{
+                                  textAlign:'center', 
+                                        color:colores.color3, 
+                                        fontFamily:'Roboto-Medium',
+                                        fontSize:15
+                                }}>No hay Movimientos registrados</Text>
                             )
+                            }
+                            </View>
+                            
                         )
                     }
-                
-                </View>
         </ScrollView>
+
+                <Modal
+                    visible={open}
+                    animationType='slide'
+                    transparent={true}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <DatePicker
+                                mode='calendar'
+                                selected={date}
+                                onDateChange={handleChange}
+                            />
+                            <TouchableOpacity
+                                style={styles.contenedorSubmit}
+                                onPress={handleOnPress}>
+                                <Text >Cerrar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+                <Modal
+                    visible={open2}
+                    animationType='slide'
+                    transparent={true}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <DatePicker
+                                mode='calendar'
+                                selected={date2}
+                                onDateChange={handleChange2}
+                            />
+                            <TouchableOpacity
+                                style={styles.contenedorSubmit}
+                                onPress={handleOnPress2}>
+                                <Text>Cerrar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
     </SafeAreaView>
   )
 }
@@ -153,5 +420,56 @@ const styles = StyleSheet.create({
         position:'absolute',
         left:10,
         top:20
-    }
+    },
+    txtSubtitulos:{
+      color:colores.color3,
+      fontSize:18, 
+      textAlign:'center',
+      fontFamily:'Roboto-Medium',
+      paddingTop:20
+    },
+    filaFiltro:{
+      flexDirection:'row', 
+      width:'100%', 
+      paddingHorizontal:30,
+      justifyContent:'center',
+      alignItems:'center'
+    },
+    contenedorSubmit2: {
+      backgroundColor: colores.color7,
+      textAlign: 'center',
+      borderRadius: 10,
+      marginHorizontal: 8,
+      padding:3
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 30
+    },
+    modalView: {
+        margin: 20,
+        borderBlockColor: '#FFF0F7',
+        borderRadius: 20,
+        width: '90%',
+        padding: 30,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+        backgroundColor: '#FFF'
+    },
+    contenedorSubmit: {
+      marginTop: 20,
+      backgroundColor: '#6A71B9',
+      textAlign: 'center',
+      borderRadius: 10,
+      marginHorizontal: 8
+  },
 })

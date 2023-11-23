@@ -330,13 +330,19 @@ const navegacion = useNavigation();
     <SafeAreaView>
       <View>
         <View style={styles.BarraSuperior}>
-          <ImgPress2 funcion={()=>{}}>
-            <Material name='database-search' size={35} color={colores.color4}/>
-          </ImgPress2>
+          <View style={{alignItems:'center'}}>
+            <ImgPress2 funcion={()=>{navegacion.navigate('Historiales2')}}>
+              <Material name='database-search' size={35} color={colores.color4}/>
+            </ImgPress2>
+            <Text style={{color:'black', fontSize:10}}>Buscar</Text>
+          </View>
           <Text style={styles.txtSuperior}>Gastos</Text>
-          <ImgPress2 funcion={add}>
-            <Material name='plus-thick' size={35} color={colores.color4}/>
-          </ImgPress2>
+          <View style={{alignItems:'center'}}>
+              <ImgPress2 funcion={add}>
+                  <Material name='plus-thick' size={35} color={colores.color4}/>
+              </ImgPress2>
+              <Text style={{color:'black', fontSize:10}}>Añadir</Text>
+          </View>
         </View>
         {
           cargando ? (

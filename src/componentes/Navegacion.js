@@ -17,6 +17,7 @@ import Despliegue from '../vistas/Despliegue';
 import Empresa from '../vistas/Empresa';
 import Gastos from '../vistas/Gastos';
 import Historiales from '../vistas/Historiales';
+import Historiales2 from '../vistas/Historiales2';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +44,7 @@ const Navegacion = () => {
                             <Stack.Screen name="Ingresos" component={Ingresos} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Gastos" component={Gastos} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Historiales" component={Historiales} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Historiales2" component={Historiales2} options={{ headerShown: false,}}/>
                         
                           </>
                       )

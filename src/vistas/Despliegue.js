@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native'
 import ImgPress from '../componentes/ImgPress'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { colores, colors } from '../componentes/Colors'
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableOpacity } from 'react-native'
@@ -22,49 +22,34 @@ const Despliegue = () => {
     const idUser = userInfo.id;
     const datosEmpresa = companyInfo.datos;
 
-    useEffect(()=>{
-        //setIdUser(userInfo.id)
-        listarMovimientos();
-        console.log(idUser);
-      },[])
+    useFocusEffect( //Este se utiliza para que renderice las funciones de inmediato en las vistas que hacen parte de los bootom tabs
+        React.useCallback(()=>{
+            listarMovimientos();
+        }, [])
+    )
 
-    const listarMovimientos = () => {
+      const listarMovimientos = async () => {
         setCargando(true);
-    return new Promise((resolve, reject) => {
-      axios
-        .post(
-          'http://192.168.40.76/flujoCaja/listaMovimientos.php',
-          {
+        try {
+          const res = await axios.post('http://10.1.80.120/flujoCaja/listaMovimientos.php', {
             idUser: idUser
-          },
-        )
-        .then(res => {
+          });
+      
           if (res.data.result === 'success') {
-            // Registro exitoso
-            setListaMovimientos(res.data.listaMovimientos)
-            console.log("Lista", res.data.listaMovimientos)
-            setCargando(false);
-          } else if (res.data.result === 'error') {
-            // Error en la consulta
-            console.log('Error en la consulta de listar movimientos:', res.data.message);
-            reject('Error en el registro: ' + res.data.message);
-            setCargando(false);
-
+            setListaMovimientos(res.data.listaMovimientos);
+            console.log("Lista", res.data.listaMovimientos);
           } else {
-            console.log('Respuesta inesperada del servidor:', res.data);
-            reject('Error inesperado del servidor');
-            setCargando(false);
-
+            console.log('Error en la consulta de listar movimientos:', res.data.message);
+            throw new Error('Error en la consulta: ' + res.data.message);
           }
-        })
-        .catch(error => {
+        } catch (error) {
           console.error('Error de axios para listar movimientos:', error.message);
-          reject('Error con axios: ' + error.message);
-            setCargando(false);
-
-        });
-    });
-    }
+          throw error;
+        } finally {
+          setCargando(false);
+        }
+      };
+      
 
     const navegacion = useNavigation()
   return (

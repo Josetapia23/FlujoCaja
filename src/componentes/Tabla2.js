@@ -19,11 +19,12 @@ const Tabla2 = ({datos, columnas, Total}) => {
                         <FlatList
                             data={datos}
                             keyExtractor={(item) => item.id.toString()}
+                            nestedScrollEnabled
                             renderItem={({ item }) => (
                                 <>
                                 <View style={styles.contenedorLista}>
-                                    <Text style={[styles.txtContenidoTabla,{textAlign:'center'}]}>{item.nombreConcepto}</Text>
                                     <Text style={[styles.txtContenidoTabla,{textAlign:'justify'}]}>{item.descripcion}</Text>
+                                    <Text style={[styles.txtContenidoTabla,{textAlign:'center'}]}>{item.nombreConcepto}</Text>
                                     <Text style={[styles.txtContenidoTabla,{textAlign:'center'}]}>${item.monto}</Text>
                                 </View>
                                 </>
@@ -31,29 +32,32 @@ const Tabla2 = ({datos, columnas, Total}) => {
                         />
                         <View style={styles.row}>
                             <Text style={ styles.conceptos}>Total</Text>
-                            <Text style={[styles.conceptos]}>{Total}</Text>
+                            <Text style={[styles.conceptos]}>${Total}</Text>
                         </View>      
                     </>
                 ):(
                     <>
                     <View style={styles.row}>
                             <Text style={ styles.conceptos}>Monto</Text>
-                            <Text style={[styles.conceptos]}>Categoria</Text>
                             <Text style={ styles.conceptos}>Descripcion</Text>
                     </View>
                     <FlatList
                         data={datos}
                         keyExtractor={(item) => item.id.toString()}
+                        nestedScrollEnabled
                         renderItem={({ item }) => (
                             <>
                             <View style={styles.contenedorLista}>
                                 <Text style={[styles.txtContenidoTabla,{textAlign:'center'}]}>${item.monto}</Text>
-                                <Text style={[styles.txtContenidoTabla,{textAlign:'center'}]}>{item.nombreConcepto}</Text>
                                 <Text style={[styles.txtContenidoTabla,{textAlign:'justify'}]}>{item.descripcion}</Text>
                             </View>
                             </>
                         )}
-                    />      
+                    />
+                    <View style={styles.row}>
+                            <Text style={ styles.conceptos}>Total</Text>
+                            <Text style={[styles.conceptos]}>${Total}</Text>
+                    </View>        
                 </> 
                 )
             }
@@ -98,7 +102,6 @@ const styles = StyleSheet.create({
         borderBottomColor: colores.color3,
         color: 'black',
         paddingHorizontal:5,
-        justifyContent:'center',
         alignItems:'center'
     },
     row: {

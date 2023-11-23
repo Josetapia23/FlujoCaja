@@ -16,6 +16,7 @@ const Tablas = ({datos, categoria, ambos}) => {
             <FlatList
                 data={datos}
                 keyExtractor={(item) => item.id.toString()}
+                nestedScrollEnabled
                 renderItem={({ item }) => (
                     ambos == '1' ? (
                     <>
@@ -47,12 +48,12 @@ const styles = StyleSheet.create({
     container:{
         marginVertical:20,
         backgroundColor:colores.color8,
-        marginHorizontal:10,
+        marginHorizontal:12,
         borderRadius:5,
         borderColor:colores.color5,
         height:260,
         borderWidth:1,
-        borderColor:colores.color3
+        borderColor:colores.color3,
     },
     header: {
         fontFamily: 'Roboto-Bold',

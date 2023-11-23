@@ -5,7 +5,12 @@ import { colores, colors } from "../componentes/Colors";
 const SplashScreens = () => {
     return (
         <View
-            style={{ flex: 1, justifyContent: 'center', backgroundColor: colores.color5 }}>
+            style={{ flex: 1, 
+            justifyContent: 'center', 
+            backgroundColor: colores.color6, 
+            alignItems:'center', 
+            flexDirection:'column'
+            }}>
             <ActivityIndicator size="large" color={colores.color3} />
         </View>
     )
