@@ -31,13 +31,13 @@ const Despliegue = () => {
       const listarMovimientos = async () => {
         setCargando(true);
         try {
-          const res = await axios.post('http://10.1.80.120/flujoCaja/listaMovimientos.php', {
+          const res = await axios.post('http://10.1.80.124/flujoCaja/listaMovimientos.php', {
             idUser: idUser
           });
       
           if (res.data.result === 'success') {
             setListaMovimientos(res.data.listaMovimientos);
-            console.log("Lista", res.data.listaMovimientos);
+            //console.log("Lista", res.data.listaMovimientos);
           } else {
             console.log('Error en la consulta de listar movimientos:', res.data.message);
             throw new Error('Error en la consulta: ' + res.data.message);

@@ -55,7 +55,7 @@ const Ingresos = () => {
             // Registro exitoso
             setListaConceptos(res.data.listConceptos)
             console.log(res.data.listConceptos)
-            AsyncStorage.setItem("conceptos", JSON.stringify(res.data.listConceptos));
+            AsyncStorage.setItem("conceptos1", JSON.stringify(res.data.listConceptos));
             setCargando(false);
 
           } else if (res.data.result === 'error') {

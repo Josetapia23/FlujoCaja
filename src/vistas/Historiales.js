@@ -15,6 +15,7 @@ import Tabla2 from '../componentes/Tabla2';
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-native-modern-datepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Botones from '../componentes/Botones';
 
 
 
@@ -25,6 +26,8 @@ const Historiales = () => {
     const [idConcepto, setIdConcepto] = useState('');
     const [date, setDate] = useState('');
     const [date2, setDate2] = useState('');
+    const [dateFormatted, setDateFormatted] = useState('');
+  const [date2Formatted, setDate2Formatted] = useState('');
     const [tipo, setTipo] = useState(1);
     const [cargando, setCargando] = useState(false);
     const [cargando2, setCargando2] = useState(false);
@@ -34,8 +37,8 @@ const Historiales = () => {
     const [selectedValue, setSelectedValue] = useState("filtros");
     const [listaMovimientos, setListaMovimientos] = useState([]); //Ultimos 10 movimientos
     const [listaMovimientos2, setListaMovimientos2] = useState([]); //Lista de movimientos del mes
-    const [listaMovimientos3, setListaMovimientos3] = useState([]); //Lista de movimientos del mes
-    const [listaMovimientos4, setListaMovimientos4] = useState([]); //Lista de movimientos del mes
+    const [listaMovimientos3, setListaMovimientos3] = useState([]); //Lista de movimientos por fecha estimada
+    const [listaMovimientos4, setListaMovimientos4] = useState([]); //Lista de movimientos completa por categoria
     const [listaConceptos, setListaConceptos] = useState([]); //Lista de movimientos del mes
     const {userInfo, companyInfo} = useContext(AuthContext);
     const idUser = userInfo.id;
@@ -46,19 +49,15 @@ const Historiales = () => {
         //setIdUser(userInfo.id)
         listarMovimientos();
         obtenerConceptos();
-        console.log(idUser);
-        console.log(listaConceptos);
-        
       },[])
 
       const obtenerConceptos = async () => {
         try {
-          const conceptos = await AsyncStorage.getItem('conceptos');
+          const conceptos = await AsyncStorage.getItem('conceptos1');
           if (conceptos !== null) {
             // Tenemos datos
             const listaConceptos = JSON.parse(conceptos);
             setListaConceptos(listaConceptos);
-            console.log(listaConceptos);
           }
         } catch (error) {
           console.log("Error al obtener conceptos: ", error);
@@ -66,12 +65,21 @@ const Historiales = () => {
         }
       };
 
+      useEffect(() => {
+        // Establecer idConcepto con el primer id de la listaConceptos
+        if (listaConceptos.length > 0) {
+          setIdConcepto(listaConceptos[0].id);
+        }
+      }, [listaConceptos]);
+
+      
+
     const listarMovimientos = () => {
         setCargando(true);
       return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://10.1.80.120/flujoCaja/lis_mov_ingresos.php',
+          'http://10.1.80.124/flujoCaja/lis_mov_ingresos.php',
           {
             idUser: idUser,
             idTipo: tipo,
@@ -80,10 +88,10 @@ const Historiales = () => {
         .then(res => {
           if (res.data.result === 'success') {
             // Registro exitoso
-            setListaMovimientos(res.data.listaMovimientos)
-            setListaMovimientos2(res.data.listMovimientos2)
+            setListaMovimientos(res.data.listaMovimientos) //Ultimos 10 movimientos
+            setListaMovimientos2(res.data.listMovimientos2) //Movimientos totales por mes 
             setMontoTotal(res.data.montoTotal);
-            console.log(res.data.listaMovimientos)
+            //console.log(res.data.listaMovimientos)
             setCargando(false);
           } else if (res.data.result === 'error') {
             // Error en la consulta
@@ -108,6 +116,7 @@ const Historiales = () => {
     }
 
     const pressBuscar = () =>{
+      setCargando2(true);
       console.log(date, date2)
       listarMovimientos2();
     }
@@ -117,7 +126,7 @@ const Historiales = () => {
     return new Promise((resolve, reject) => {
     axios
       .post(
-        'http://10.1.80.120/flujoCaja/lis_mov_ingresos3.php',
+        'http://10.1.80.124/flujoCaja/lis_mov_ingresos3.php',
         {
           idUser: idUser,
           idTipo: tipo,
@@ -155,15 +164,26 @@ const Historiales = () => {
   }
 
   useEffect(()=>{
-    listarMovimientos3()
-  },[idConcepto])
+    listarMovimientos3();
+    console.log(idConcepto)
+  },[selectedValue]);
+
+  
+  useEffect(() => {
+    console.log("Este es el primer id de la lista conceptos ", idConcepto);
+    listarMovimientos3();
+  }, [idConcepto]);
+  
+  useEffect(() => {
+    console.log(listaConceptos, "Fin");
+  }, [listaConceptos]);
 
   const listarMovimientos3 = () => {
     setCargando(true);
   return new Promise((resolve, reject) => {
   axios
     .post(
-      'http://10.1.80.120/flujoCaja/lis_mov_ingresos3.php',
+      'http://10.1.80.124/flujoCaja/lis_mov_ingresos3.php',
       {
         idUser: idUser,
         idTipo: tipo,
@@ -173,9 +193,8 @@ const Historiales = () => {
     .then(res => {
       if (res.data.result === 'success') {
         // Registro exitoso
-        setListaMovimientos3(res.data.listaMovimientos4);
-        setMontoTotal3(res.data.montoTotal2);
-        console.log(res.data.listaMovimientos4);
+        setListaMovimientos4(res.data.listaMovimientos4);
+        setMontoTotal3(res.data.monTotal2);
         setCargando(false);
       } else if (res.data.result === 'error') {
         // Error en la consulta
@@ -230,7 +249,7 @@ const Historiales = () => {
                           </View>
                         ) :(
                           <View>
-                            <Text style={styles.txtSubtitulos}>Filtros</Text>
+                            {/* <Text style={styles.txtSubtitulos}>Filtros</Text> */}
                             <View style={styles.filaFiltro}>
                                 <Text style={{width:'50%', paddingLeft:30}}>Seleccionar filtro:</Text>
                                 <Picker
@@ -257,10 +276,14 @@ const Historiales = () => {
                               (
                                 selectedValue == 'mes' ? 
                                 (
-                                  <Tabla2 
+                                  listaMovimientos2.length>0?(
+                                    <Tabla2 
                                   datos={listaMovimientos2} //Tabla que muestra movimientos del mes actual
                                   columnas={3}
                                   Total={montoTotal}/>
+                                  ):(
+                                    <Text style={{fontFamily:'Roboto-Medium', textAlign:'center'}}>"Este mes aun no tiene movimientos registrados"</Text>                                  )
+                                  
                                 ):
                                 (
                                   selectedValue == 'fecha' ? 
@@ -270,33 +293,43 @@ const Historiales = () => {
                                         <TouchableOpacity
                                             style={[styles.contenedorSubmit2]}
                                             onPress={handleOnPress}>
-                                            <Text style={{ color:colores.color5, fontSize: 20, padding: 3 }}>Fecha inicial</Text>
+                                            <Text style={{ color:colores.color4, fontSize: 20, padding: 3 }}>Fecha inicial</Text>
                                         </TouchableOpacity>
-                                        <Text style={{ color: colores.color5, fontSize: 20, }}>{date}</Text>
+                                        <Text style={{ color: colores.color5, fontSize: 14, }}>{date}</Text>
                                     </View>
                                     <View style={{alignItems:'center'}}>
                                         <TouchableOpacity
                                             style={[styles.contenedorSubmit2]}
                                             onPress={handleOnPress2}>
-                                            <Text style={{ color: colores.color5, fontSize: 20, padding: 3 }}>Fecha Final</Text>
+                                            <Text style={{ color: colores.color4, fontSize: 20, padding: 3 }}>Fecha Final</Text>
                                         </TouchableOpacity>
-                                        <Text style={{ color: colores.color5, fontSize: 20 }}>{date2}</Text>
+                                        <Text style={{ color: colores.color5, fontSize: 14 }}>{date2}</Text>
                                     </View>
                                 </View>
-                                <TouchableOpacity onPress={()=>{ pressBuscar()}}>
-                                  <Text style={{textAlign:'center'}}>Ver</Text>
-                                </TouchableOpacity>
+                                <Botones funcion={()=> pressBuscar()}
+                                name='Ver'
+                                margin={120}/>
                                 {
-                                  listaMovimientos3.length>0?
-                                  (
-                                    <Tabla2 
-                                  datos={listaMovimientos3} //Tabla que muestra movimientos del mes actual
-                                  columnas={3}
-                                  Total={montoTotal2}/>
-                                  ):
-                                  (
-                                    <Text></Text>
-                                  )
+                                   cargando2 ==true ?
+                                   (
+                                   listaMovimientos3.length>0 ? 
+                                    (
+                                      <>
+                                      <Text style={styles.txtSubtitulos}>{`Entre ${date} y ${date2} estos son los movimientos de ingresos`}</Text>
+                                        <Tabla2 
+                                      datos={listaMovimientos3} //Tabla que muestra movimientos del mes actual
+                                      columnas={4}
+                                      Total={montoTotal2}/>
+                                      </>
+                                    ):
+                                    (
+                                      <Text style={{textAlign:'center', paddingTop:10, color:colores.color9}}>
+                                        "En ese lapso de fechas no hay registros"</Text>
+                                    )
+                                   ):(
+                                    <></>
+                                   )
+                                  
                                 }
 
                                 </>
@@ -310,16 +343,28 @@ const Historiales = () => {
                                       <Picker
                                         style={{width:'50%', marginHorizontal:50, color:colores.color4, }}
                                         selectedValue={idConcepto}
-                                        onValueChange={(itemValue) => setIdConcepto(itemValue)}
+                                        onValueChange={(itemValue) => {
+                                          setIdConcepto(itemValue);
+                                          listarMovimientos3();
+                                        }}
                                         >
                                         {listaConceptos.map((concepto) => (
                                         <Picker.Item label={concepto.nombreConcepto} value={concepto.id} key={concepto.id} />
                                         ))}
                                       </Picker>
                                     </View>
-                                    <Tabla2 columnas={2}
-                                      datos={sd}
-                                    />
+                                    {
+                                      listaMovimientos4.length>0?
+                                      (
+                                        <Tabla2 columnas={2}
+                                          datos={listaMovimientos4}
+                                          Total={montoTotal3}
+                                        />
+                                      ):
+                                      (
+                                        <Text style={{fontFamily:'Roboto-Medium', textAlign:'center'}}>"En esta categoria no hay movimientos registrados aún"</Text>
+                                      )
+                                    }
                                     </>
                                   ):
                                   (
@@ -340,7 +385,7 @@ const Historiales = () => {
                                 </View>
                                 ):(
                                 <View style={{paddingTop:5}}>
-                                    <Text style={styles.txtSubtitulos}>Ultimos 10 movimientos</Text>
+                                    <Text style={styles.txtSubtitulos}>Ultimos 10 movimientos de ingresos en general</Text>
                                     <Tablas datos={listaMovimientos}
                                     categoria={'Categorias'} />
                                 </View>
@@ -350,7 +395,8 @@ const Historiales = () => {
                                   textAlign:'center', 
                                         color:colores.color3, 
                                         fontFamily:'Roboto-Medium',
-                                        fontSize:15
+                                        fontSize:15,
+                                        marginTop:100
                                 }}>No hay Movimientos registrados</Text>
                             )
                             }
@@ -374,7 +420,7 @@ const Historiales = () => {
                             <TouchableOpacity
                                 style={styles.contenedorSubmit}
                                 onPress={handleOnPress}>
-                                <Text >Cerrar</Text>
+                                <Text  style={{color:colores.color8, padding:5}}>Cerrar</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -393,7 +439,7 @@ const Historiales = () => {
                             <TouchableOpacity
                                 style={styles.contenedorSubmit}
                                 onPress={handleOnPress2}>
-                                <Text>Cerrar</Text>
+                                <Text style={{color:colores.color8, padding:5}}>Cerrar</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -426,17 +472,19 @@ const styles = StyleSheet.create({
       fontSize:18, 
       textAlign:'center',
       fontFamily:'Roboto-Medium',
-      paddingTop:20
+      paddingTop:20,
+      marginHorizontal:30
     },
     filaFiltro:{
       flexDirection:'row', 
       width:'100%', 
       paddingHorizontal:30,
       justifyContent:'center',
-      alignItems:'center'
+      alignItems:'center',
+      marginTop:10
     },
     contenedorSubmit2: {
-      backgroundColor: colores.color7,
+      backgroundColor: colores.color8,
       textAlign: 'center',
       borderRadius: 10,
       marginHorizontal: 8,
@@ -450,7 +498,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
         margin: 20,
-        borderBlockColor: '#FFF0F7',
+        borderBlockColor: colores.color4,
         borderRadius: 20,
         width: '90%',
         padding: 30,
@@ -467,9 +515,9 @@ const styles = StyleSheet.create({
     },
     contenedorSubmit: {
       marginTop: 20,
-      backgroundColor: '#6A71B9',
+      backgroundColor: colores.color4,
       textAlign: 'center',
       borderRadius: 10,
-      marginHorizontal: 8
+      marginHorizontal: 8,
   },
 })

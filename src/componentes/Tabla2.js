@@ -23,8 +23,8 @@ const Tabla2 = ({datos, columnas, Total}) => {
                             renderItem={({ item }) => (
                                 <>
                                 <View style={styles.contenedorLista}>
-                                    <Text style={[styles.txtContenidoTabla,{textAlign:'justify'}]}>{item.descripcion}</Text>
-                                    <Text style={[styles.txtContenidoTabla,{textAlign:'center'}]}>{item.nombreConcepto}</Text>
+                                    <Text style={[styles.txtContenidoTabla2,{textAlign:'justify' ,paddingHorizontal:2}]}>{item.descripcion}</Text>
+                                    <Text style={[styles.txtContenidoTabla2,{textAlign:'center'}]}>{item.nombreConcepto}</Text>
                                     <Text style={[styles.txtContenidoTabla,{textAlign:'center'}]}>${item.monto}</Text>
                                 </View>
                                 </>
@@ -36,29 +36,60 @@ const Tabla2 = ({datos, columnas, Total}) => {
                         </View>      
                     </>
                 ):(
-                    <>
-                    <View style={styles.row}>
-                            <Text style={ styles.conceptos}>Monto</Text>
+                    columnas===4 ? (
+                        <>
+                        <View style={styles.row}>
+                        <Text style={ styles.conceptos}>Fecha</Text>
                             <Text style={ styles.conceptos}>Descripcion</Text>
-                    </View>
-                    <FlatList
-                        data={datos}
-                        keyExtractor={(item) => item.id.toString()}
-                        nestedScrollEnabled
-                        renderItem={({ item }) => (
-                            <>
-                            <View style={styles.contenedorLista}>
-                                <Text style={[styles.txtContenidoTabla,{textAlign:'center'}]}>${item.monto}</Text>
-                                <Text style={[styles.txtContenidoTabla,{textAlign:'justify'}]}>{item.descripcion}</Text>
-                            </View>
-                            </>
-                        )}
-                    />
-                    <View style={styles.row}>
+                            <Text style={[styles.conceptos]}>Categoria</Text>
+                            <Text style={ styles.conceptos}>Monto</Text>
+                        </View>
+                        <FlatList
+                            data={datos}
+                            keyExtractor={(item) => item.id.toString()}
+                            nestedScrollEnabled
+                            renderItem={({ item }) => (
+                                <>
+                                <View style={styles.contenedorLista}>
+                                    <Text style={[styles.txtContenidoTabla2,{textAlign:'center', }]}>{item.fecha}</Text>
+                                    <Text style={[styles.txtContenidoTabla2,{textAlign:'justify' ,paddingHorizontal:2}]}>{item.descripcion}</Text>
+                                    <Text style={[styles.txtContenidoTabla2,{textAlign:'center',}]}>{item.nombreConcepto}</Text>
+                                    <Text style={[styles.txtContenidoTabla,{textAlign:'center'}]}>${item.monto}</Text>
+                                </View>
+                                </>
+                            )}
+                        />
+                        <View style={styles.row}>
                             <Text style={ styles.conceptos}>Total</Text>
                             <Text style={[styles.conceptos]}>${Total}</Text>
-                    </View>        
-                </> 
+                        </View>      
+                    </>
+                    ):(
+                    <>
+                        <View style={styles.row}>
+                                <Text style={ styles.conceptos}>Descripcion</Text>
+                                <Text style={ styles.conceptos}>Monto</Text>
+                        </View>
+                        <FlatList
+                            data={datos}
+                            keyExtractor={(item) => item.id.toString()}
+                            nestedScrollEnabled
+                            renderItem={({ item }) => (
+                                <>
+                                <View style={styles.contenedorLista}>
+                                    <Text style={[styles.txtContenidoTabla2,{textAlign:'justify', paddingHorizontal:2}]}>{item.descripcion}</Text>
+                                    <Text style={[styles.txtContenidoTabla,{textAlign:'center'}]}>${item.monto}</Text>
+                                </View>
+                                </>
+                            )}
+                        />
+                        <View style={styles.row}>
+                                <Text style={ styles.conceptos}>Total</Text>
+                                <Text style={[styles.conceptos]}>${Total}</Text>
+                        </View>        
+                    </> 
+                    )
+                    
                 )
             }
             
@@ -102,7 +133,8 @@ const styles = StyleSheet.create({
         borderBottomColor: colores.color3,
         color: 'black',
         paddingHorizontal:5,
-        alignItems:'center'
+        alignItems:'center',
+        justifyContent:'center'
     },
     row: {
         flexDirection: 'row',
@@ -118,5 +150,13 @@ const styles = StyleSheet.create({
         color:colors.color6,
         fontFamily: 'Roboto-Regular',
         flex:1,
+    },
+    txtContenidoTabla2:{
+        color:colors.color6,
+        fontFamily: 'Roboto-Regular',
+        flex:1,
+        borderRightWidth: 1, 
+        borderRightColor: 'black', 
+        height:'100%',
     }
 })
