@@ -79,7 +79,7 @@ const Historiales = () => {
       return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://10.1.80.124/flujoCaja/lis_mov_ingresos.php',
+          'http://10.1.80.199/flujoCaja/lis_mov_ingresos.php',
           {
             idUser: idUser,
             idTipo: tipo,
@@ -126,7 +126,7 @@ const Historiales = () => {
     return new Promise((resolve, reject) => {
     axios
       .post(
-        'http://10.1.80.124/flujoCaja/lis_mov_ingresos3.php',
+        'http://10.1.80.199/flujoCaja/lis_mov_ingresos3.php',
         {
           idUser: idUser,
           idTipo: tipo,
@@ -183,7 +183,7 @@ const Historiales = () => {
   return new Promise((resolve, reject) => {
   axios
     .post(
-      'http://10.1.80.124/flujoCaja/lis_mov_ingresos3.php',
+      'http://10.1.80.199/flujoCaja/lis_mov_ingresos3.php',
       {
         idUser: idUser,
         idTipo: tipo,
