@@ -55,7 +55,10 @@ const Despliegue = () => {
   return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.containerSuperior}>
-                    <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7}}>Historiales</Text>
+                    <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Inicio')}>
+                        <Material name='arrow-left' size={20} color={colores.color7}/>
+                    </TouchableOpacity>
+                    <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7, textAlign:'center'}}>{`Historiales`}</Text>
                 </View>
                 
                 <View style={styles.view}>

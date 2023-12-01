@@ -11,6 +11,7 @@ import Botones from '../componentes/Botones';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native';
 import AntDesign from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Alert } from 'react-native';
 
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -21,7 +22,7 @@ const NIT_REGEX = /^[0-9]{1,10}-[0-9]{1}$/;
 const DIRECCION_REGEX = /^[0-9A-Za-z\s#áéíóúÁÉÍÓÚñÑ.,-/]+$/;
 
 const Empresa = () => {
-  const { isLoading, userInfo, registerEmpresa, companyInfo} = useContext(AuthContext);
+  const { isLoading, userInfo, registerEmpresa, companyInfo, logout} = useContext(AuthContext);
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   const [idDepartamento, setIdDepartamen] = useState(8);
@@ -34,6 +35,25 @@ const Empresa = () => {
   const [telefonoEmpresarial, setTelefono] = useState('');
   const [emailEmpresarial, setEmail] = useState('');
   const registroEmpr = 'Si';
+
+
+  const salir = () => {
+    Alert.alert(
+        'Cerrar Sesion',
+        `Confirma salir de sesion?`,
+        [
+            {
+                text: 'Cancelar',
+                style: 'cancel',
+            },
+            {
+                text: 'OK', onPress: () => {
+                    logout();
+                }
+            }
+        ]
+    );
+}
 
 
   const estado = null;
@@ -124,21 +144,25 @@ const navegacion = useNavigation();
       {pasar == 'si' ?  
       (
         <SafeAreaView style={styles.containForm}>
-          <View>
-            <Text></Text>
-            <AntDesign name='account-circle' size={150} color={colores.color1}/>
-
-            <Text style={{color:'black'}}>{userInfo.nombre}</Text>
-            <Text style={{color:'black'}}>{userInfo.email}</Text>
-          <View>
+          <View style={{marginBottom:40, marginTop:10}}>
+          <View style={{alignItems:'center', marginBottom:20}}>
+            <AntDesign name='account-circle' size={150} color={colores.color5}/>
+            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Nombre Emprendedor: {userInfo.nombre}</Text>
+            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Correo Emprendedor: {userInfo.email}</Text>
           </View>
-            <AntDesign name='domain' size={150} color={colores.color1}/>
-            <Text style={{color:'black'}}>{datosEmpresa.nombreEmprendimiento}</Text>
-            <Text style={{color:'black'}}>{datosEmpresa.nit}</Text>
-            <Text style={{color:'black'}}>{datosEmpresa.direccion}</Text>
-            <Text style={{color:'black'}}>{datosEmpresa.telefonoEmpresarial}</Text>
-            <Text style={{color:'black'}}>{datosEmpresa.emailEmpresarial}</Text>
+          <View style={{alignItems:'center', marginBottom:20}}>
+            <AntDesign name='domain' size={150} color={colores.color2}/>
+            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Nombre Empresa: {datosEmpresa.nombreEmprendimiento}</Text>
+            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Nit: {datosEmpresa.nit}</Text>
+            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Direccion: {datosEmpresa.direccion}</Text>
+            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Tel Empresa: {datosEmpresa.telefonoEmpresarial}</Text>
+            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Correo Empresa: {datosEmpresa.emailEmpresarial}</Text>
           </View>
+          </View>
+          <Botones name='Cerrar Sersion'
+            funcion={salir} margin={100} padding={4}>
+            <AntDesign name='logout-variant' size={35} color={colores.color8}/>
+          </Botones>
       </SafeAreaView>
       ) : (
         <>
@@ -314,7 +338,7 @@ export default Empresa;
 
 const styles = StyleSheet.create({
   containForm: {
-    alignItems:'center',
+    
   },
   modal: {
     flex:1,

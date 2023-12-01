@@ -2,15 +2,15 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { colores } from './Colors'
 
-const Botones = ({funcion, name, margin}) => {
+const Botones = ({children, funcion, name, margin, padding}) => {
   return (
-    <View >
-        <TouchableOpacity style={[styles.btnIngreso,{marginHorizontal:margin}]}
-            onPress={funcion}
-        ><Text style={styles.txtInferior}>{name}</Text>
+        <TouchableOpacity style={[styles.btnIngreso,{marginHorizontal:margin, paddingHorizontal:padding}]}
+        onPress={funcion}>
+            <View style={{flexDirection:'row', alignItems:'center'}}>
+            {children}
+            <Text style={styles.txtInferior}>{name}</Text>
+            </View>
         </TouchableOpacity>
-
-    </View>
   )
 }
 
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
         backgroundColor: colores.color4,
         textAlign: 'center',
         borderRadius: 10,
+        
     },
     txtInferior: {
         padding: 10,

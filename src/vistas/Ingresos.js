@@ -334,6 +334,12 @@ const activarModal2 = (id, nombre) => {
 const navegacion = useNavigation();
   return (
     <SafeAreaView>
+      <View style={styles.containerSuperior}>
+            <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Despliegue')}>
+                <Material name='arrow-left' size={20} color={colores.color7}/>
+            </TouchableOpacity>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7, textAlign:'center'}}>{`Lista De Ingresos`}</Text>
+        </View>
       <View>
         <View style={styles.BarraSuperior}>
           <View style={{alignItems:'center'}}>
@@ -342,7 +348,6 @@ const navegacion = useNavigation();
           </ImgPress2>
           <Text style={{color:'black', fontSize:10}}>Buscar</Text>
           </View>
-          <Text style={styles.txtSuperior}>Lista De Ingresos</Text>
             <View style={{alignItems:'center'}}>
           <ImgPress2 funcion={add}>
               <Material name='plus-thick' size={35} color={colores.color4}/>
@@ -363,6 +368,7 @@ const navegacion = useNavigation();
               <View style={{ marginTop: 40, marginBottom: 10 }}>
                 <ScrollView style={{ height: '84%' }}>
                   <FlatList
+                    nestedScrollEnabled
                     style={styles.listaConceptos}
                     data={listaConceptos}
                     renderItem={renderItem}
@@ -463,6 +469,18 @@ const styles = StyleSheet.create({
     flex:1,
     backgroundColor:colores.color6
   },
+  containerSuperior:{
+    //flexDirection:'row',
+    backgroundColor:colores.color5,
+    alignItems:'center',
+    justifyContent:'center',
+    height:100
+},
+atras:{
+  position:'absolute',
+  left:10,
+  top:20
+},
   BarraSuperior:{
     paddingTop:20,
     flexDirection:'row',
@@ -520,6 +538,7 @@ txt:{
 listaConceptos:{
   //marginTop:10,
   padding:10,
+  height:420
 },
 cardView:{
   backgroundColor:colores.color1,

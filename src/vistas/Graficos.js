@@ -62,6 +62,6 @@ export default Graficos
 const styles = StyleSheet.create({
   container:{
     flex:1,
-    backgroundColor:colores.color1
+    backgroundColor: colores.color6,
   }
 })

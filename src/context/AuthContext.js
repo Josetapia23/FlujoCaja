@@ -206,6 +206,10 @@ export const AuthProvider = ({children}) => {
       await AsyncStorage.removeItem('id');
       await AsyncStorage.removeItem('companyInfo');
       await AsyncStorage.removeItem('emprendimientoInfo');
+      await AsyncStorage.removeItem('conceptos1');
+      await AsyncStorage.removeItem('conceptos2');
+
+      
 
       setTokenUsuario(0);
       setUserInfo({});

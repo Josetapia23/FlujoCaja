@@ -180,6 +180,7 @@ const Historiales = () => {
 
   const listarMovimientos3 = () => {
     setCargando(true);
+    setListaMovimientos4([]);
   return new Promise((resolve, reject) => {
   axios
     .post(
@@ -196,6 +197,7 @@ const Historiales = () => {
         setListaMovimientos4(res.data.listaMovimientos4);
         setMontoTotal3(res.data.monTotal2);
         setCargando(false);
+        console.log(listaMovimientos4);
       } else if (res.data.result === 'error') {
         // Error en la consulta
         console.log('Error en la consulta de listar movimientos Ingresos1:', res.data.message);
@@ -270,7 +272,7 @@ const Historiales = () => {
                                 <Text style={{
                                   color:'black', 
                                   textAlign:'center',
-                                  marginTop:20}}>No se ha seleccionado nada</Text>
+                                  marginTop:20}}>"No se ha seleccionado nada"</Text>
                                 
                               ):
                               (
