@@ -17,27 +17,36 @@ if (empty($data["id"])) {
         // Escapar el valor del ID para evitar inyección de SQL
         $idConcepto = $conn->real_escape_string($data["id"]);
 
-        // Preparar la consulta DELETE
-        $sql = "DELETE FROM conceptos WHERE id = ?";
-        $stmtDeleteConcepto = $conn->prepare($sql);
+        // Verificar si el registro con el ID proporcionado existe
+        $checkIfExistsSql = "SELECT id FROM conceptos WHERE id = ?";
+        $stmtCheckIfExists = $conn->prepare($checkIfExistsSql);
+        $stmtCheckIfExists->bind_param("i", $idConcepto);
+        $stmtCheckIfExists->execute();
+        $stmtCheckIfExists->store_result();
 
-        // Verificar si la preparación de la consulta fue exitosa
-        if ($stmtDeleteConcepto->num_rows > 0) {
-            // Enlazar el parámetro
+        // Si el registro existe, proceder con la eliminación
+        if ($stmtCheckIfExists->num_rows > 0) {
+            // Preparar la consulta DELETE
+            $deleteSql = "DELETE FROM conceptos WHERE id = ?";
+            $stmtDeleteConcepto = $conn->prepare($deleteSql);
             $stmtDeleteConcepto->bind_param("i", $idConcepto);
 
             // Ejecutar la consulta DELETE
             if ($stmtDeleteConcepto->execute()) {
                 $response = array('result' => 'success', 'message' => 'Registro eliminado con éxito.');
             } else {
-                $response = array('result' => 'error', 'message' => 'Error al eliminar el registro: ' . $stmtDeleteConcepto->error);
+                $response = array('result' => 'error', 'message' => 'Error al intentar eliminar el registro: ' . $conn->error);
             }
 
-            // Cerrar la consulta preparada
+            // Cerrar el statement DELETE
             $stmtDeleteConcepto->close();
         } else {
-            $response = array('result' => 'error', 'message' => 'Error el id no existe: ' . $conn->error);
+            // El registro no existe
+            $response = array('result' => 'error2', 'message' => 'No existe un registro con el ID proporcionado.');
         }
+
+        // Cerrar el statement de verificación de existencia
+        $stmtCheckIfExists->close();
 
         // Cerrar la conexión a la base de datos
         $conn->close();

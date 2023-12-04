@@ -4,7 +4,7 @@ require('config.db.php');
 $json = file_get_contents('php://input');
 $data = json_decode($json, true);
 
-if (empty($data["idUser"]) || empty($data["idTipo"]) || empty($data["fecha1"]) || empty($data["fecha2"])) {
+if (empty($data["idUser"]) || empty($data["idTipo"]) || empty($data["idConcepto"]) || empty($data["fecha1"]) || empty($data["fecha2"])) {
     $response = array('result' => 'error', 'message' => 'Faltan campos requeridos.');
 } else {
     $conn = new mysqli($servername, $username, $password, $dbname);
@@ -14,8 +14,14 @@ if (empty($data["idUser"]) || empty($data["idTipo"]) || empty($data["fecha1"]) |
     } else {
         $idUser = $conn->real_escape_string($data["idUser"]);
         $idTipo = $conn->real_escape_string($data["idTipo"]);
-        $fecha1 = $conn->real_escape_string($data["fecha1"])+" 00:00:00";
-        $fecha2 = $conn->real_escape_string($data["fecha2"])+" 23:59:59";
+        $idConcepto = $conn->real_escape_string(($data["idConcepto"]));
+        $fecha1 = new DateTime($conn->real_escape_string($data["fecha1"]));
+        $fecha1->setTime(0, 0, 0);
+        $fecha1 = $fecha1->format('Y-m-d H:i:s');
+
+        $fecha2 = new DateTime($conn->real_escape_string($data["fecha2"]));
+        $fecha2->setTime(23, 59, 59);
+        $fecha2 = $fecha2->format('Y-m-d H:i:s');
 
         $conn->autocommit(false); // Iniciar transacción
 
@@ -49,27 +55,41 @@ if (empty($data["idUser"]) || empty($data["idTipo"]) || empty($data["fecha1"]) |
         }
         $stmt->close(); // Cerrar la tercera consulta preparada
 
-        // $sql2 = "SELECT m.id, m.monto, c.nombreConcepto, t.nombreTipo, m.fecha, m.descripcion
-        //         FROM movimientos m
-        //         JOIN conceptos c ON c.id = m.idConcepto
-        //         JOIN tipos t ON t.id = m.idTipo
-        //         WHERE m.idUser = ? AND m.idTipo = ?
-        //         AND m.fecha BETWEEN ? AND ?
-        //         ORDER BY m.fecha";
+        
+        $sql2 = "SELECT m.id, m.monto, c.nombreConcepto, t.nombreTipo, m.fecha, m.descripcion
+                FROM movimientos m
+                JOIN conceptos c ON c.id = m.idConcepto
+                JOIN tipos t ON t.id = m.idTipo
+                WHERE m.idUser = ? AND m.idTipo = ?
+                AND m.idConcepto= ?
+                ORDER BY m.fecha";
 
-        // // Utilizar consultas preparadas para evitar inyección SQL
-        // $stmt2 = $conn->prepare($sql2);
-        // $stmt2->bind_param("iiss", $idUser, $idTipo, $idConcepto);
-        // $stmt2->execute();
-        // $stmt2->bind_result($idMov, $montoMov, $nombreConceptoMov, $nombreTipoMov, $fechaMov, $descripcion);
+            $stmt2 = $conn->prepare($sql2);
+            $stmt2->bind_param("iii", $idUser, $idTipo, $idConcepto);
+            $stmt2->execute();
+            $stmt2->bind_result($idMov, $montoMov, $nombreConceptoMov, $nombreTipoMov, $fechaMov, $descripcion);
 
+            $listMovimientos2 = array();
+            while ($stmt2->fetch()) {
+                // Formatear el monto antes de agregarlo al array
+                $montoMov = number_format($montoMov);
+                $listMovimientos2[] = array(
+                    'id' => $idMov,
+                    'monto' => $montoMov,
+                    'nombreConcepto' => $nombreConceptoMov,
+                    'nombreTipo' => $nombreTipoMov,
+                    'fecha' => $fechaMov,
+                    'descripcion' => $descripcion
+                );
+            }
+            $stmt2->close(); // Cerrar la tercera consulta preparada
 
-        // Obtener el monto total
-        $sql3 = "SELECT SUM(m.monto) as total FROM movimientos m WHERE m.fecha BETWEEN ? AND ?";
-        $stmt3 = $conn->prepare($sql3);
-        $stmt3->bind_param("ss", $fecha1, $fecha2);
-        $stmt3->execute();
-        $stmt3->bind_result($montoTotal);
+            // Obtener el monto total
+            $sql3 = "SELECT SUM(m.monto) as total FROM movimientos m WHERE m.fecha BETWEEN ? AND ?";
+            $stmt3 = $conn->prepare($sql3);
+            $stmt3->bind_param("ss", $fecha1, $fecha2);
+            $stmt3->execute();
+            $stmt3->bind_result($montoTotal);
 
         if ($stmt3->fetch()) {
             $montoTotal = number_format($montoTotal);
@@ -82,6 +102,7 @@ if (empty($data["idUser"]) || empty($data["idTipo"]) || empty($data["fecha1"]) |
         $response = array('result' => 'success',
             'message' => 'Registros obtenidos exitosamente',
             'listaMovimientos3' => $listMovimientos,
+            'listaMovimientos4' => $listMovimientos2,
             'montoTotal' => $montoTotal);
 
         $conn->autocommit(true); // Restaurar modo autocommit

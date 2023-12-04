@@ -9,6 +9,7 @@ export const AuthProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userInfo, setUserInfo] = useState({});
   const [companyInfo, setCompanyInfo] = useState({});
+  const [montosGenerales, setMontosGenerales] = useState({});
   const [errorMessage, setErrorMessage] = useState(false);
   const [txtErrorEmail, setTxtErrorEmail] = useState('');
   const [ok, setOk] = useState(false);
@@ -137,6 +138,34 @@ export const AuthProvider = ({children}) => {
   })
   };
 
+  const montos = () => {
+    return new Promise((resolve, reject) => {
+      setIsLoading(true);
+    axios
+    .post('http://192.168.39.180/flujoCaja/montosPorHora.php', { 
+      idUser: userInfo.id,
+      idEmprendimiento: companyInfo.datos.id })
+    .then(respuesta => {
+      // Procesa la respuesta adicional
+      let montosData = respuesta.data;
+      setMontosGenerales(montosData);
+      console.log('Información de montos:', montosData);
+      //console.log(companyInfo);
+      setIsLoading(false);
+    })
+    .catch(error => {
+      console.error('Error al obtener montos de la empresa:', error.response || error.message || error);
+      setIsLoading(false);
+      reject(error); 
+    });
+  })
+  };
+
+
+ useEffect(() => {
+    montos();
+  }, [companyInfo]);
+
   useEffect(() => {
     obtenerEmpresa();
   }, [userInfo]);
@@ -255,6 +284,7 @@ export const AuthProvider = ({children}) => {
         success,
         activo,
         splashLoading,
+        montosGenerales,
         register,
         login,
         logout,

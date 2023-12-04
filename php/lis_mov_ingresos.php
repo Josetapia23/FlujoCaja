@@ -83,9 +83,9 @@ if (empty($data["idUser"]) || empty($data["idTipo"])) {
         $stmt2->close(); // Cerrar la segunda consulta preparada
 
         // Obtener el monto total
-        $sql3 = "SELECT SUM(m.monto) as total FROM movimientos m WHERE MONTH(m.fecha) = ?";
+        $sql3 = "SELECT SUM(m.monto) as total FROM movimientos m WHERE MONTH(m.fecha) = ? AND m.idUser=? And m.idTipo=?";
         $stmt3 = $conn->prepare($sql3);
-        $stmt3->bind_param("i", $currentMonth);
+        $stmt3->bind_param("iii", $currentMonth, $idUser, $idTipo);
         $stmt3->execute();
         $stmt3->bind_result($montoTotal);
 

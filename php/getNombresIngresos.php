@@ -15,12 +15,13 @@ if ($conn->connect_error) {
 }
 
 // Datos para el inicio de sesión
-if (isset($data["id"])) {
+if (isset($data["id"]) || empty($data["tipo"])) {
     $id = $conn->real_escape_string($data["id"]);
+    $idTipo = $conn->real_escape_string($data["tipo"]);
     $listaConceptos = array();
 
     // Verificar las credenciales en la tabla "usuarios"
-    $sqlGetConceptos = "SELECT id, nombreConcepto FROM `conceptos` WHERE idUser = '$id'"; // Limitar a 1 resultado
+    $sqlGetConceptos = "SELECT id, nombreConcepto FROM `conceptos` WHERE idUser = '$id' AND idTipo= '$idTipo'"; // Limitar a 1 resultado
     $resultConceptos = $conn->query($sqlGetConceptos);
 
     while ($row = $resultConceptos->fetch_assoc()) {

@@ -31,7 +31,7 @@ const Despliegue = () => {
       const listarMovimientos = async () => {
         setCargando(true);
         try {
-          const res = await axios.post('http://10.1.80.199/flujoCaja/listaMovimientos.php', {
+          const res = await axios.post('http://192.168.39.180/flujoCaja/listaMovimientos.php', {
             idUser: idUser
           });
       

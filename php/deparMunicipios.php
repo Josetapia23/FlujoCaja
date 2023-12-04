@@ -19,7 +19,7 @@ if (empty($data["idDepar"])) {
         $conn->autocommit(false); // Iniciar transacción
 
         // Obtener departamentos
-        $sql = "SELECT * FROM departamentos";
+        $sql = "SELECT * FROM departamentos2";
         $result = $conn->query($sql);
 
         if ($result) {
@@ -34,24 +34,25 @@ if (empty($data["idDepar"])) {
             $stmtSql2 = $conn->prepare($sql2);
             $stmtSql2->bind_param("i", $idDepar);
             $stmtSql2->execute();
-            $resultMunicipios = $stmtSql2->get_result();
+            $stmtSql2->bind_result($id_municipio, $municipio);
             $municipios = array();
 
-            while ($rowMunicipio = $resultMunicipios->fetch_assoc()) {
-                $municipios[] = $rowMunicipio;
+            while ($stmtSql2->fetch()) {
+                $municipios[] = array('id_municipio' => $id_municipio, 'municipio' => $municipio);
             }
 
             $sql3 = "SELECT m.id_municipio, m.municipio FROM municipios AS m WHERE m.departamento_id = ? ORDER BY m.id_municipio ASC LIMIT 1";
             $stmtSql3 = $conn->prepare($sql3);
             $stmtSql3->bind_param("i", $idDepar);
             $stmtSql3->execute();
-            $resultMunicipio1 = $stmtSql3->get_result();
+            $stmtSql3->bind_result($municipio1_id, $municipio1_nombre);
+
             $municipio1 = array();
-            while ($rowMunicipio1 = $resultMunicipio1->fetch_assoc()) {
-                $municipio1[] = $rowMunicipio1;
+            while ($stmtSql3->fetch()) {
+                $municipio1[] = array('id_municipio' => $municipio1_id, 'municipio' => $municipio1_nombre);
             }
 
-            $response = array('result' => 'success', 'message' => 'Registros obtenidos exitosamente',  'municipio1' => $municipio1, 'departamentos' => $departamentos, 'municipios' => $municipios);
+            $response = array('result' => 'success', 'message' => 'Registros obtenidos exitosamente', 'municipio1' => $municipio1, 'departamentos' => $departamentos, 'municipios' => $municipios);
         } else {
             $response = array('result' => 'error', 'message' => 'Error en la consulta: ' . $conn->error);
         }
