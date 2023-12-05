@@ -10,12 +10,15 @@ export const AuthProvider = ({children}) => {
   const [userInfo, setUserInfo] = useState({});
   const [companyInfo, setCompanyInfo] = useState({});
   const [montosGenerales, setMontosGenerales] = useState({});
+  const [arrayIngresos, setArrayIngresos] = useState([]);
+  const [arrayGastos, setArrayGastos] = useState([]);
   const [errorMessage, setErrorMessage] = useState(false);
   const [txtErrorEmail, setTxtErrorEmail] = useState('');
   const [ok, setOk] = useState(false);
   const [success, setSuccess] = useState('no');
   const [activo, setActivo] = useState(false);
   const [tokenUsuario, setTokenUsuario] = useState(0);
+  const [tokenEmpresa, setTokenEmpresa] = useState(0);
   const [splashLoading, setSplashLoading] = useState(false);
 
 
@@ -38,7 +41,7 @@ export const AuthProvider = ({children}) => {
           setUserInfo(userInfo);
           console.log(userInfo);
           setIsLoading(false);
-          AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+          //AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
           if (userInfo.result === 'success') {
             // Registro exitoso, muestra un mensaje o realiza una acción adicional
             console.log('Registro exitoso');
@@ -106,69 +109,92 @@ export const AuthProvider = ({children}) => {
     });
   };
 
-  const obtenerEmpresa = () => {
-    return new Promise((resolve, reject) => {
+  const obtenerEmpresa = async () => {
+    try {
       setIsLoading(true);
-    axios
-    .post('https://www.plataforma50.com/pruebas/gestionP/getDatosEmpresa.php', { id: userInfo.id })
-    .then(respuesta => {
-      // Procesa la respuesta adicional
-      let emprendimientoData = respuesta.data;
+      const respuesta = await axios.post(
+        'https://www.plataforma50.com/pruebas/gestionP/getDatosEmpresa.php',
+        { id: userInfo.id }
+      );
+      const emprendimientoData = respuesta.data;
+      AsyncStorage.setItem('companyinfo', JSON.stringify(emprendimientoData));
+
       console.log('Información adicional:', emprendimientoData);
-      if(emprendimientoData.success== true){
-          //AsyncStorage.setItem('emprendimientoInfo', JSON.stringify(emprendimientoData));
-          setCompanyInfo({
-            "pasar":"si",
-            "datos": emprendimientoData.emprendimiento
-          });
-      }else{
-        //AsyncStorage.setItem('emprendimientoInfo', "Sin datos");
+      if (emprendimientoData.success) {
+        setTokenEmpresa(1);
         setCompanyInfo({
-          "pasar":"no"
-        })
+          pasar: 'si',
+          datos: emprendimientoData.emprendimiento,
+        });
+      } else {
+        setCompanyInfo({
+          pasar: 'no',
+        });
       }
-      //console.log(companyInfo);
+
       setIsLoading(false);
-    })
-    .catch(error => {
-      console.error('Error al obtener información adicional:', error.response || error.message || error);
+    } catch (error) {
+      console.error(
+        'Error al obtener información adicional:',
+        error.response || error.message || error
+      );
       setIsLoading(false);
-      reject(error); // Rechaza la promesa en caso de error al obtener información adicional
-    });
-  })
+      throw error; // Lanza el error para que pueda ser manejado por la llamada de la promesa
+    }
   };
 
-  const montos = () => {
-    return new Promise((resolve, reject) => {
+  const montos = async () => {
+    try {
       setIsLoading(true);
-    axios
-    .post('http://192.168.39.180/flujoCaja/montosPorHora.php', { 
-      idUser: userInfo.id,
-      idEmprendimiento: companyInfo.datos.id })
-    .then(respuesta => {
-      // Procesa la respuesta adicional
-      let montosData = respuesta.data;
+      const respuesta = await axios.post(
+        'http://10.1.80.100/flujoCaja/montosPorHora.php',
+        {
+          idUser: userInfo.id,
+          idEmprendimiento: companyInfo.datos.id,
+        }
+      );
+
+      const montosData = respuesta.data;
       setMontosGenerales(montosData);
-      console.log('Información de montos:', montosData);
-      //console.log(companyInfo);
+      setArrayIngresos(montosData.ingresoPorIntervalo);
+      setArrayGastos(montosData.gastoPorIntervalo);
+      console.log('Información de montos:'," ",montosData.ingresoPorIntervalo, " ",montosData.gastoPorIntervalo);
+
       setIsLoading(false);
-    })
-    .catch(error => {
-      console.error('Error al obtener montos de la empresa:', error.response || error.message || error);
+    } catch (error) {
+      console.error(
+        'Error al obtener montos de la empresa:',
+        error.response || error.message || error
+      );
       setIsLoading(false);
-      reject(error); 
-    });
-  })
+      throw error; // Lanza el error para que pueda ser manejado por la llamada de la promesa
+    }
   };
 
-
- useEffect(() => {
-    montos();
-  }, [companyInfo]);
 
   useEffect(() => {
-    obtenerEmpresa();
+    const fetchData = async () => {
+      try {
+        await obtenerEmpresa();
+      } catch (error) {
+        // Manejar el error aquí si es necesario
+      }
+    };
+
+    fetchData();
   }, [userInfo]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await montos();
+      } catch (error) {
+        // Manejar el error aquí si es necesario
+      }
+    };
+
+    fetchData();
+  }, [companyInfo]);
 
   const registerEmpresa = (nombreEmpresa, nit, direccion, telefonoEmpresarial, emailEmpresarial, idUser, idDepartamento, idMunicipio, registroEmpresa) => {
     return new Promise((resolve, reject) => {
@@ -197,6 +223,7 @@ export const AuthProvider = ({children}) => {
           if (companyData.result === 'success') {
             // Registro exitoso, muestra un mensaje o realiza una acción adicional
             //https://www.plataforma50.com/pruebas/gestionP/registro.php
+            setTokenEmpresa(1);
             setCompanyInfo({
               "pasar":"si",
               "datos": companyData.emprendimiento
@@ -230,20 +257,22 @@ export const AuthProvider = ({children}) => {
     setIsLoading(true);
     try {
       await AsyncStorage.removeItem('userInfo');
-      //await AsyncStorage.removeItem('seno');
-      //await AsyncStorage.removeItem('tokenDispositivo');
       await AsyncStorage.removeItem('id');
       await AsyncStorage.removeItem('companyInfo');
       await AsyncStorage.removeItem('emprendimientoInfo');
       await AsyncStorage.removeItem('conceptos1');
       await AsyncStorage.removeItem('conceptos2');
 
-      
-
       setTokenUsuario(0);
+      setTokenEmpresa(0);
       setUserInfo({});
-      setIsLoading(false);
       setCompanyInfo({});
+      setMontosGenerales({});
+      setArrayGastos([]);
+      setArrayIngresos([]);
+      setIsLoading(false);
+      setErrorMessage(false);
+      setActivo(false);
       console.log('salio');
     } catch (e) {
       console.error('Error ' + e);
@@ -257,10 +286,22 @@ export const AuthProvider = ({children}) => {
       let userInfo = await AsyncStorage.getItem('userInfo');
       userInfo = JSON.parse(userInfo);
 
+      let companyInfo = await AsyncStorage.getItem('companyInfo');
+      companyInfo = JSON.parse(companyInfo);
+
       if (userInfo) {
         setUserInfo(userInfo);
         setTokenUsuario(1);
       }
+
+      if (companyInfo) {
+        setCompanyInfo({
+          pasar: 'si',
+          datos: companyInfo.emprendimiento,
+        });
+        setTokenEmpresa(1);
+      }
+
       setSplashLoading(false);
     } catch (e) {
       setSplashLoading(false);
@@ -271,6 +312,8 @@ export const AuthProvider = ({children}) => {
   useEffect(() => {
     isLogged();
   }, []); //Fin
+
+
   return (
     <AuthContext.Provider
       value={{
@@ -280,11 +323,14 @@ export const AuthProvider = ({children}) => {
         userInfo,
         companyInfo,
         tokenUsuario,
+        tokenEmpresa,
         ok,
         success,
         activo,
         splashLoading,
         montosGenerales,
+        arrayIngresos,
+        arrayGastos,
         register,
         login,
         logout,

@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react'
 import {colores, colors} from '../componentes/Colors'
 import { TouchableOpacity } from 'react-native'
 import { AuthContext } from '../context/AuthContext'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Alert } from 'react-native'
 import Botones from '../componentes/Botones'
@@ -12,26 +12,37 @@ import { useEffect } from 'react'
 
 
 const Home = () => {
-  const { isLoading, logout, userInfo, montosGenerales } = useContext(AuthContext);
+  const { isLoading, logout, userInfo, montosGenerales, arrayIngresos, arrayGastos, tokenEmpresa } = useContext(AuthContext);
   const ingresoDiario = montosGenerales.ingresoDiario; //Cantidad de ingresos en el dia actual
   const ingresoMensual = montosGenerales.ingresoMensual;//Cantidad de ingresos en el mes actual
   const gastoDiario = montosGenerales.gastoDiario;//Cantidad de gastos en el dia actual
   const gastoMensual = montosGenerales.gastoMensual; //Cantidad de gastos en el mes actual
   const nombreUsuario = userInfo.nombre;
-  const [arrayIngresos, setArryIngresos] = useState([]);
-  const [arrayGastos, setArrayGastos] = useState([]);
+  const [arrayIngresos2, setArrayIngresos2] = useState([]);
+  const [arrayGastos2, setArrayGastos2] = useState([]);
 
 
+  useEffect(() => {
+    if (arrayIngresos) {
+      setArrayIngresos2(arrayIngresos);
+    }
+    if (arrayGastos) {
+      setArrayGastos2(arrayGastos);
+    }
+  }, [arrayIngresos, arrayGastos]);
 
+  const arrayIngresosNumeros = arrayIngresos2?.map(val => Number(val.replace(/,/g, ''))) || [0,0,0,0,0,0];
+  const arrayGastosNumeros = arrayGastos2?.map(val => Number(val.replace(/,/g, ''))) || [0,0,0,0,0,0];
+
+
+console.log(arrayIngresosNumeros, "  ", arrayGastosNumeros)
+
+  //const arrayIngresos = montosGenerales.ingresoPorIntervalo;
   // useEffect(()=>{
   //   setArryIngresos(montosGenerales.ingresoPorIntervalo)
   //   setArrayGastos(montosGenerales.gastoPorIntervalo)
   // },[])
 
-
-
- const gananciaDiaria = ingresoDiario-gastoDiario;
- const gananciaMes = ingresoMensual-gastoMensual;
 
 
   const salir = () => {
@@ -59,14 +70,13 @@ const xx = useNavigation();
             <Spinner visible={isLoading} />
             
             <ScrollView>
-              <Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={[23,45,67,34,56,67]}/>
-              <View>
+            <View>
                 {
                   ingresoDiario !== null?
                   (
                     <>
-                    <Text>{nombreUsuario}</Text>
                     <Text>{`El monto total de ingresos de hoy son de: ${ingresoDiario}`}</Text>
+                  {arrayIngresosNumeros.length > 0 ? (<Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayIngresosNumeros} v='i'/>):(<></>)}
                     </>
                   ):(
                     <Text>{`El dia de hoy no ha registrado ingresos`}</Text>
@@ -83,8 +93,12 @@ const xx = useNavigation();
                 {
                   gastoDiario !== null?
                   (
+                    
+                    <>
                     <Text>{`El monto total de gastos de hoy son de: ${gastoDiario}`}</Text>
-                  ):(
+                    {arrayGastosNumeros.length > 0 ? (<Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayGastosNumeros} v='g'/>):(<></>)}
+                    </>
+                    ):(
                     <Text>{`El dia de hoy no ha registrado gastos`}</Text>
                   )
                 }
@@ -95,10 +109,6 @@ const xx = useNavigation();
                   ):(
                     <Text>{`El dia de hoy no ha registrado gastos`}</Text>
                   )
-                }
-                {
-                  gananciaDiaria>0 ?
-                  (<Text>{`Las ganancias del dia son  ${gananciaDiaria}`}</Text>):(<Text>{gananciaDiaria}</Text>)
                 }
                 <Botones name='Cerrar Sersion'
                     funcion={salir} margin={100} padding={4}></Botones>

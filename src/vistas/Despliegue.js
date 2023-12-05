@@ -31,7 +31,7 @@ const Despliegue = () => {
       const listarMovimientos = async () => {
         setCargando(true);
         try {
-          const res = await axios.post('http://192.168.39.180/flujoCaja/listaMovimientos.php', {
+          const res = await axios.post('https://www.plataforma50.com/pruebas/gestionP/listaMovimientos.php', {
             idUser: idUser
           });
       
@@ -87,7 +87,8 @@ const Despliegue = () => {
                                         fontSize:25
                                         }}>{`Ultimos ${listaMovimientos.length} movimientos`}</Text>
                                     <Tablas datos={listaMovimientos}
-                                    categoria={'Categorias-Tipo'} />
+                                    categoria={'Categorias-Tipo'}
+                                    ambos={'1'} />
                                 </View>
                                 ):(
                                 <View>

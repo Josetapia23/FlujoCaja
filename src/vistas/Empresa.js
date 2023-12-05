@@ -21,7 +21,7 @@ const TELEFONO_REGEX = /^[0-9]{7,10}$/;
 const NIT_REGEX = /^[0-9]{1,10}-[0-9]{1}$/;
 const DIRECCION_REGEX = /^[0-9A-Za-z\s#áéíóúÁÉÍÓÚñÑ.,-/]+$/;
 
-const Empresa = () => {
+const Empresa2 = () => {
   const { isLoading, userInfo, registerEmpresa, companyInfo, logout} = useContext(AuthContext);
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
@@ -334,7 +334,7 @@ const navegacion = useNavigation();
   );
 };
 
-export default Empresa;
+export default Empresa2;
 
 const styles = StyleSheet.create({
   containForm: {

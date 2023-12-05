@@ -1,5 +1,5 @@
 import { StyleSheet} from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -15,6 +15,7 @@ import Graficos from '../vistas/Graficos';
 import Ingresos from '../vistas/Ingresos';
 import Despliegue from '../vistas/Despliegue';
 import Empresa from '../vistas/Empresa';
+import Empresa3 from '../vistas/Empresa3';
 import Gastos from '../vistas/Gastos';
 import Historiales from '../vistas/Historiales';
 import Historiales2 from '../vistas/Historiales2';
@@ -22,8 +23,14 @@ import Historiales2 from '../vistas/Historiales2';
 const Stack = createNativeStackNavigator();
 
 const Navegacion = () => {
-  const { tokenUsuario, splashLoading } = useContext(AuthContext)
+  const { tokenUsuario, splashLoading, tokenEmpresa } = useContext(AuthContext);
+const [tokenEmpresa2, setTokenEmpresa2] = useState(null);
+  
+useEffect(()=>(
+    setTokenEmpresa2(tokenEmpresa)
+  ),[tokenEmpresa]);
 
+    console.log("Este es el token empresa: ", tokenEmpresa2);
   return (
     <NavigationContainer>
         <Stack.Navigator >
@@ -36,7 +43,7 @@ const Navegacion = () => {
                               <Stack.Screen name="Registro" component={Registro} options={{ headerShown: false,}}/>
                           </>
                       ) : (
-                          <>
+                        <>
                             <Stack.Screen name="Home" component={TabGroup} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Graficos" component={Graficos} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Despliegue" component={Despliegue} options={{ headerShown: false,}}/>
@@ -45,8 +52,7 @@ const Navegacion = () => {
                             <Stack.Screen name="Gastos" component={Gastos} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Historiales" component={Historiales} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Historiales2" component={Historiales2} options={{ headerShown: false,}}/>
-                        
-                          </>
+                          </> 
                       )
         }
         </Stack.Navigator>
