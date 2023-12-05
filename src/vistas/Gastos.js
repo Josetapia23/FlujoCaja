@@ -140,7 +140,7 @@ const Gastos = () => {
           {
             monto: getValues('monto'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
             descripcion: descripcion,
-            idTipo: 1,
+            idTipo: 2,
             idUser: idUser,
             idConcepto:idConcepto,
             idEmprendimiento: datosEmpresa.id

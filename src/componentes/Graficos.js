@@ -3,8 +3,9 @@ import React from 'react'
 
 import {
     LineChart,
+    ProgressChart
   } from "react-native-chart-kit";
-import { colores } from './Colors';
+import { colores, colors } from './Colors';
 
 const Graficos = ({labels, datos, v}) => {
 
@@ -28,21 +29,21 @@ const Graficos = ({labels, datos, v}) => {
         yAxisInterval={1} // optional, defaults to 1
         chartConfig={{
             backgroundColor: colores.color9,
-            backgroundGradientFrom: colores.color3,
-          backgroundGradientTo: colores.color6,
-          //decimalPlaces: 1, // optional, defaults to 2dp
-          color: (opacity = 1) => colores.color1,
+            backgroundGradientFrom: colores.color8,
+          backgroundGradientTo: colores.color8,
+          decimalPlaces: 0, // optional, defaults to 2dp
+          color: (opacity = 10) => colors.color8,
           labelColor: (opacity = 5) => `rgba(0, 0, 0, ${opacity})`,
           propsForDots: {
             r: "4",
-            strokeWidth: "2",
+            strokeWidth: "3",
             stroke: 'green'
           }
         }}
         bezier
         style={{
           marginVertical: 8,
-          borderRadius: 16,
+          borderRadius: 7,
         }}
     />
       ):(
@@ -63,21 +64,21 @@ const Graficos = ({labels, datos, v}) => {
           yAxisInterval={1} // optional, defaults to 1
           chartConfig={{
               backgroundColor: colores.color9,
-              backgroundGradientFrom: colores.color5,
-            backgroundGradientTo: colores.color6,
-            //decimalPlaces: 1, // optional, defaults to 2dp
-            color: (opacity = 1) => colores.color4,
+              backgroundGradientFrom: colores.color8,
+            backgroundGradientTo: colores.color8,
+            decimalPlaces: 0, // optional, defaults to 2dp
+            color: (opacity = 10) => colors.color8,
             labelColor: (opacity = 5) => `rgba(0, 0, 0, ${opacity})`,
             propsForDots: {
               r: "4",
               strokeWidth: "2",
-              stroke: 'red'
+              stroke: colores.color10
             }
           }}
           bezier
           style={{
             marginVertical: 8,
-            borderRadius: 16,
+            borderRadius: 7,
           }}
       />
         ):(

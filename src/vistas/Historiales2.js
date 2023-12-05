@@ -238,7 +238,7 @@ const Historiales = () => {
   return (
     <SafeAreaView style={styles.container}>
         <View style={styles.containerSuperior}>
-            <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Ingresos')}>
+            <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Gastos')}>
                 <Material name='arrow-left' size={20} color={colores.color7}/>
             </TouchableOpacity>
             <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7, textAlign:'center'}}>{`Historial de Gastos\nTotal`}</Text>

@@ -147,7 +147,7 @@ export const AuthProvider = ({children}) => {
     try {
       setIsLoading(true);
       const respuesta = await axios.post(
-        'http://10.1.80.100/flujoCaja/montosPorHora.php',
+        'https://www.plataforma50.com/pruebas/gestionP/montosPorHora.php',
         {
           idUser: userInfo.id,
           idEmprendimiento: companyInfo.datos.id,

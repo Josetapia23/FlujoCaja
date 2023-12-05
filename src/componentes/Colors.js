@@ -7,7 +7,9 @@ export const colores = {
     color6: '#f1f1f1',
     color7: '#e3dddd',
     color8: '#fff',
-    color9: '#635c5c'
+    color9: '#635c5c',
+    color10: '#Ff0000',
+    color11: '#BF080B'
 }
 
 export const colors = {
