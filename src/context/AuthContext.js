@@ -335,6 +335,7 @@ export const AuthProvider = ({children}) => {
         login,
         logout,
         registerEmpresa,
+        montos
       }}>
       {children}
     </AuthContext.Provider>

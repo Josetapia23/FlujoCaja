@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View , RefreshControl } from 'react-native'
 import React, { useContext, useState } from 'react'
 import {colores, colors} from '../componentes/Colors'
 import { TouchableOpacity } from 'react-native'
@@ -9,19 +9,42 @@ import { Alert } from 'react-native'
 import Botones from '../componentes/Botones'
 import Graficos from '../componentes/Graficos'
 import { useEffect } from 'react'
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 
 const Home = () => {
-  const { isLoading, logout, userInfo, montosGenerales, arrayIngresos, arrayGastos, tokenEmpresa } = useContext(AuthContext);
+  const { isLoading, logout, userInfo, montosGenerales, arrayIngresos, arrayGastos, tokenEmpresa, montos } = useContext(AuthContext);
+  const [arrayIngresos2, setArrayIngresos2] = useState([]);
+  const [arrayGastos2, setArrayGastos2] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [fechaFormateada, setFechaFormateada] = useState('');
   const ingresoDiario = montosGenerales.ingresoDiario; //Cantidad de ingresos en el dia actual
   const ingresoMensual = montosGenerales.ingresoMensual;//Cantidad de ingresos en el mes actual
   const gastoDiario = montosGenerales.gastoDiario;//Cantidad de gastos en el dia actual
   const gastoMensual = montosGenerales.gastoMensual; //Cantidad de gastos en el mes actual
   const nombreUsuario = userInfo.nombre;
-  const [arrayIngresos2, setArrayIngresos2] = useState([]);
-  const [arrayGastos2, setArrayGastos2] = useState([]);
+
+  const arrayIngresosNumeros = arrayIngresos2?.map(val => Number(val.replace(/,/g, ''))) || [0,0,0,0,0,0];
+  const arrayGastosNumeros = arrayGastos2?.map(val => Number(val.replace(/,/g, ''))) || [0,0,0,0,0,0];
+  
+  
+  const ingresoDiarioNumerico = ingresoDiario ? Number(ingresoDiario.replace(/,/g, '')) : 0;
+  const gastoDiarioNumerico = gastoDiario ? Number(gastoDiario.replace(/,/g, '')) : 0;
+  
+  const ingresoMensualNumerico = ingresoMensual ? Number(ingresoMensual.replace(/,/g, '')) : 0;
+  const gastoMensualNumerico = gastoMensual ? Number(gastoMensual.replace(/,/g, '')) : 0;
+  const balanceMensual2 = ingresoMensualNumerico - gastoMensualNumerico;
+  const balanceMensual = balanceMensual2.toLocaleString();
+  
 
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await montos(); // Llamamos a la función montos para actualizar los datos
+    setRefreshing(false);
+  };
+  
   useEffect(() => {
     if (arrayIngresos) {
       setArrayIngresos2(arrayIngresos);
@@ -31,19 +54,10 @@ const Home = () => {
     }
   }, [arrayIngresos, arrayGastos]);
 
-  const arrayIngresosNumeros = arrayIngresos2?.map(val => Number(val.replace(/,/g, ''))) || [0,0,0,0,0,0];
-  const arrayGastosNumeros = arrayGastos2?.map(val => Number(val.replace(/,/g, ''))) || [0,0,0,0,0,0];
 
+console.log(arrayIngresosNumeros, "  ", balanceMensual, "  ",arrayGastosNumeros)
 
-console.log(arrayIngresosNumeros, "  ", arrayGastosNumeros)
-
-  //const arrayIngresos = montosGenerales.ingresoPorIntervalo;
-  // useEffect(()=>{
-  //   setArryIngresos(montosGenerales.ingresoPorIntervalo)
-  //   setArrayGastos(montosGenerales.gastoPorIntervalo)
-  // },[])
-
-
+  
 
   const salir = () => {
     Alert.alert(
@@ -63,51 +77,126 @@ console.log(arrayIngresosNumeros, "  ", arrayGastosNumeros)
     );
 }
 
+useEffect(() => {
+  // Obtener la fecha actual
+  const fechaActual = new Date();
+
+  // Opciones de formato para el objeto Intl.DateTimeFormat
+  const opcionesFormato = {
+    weekday: 'long', // día de la semana (nombre completo)
+    year: 'numeric', // año (numérico)
+    month: 'long', // mes (nombre completo)
+    day: 'numeric', // día del mes (numérico)
+  };
+
+  // Formatear la fecha usando Intl.DateTimeFormat
+  const formatoFecha = new Intl.DateTimeFormat('es-ES', opcionesFormato);
+  const fechaFormateadaTexto = formatoFecha.format(fechaActual);
+
+  setFechaFormateada(fechaFormateadaTexto);
+}, []); 
+
 const xx = useNavigation();
 
   return (
     <View style={styles.container}>
             <Spinner visible={isLoading} />
-            
-            <ScrollView>
-            <View>
+            <View style={styles.containerSuperior}>
+              <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7, textAlign:'center'}}>{`Hola ${userInfo.nombre}`}</Text>
+            </View>
+            <ScrollView 
+            style={{marginVertical:20}}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }>
+            <View style={styles.containerBody}>
                 {
-                  ingresoDiario !== null?
+                  ingresoDiarioNumerico > 0?
                   (
                     <>
-                    <Text>{`El monto total de ingresos de hoy son de: ${ingresoDiario}`}</Text>
+                    <Text style={styles.txtMontos}>
+                      El monto total de ingresos de hoy son de 
+                    <Text style={{color:'green'}}> ${ingresoDiario}</Text></Text>
                   {arrayIngresosNumeros.length > 0 ? (<Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayIngresosNumeros} v='i'/>):(<></>)}
                     </>
                   ):(
-                    <Text>{`El dia de hoy no ha registrado ingresos`}</Text>
+                    <Text style={styles.txtMontos}>{`El dia de hoy no ha registrado ingresos`}</Text>
                   )
                 }
+                <View style={{borderBottomColor:colors.color8, width:'100%', borderWidth:1, opacity:0.1, top:0}}></View>
                 {
-                  ingresoMensual !== null?
-                  (
-                    <Text>{`El monto total de ingresos de este mes es de: ${ingresoDiario}`}</Text>
-                  ):(
-                    <Text>{`En este mes no tiene ingresos registrados`}</Text>
-                  )
-                }
-                {
-                  gastoDiario !== null?
+                  gastoDiarioNumerico > 0?
                   (
                     
                     <>
-                    <Text>{`El monto total de gastos de hoy son de: ${gastoDiario}`}</Text>
+                    <Text style={[styles.txtMontos, {marginTop:10}]}>
+                      {`El monto total de gastos hoy '${fechaFormateada}' son:`} 
+                    <Text style={{color:'red'}}> ${gastoDiario}</Text></Text>
                     {arrayGastosNumeros.length > 0 ? (<Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayGastosNumeros} v='g'/>):(<></>)}
                     </>
                     ):(
-                    <Text>{`El dia de hoy no ha registrado gastos`}</Text>
+                    <Text style={[styles.txtMontos, {marginTop:10}]}>{`El dia de hoy no ha registrado gastos`}</Text>
                   )
                 }
+                <View style={{borderBottomColor:colors.color8, width:'100%', borderWidth:1, opacity:0.1, top:0}}></View>
+                
                 {
-                  gastoMensual !== null?
-                  (
-                    <Text>{`El monto total de gastos de hoy son de: ${gastoMensual}`}</Text>
+                  ingresoMensualNumerico > 0 && gastoMensualNumerico > 0?(
+                    <>
+                    <Text style={[styles.txtMontos, {marginTop:10}]}>
+                      El balance total del mes actual es el siguiente:</Text>
+                      {
+                        balanceMensual2 > 0 ?
+                        (<Text style={{color:'green', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>):
+                        (<Text style={{color:'red', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>)
+                      }
+                      <Text
+                      style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
+                        {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
+                        </Text>
+                    </>
                   ):(
-                    <Text>{`El dia de hoy no ha registrado gastos`}</Text>
+                    ingresoMensualNumerico > 0?
+                    (
+                      <>
+                      <Text style={[styles.txtMontos, {marginTop:10}]}>
+                      El balance total del mes actual es el siguiente:</Text>
+                      <Text style={{color:'green', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
+                      <Text
+                        style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
+                        {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
+                      </Text>
+                      
+                      </>
+                    ):(
+                    <>
+                    </>
+                    )
+                  )
+                }
+
+
+
+
+                {
+                  ingresoMensualNumerico > 0?
+                  (
+                    <Text style={[styles.txtMontos, {marginTop:10}]}>
+                      El monto total de ingresos del mes actual es de:
+                    <Text style={{color:'green'}}> ${ingresoMensual}</Text></Text>
+                  ):(
+                    <Text style={[styles.txtMontos, {marginTop:10}]}>{`En este mes no tiene ingresos registrados`}</Text>
+                  )
+                }
+                <View style={{borderBottomColor:colors.color8, width:'100%', borderWidth:1, opacity:0.1, top:0}}></View>
+                {
+                  gastoMensualNumerico > 0?
+                  (
+                    <Text style={[styles.txtMontos, {marginTop:10}]}>
+                      El monto total de gastos del mes actual es de:
+                    <Text style={{color:'red'}}> ${gastoMensual}</Text></Text>
+                  ):(
+                    <Text style={[styles.txtMontos, {marginTop:10}]}>{`El dia de hoy no ha registrado gastos`}</Text>
                   )
                 }
                 <Botones name='Cerrar Sersion'
@@ -125,7 +214,24 @@ const styles = StyleSheet.create({
   container:{
     flex:1,
     backgroundColor: colores.color6,
+  },
+  containerSuperior:{
+    //flexDirection:'row',
+    backgroundColor:colores.color5,
     alignItems:'center',
-    justifyContent:'space-around'
+    justifyContent:'center',
+    height:100
+  },
+  containerBody:{
+    alignItems:'center',
+    marginTop:20
+  },
+  txtMontos:{
+    fontFamily:'Roboto-Medium',
+    fontSize:20,
+    marginHorizontal:30,
+    textAlign:'center',
+    color:colores.color9,
+    paddingVertical:5
   }
 })

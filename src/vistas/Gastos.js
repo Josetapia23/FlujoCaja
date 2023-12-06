@@ -379,7 +379,14 @@ const navegacion = useNavigation();
           visible={visible}>
             <View style={styles.modal}>
               <View style={styles.modalView}>
-                <TouchableOpacity style={styles.closeButton}
+              {
+            cargando ? (
+              <View style={{marginTop:150}}>
+              <SplashScreens />
+            </View> 
+            ):(
+              <>
+              <TouchableOpacity style={styles.closeButton}
                 onPress={()=>{
                   setVisible(!visible);
                   reset({ nombre: '' }); // Esto reseteará el campo 'nombre' del formulario
@@ -408,6 +415,11 @@ const navegacion = useNavigation();
                 name='Guardar'
                 funcion={handleSubmit(guardar)}
                 margin={50}/>
+                </>
+            )
+        
+        }
+                
               </View>
             </View>
       </Modal>
@@ -417,6 +429,14 @@ const navegacion = useNavigation();
           visible={visible2}>
             <View style={styles.modal}>
               <View style={styles.modalView}>
+
+              {
+            cargando ? (
+              <View style={{marginTop:150}}>
+              <SplashScreens />
+            </View> 
+            ):(
+              <>
                 <TouchableOpacity style={styles.closeButton}
                 onPress={()=>{
                   setVisible2(false);
@@ -426,7 +446,7 @@ const navegacion = useNavigation();
                 <Text style={{fontSize:20}}>X</Text>
                 </TouchableOpacity>
                 <Text style={styles.txtTitulo}>{`Nuevo monto de ${nombreCateg}`}</Text>
-                
+
                 <View 
                     style={{paddingBottom:30}}
                     >
@@ -447,6 +467,9 @@ const navegacion = useNavigation();
                 name='Guardar'
                 funcion={handleSubmit(AlertaMonto)}
                 margin={50}/>
+              </>
+              )
+              }
               </View>
             </View>
           </Modal>

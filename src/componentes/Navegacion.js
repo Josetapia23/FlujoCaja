@@ -76,7 +76,7 @@ function TabGroup() {
                     if (route.name === 'Inicio') {
                         iconName = 'home-outline';
                     }else if(route.name === 'Graficos'){
-                      iconName = 'chart-areaspline';
+                      iconName = 'calculator-variant-outline';
                     }else if(route.name === 'Despliegue'){
                         iconName = 'currency-usd';
                     }else if(route.name === 'Empresa'){
