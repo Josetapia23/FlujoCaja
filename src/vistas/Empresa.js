@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native';
 import AntDesign from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Alert } from 'react-native';
+import Botones2 from '../componentes/Botones2';
 
 //import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -129,7 +130,7 @@ const registrarEmpresa = () => {
   registerEmpresa(nombreEmpresa, nit, direccion, telefonoEmpresarial, emailEmpresarial, idUser, idDepartamento, idMunicipio, registroEmpr)
       .then(() => {
           // Registro exitoso, navega a la pantalla deseada
-          navegacion.navigate('Home'); // Reemplaza 'PantallaDespuesDelRegistro' con el nombre de la pantalla a la que deseas navegar después del registro exitoso.
+          navegacion.navigate('Empresa'); // Reemplaza 'PantallaDespuesDelRegistro' con el nombre de la pantalla a la que deseas navegar después del registro exitoso.
       })
       .catch(error => {
           // Manejar el error si es necesario
@@ -318,8 +319,12 @@ const navegacion = useNavigation();
                       <Botones 
                             name='Registrar'
                             funcion={handleSubmit(registrarEmpresa)}
-                            margin={70}
+                            margin={60}
                             />
+                      <Botones2 name='Cerrar Sersion'
+                          funcion={salir} margin={60} padding={4}>
+                        < AntDesign name='logout-variant' size={35} color={colores.color8}/>
+                      </Botones2>
                       
                             
                     <Text>{estado} {idUser} {idDepartamento} {idMunicipio}</Text>

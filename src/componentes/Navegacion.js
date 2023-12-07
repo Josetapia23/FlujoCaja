@@ -44,10 +44,10 @@ useEffect(()=>(
                           </>
                       ) : (
                         <>
-                            <Stack.Screen name="Home" component={TabGroup} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Empresa" component={TabGroup} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Home" component={Home} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Graficos" component={Graficos} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Despliegue" component={Despliegue} options={{ headerShown: false,}}/>
-                            <Stack.Screen name="Empresa" component={Empresa} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Ingresos" component={Ingresos} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Gastos" component={Gastos} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Historiales" component={Historiales} options={{ headerShown: false,}}/>
@@ -66,7 +66,7 @@ const Tab = createBottomTabNavigator(); //Instanciamos la clase createBottomTabN
 function TabGroup() {
     return (
         <Tab.Navigator
-            initialRouteName="Inicio"
+            initialRouteName="Empresa"
             screenOptions={({ route }) => ({
                 tabBarShowLabel: false,
                 tabBarIcon: ({ focused, color, size }) => {
@@ -93,7 +93,6 @@ function TabGroup() {
                 },
             }}
         >
-            
             <Tab.Screen name="Inicio" component={Home} options={{ headerShown: false }} />
             <Tab.Screen name="Despliegue" component={Despliegue} options={{ headerShown: false }} />
             <Tab.Screen name="Graficos" component={Graficos} options={{ headerShown: false }} />

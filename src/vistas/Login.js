@@ -37,12 +37,12 @@ const Login = () => {
 
 
 
-    useEffect(() => {
-        if (success === 'si') {
-            //setIsNavigating(true); // Evitar múltiples navegaciones
-            xx.navigate('Home'); // Realizar la navegación cuando success sea 'si'
-        }
-    }, [success]);
+    // useEffect(() => {
+    //     if (success === 'si') {
+    //         //setIsNavigating(true); // Evitar múltiples navegaciones
+    //         xx.navigate('Home'); // Realizar la navegación cuando success sea 'si'
+    //     }
+    // }, [success]);
 
     const Login = () => {
         login(email, contrasena)

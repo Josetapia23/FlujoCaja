@@ -6,6 +6,9 @@ import Imput2 from '../componentes/Imput2';
 import Botones from '../componentes/Botones';
 import { useForm } from 'react-hook-form';
 import SplashScreens from './SplashScreens';
+import { ScrollView } from 'react-native';
+import Imputs from '../componentes/Imputs';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Graficos = () => {
   const {
@@ -18,50 +21,63 @@ const Graficos = () => {
 const [cantidad1, setCantidad1] = useState(0);
 const [cantidad, setCantidad] = useState(0);
 const [cargando, setCargando] = useState(false);
+const [monto1, setMonto1] = useState('');
+const [monto2, setMonto2] = useState('');
+const [monto3, setMonto3] = useState('');
+const [monto4, setMonto4] = useState('');
+const [gfm, setGfm] = useState("");
+const [mtms, setMtms] = useState("");
+const [pvp, setPvp] = useState("");
+const [ppxp, setPpxp] = useState("");
 
+const Calcular = () => {
+  setCargando(true);
 
-
-  // const gastoFijoMensual2 = getValues('monto1'); //Montos Obtenidos
+  // const gastoFijoMensual2 = getValues('monto1');
   // const metaMensual2 = getValues('monto2');
   // const precioVentaProducto2 = getValues('monto3');
-  // const precioProduccionXProducto2 = getValues('monto4');
 
-  // //Aqui los formateo a todos los string obtenidos del formulario
-  // const gastoFijoMensual = gastoFijoMensual2 ? Number(gastoFijoMensual2.replace(/,/g, '')) : 0;
-  // const metaMensual = metaMensual2 ? Number(metaMensual2.replace(/,/g, '')) : 0;
-  // const precioVentaProducto = precioVentaProducto2 ? Number(precioVentaProducto2.replace(/,/g, '')) : 0;
-  // const precioProduccionXProducto = precioProduccionXProducto2 ? Number(precioProduccionXProducto2.replace(/,/g, '')) : 0;
+  const gastoFijoMensual = monto1 ? Number(monto1.replace(/,/g, '')) : 0;
+  const metaMensual = monto2 ? Number(monto2.replace(/,/g, '')) : 0;
+  const precioVentaProducto = monto2 ? Number(monto3.replace(/,/g, '')) : 0;
+  const precioProduccionXProducto = monto4 ? Number(monto4.replace(/,/g, '')) : 0;
 
-  //
-  // const gfm = gastoFijoMensual.toLocaleString();
-  // const mtms = metaMensual.toLocaleString();
-  // const pvp = precioVentaProducto.toLocaleString();
-  // const ppxp = precioProduccionXProducto.toLocaleString();
+  const gfmFormatted = gastoFijoMensual.toLocaleString();
+  const mtmsFormatted = metaMensual.toLocaleString();
+  const pvpFormatted = precioVentaProducto.toLocaleString();
+  const ppxpFormatted = precioProduccionXProducto.toLocaleString();
 
-  const Calcular = () =>{
-    setCargando(true);
-
-    const gastoFijoMensual2 = getValues('monto1');
-    const metaMensual2 = getValues('monto2');
-    const precioVentaProducto2 = getValues('monto3');
-    const precioProduccionXProducto2 = getValues('monto4');
-
-    const gastoFijoMensual = gastoFijoMensual2 ? Number(gastoFijoMensual2.replace(/,/g, '')) : 0;
-    const metaMensual = metaMensual2 ? Number(metaMensual2.replace(/,/g, '')) : 0;
-    const precioVentaProducto = precioVentaProducto2 ? Number(precioVentaProducto2.replace(/,/g, '')) : 0;
-    const precioProduccionXProducto = precioProduccionXProducto2 ? Number(precioProduccionXProducto2.replace(/,/g, '')) : 0;
-
-    const gfm = gastoFijoMensual.toLocaleString();
-    const mtms = metaMensual.toLocaleString();
-    const pvp = precioVentaProducto.toLocaleString();
-    const ppxp = precioProduccionXProducto.toLocaleString();
-
-    if (!isNaN(gastoFijoMensual) && !isNaN(metaMensual) && !isNaN(precioVentaProducto) && !isNaN(precioProduccionXProducto)) {
-      setCantidad1((gastoFijoMensual + metaMensual) / (precioVentaProducto - precioProduccionXProducto));
-    }    
-    
-    setCargando(false);
+  if (!isNaN(gastoFijoMensual) && !isNaN(metaMensual) && !isNaN(precioVentaProducto) && !isNaN(precioProduccionXProducto)) {
+    setCantidad1((gastoFijoMensual + metaMensual) / (precioVentaProducto - precioProduccionXProducto));
+    setGfm(gfmFormatted);
+    setMtms(mtmsFormatted);
+    setPvp(pvpFormatted);
+    setPpxp(ppxpFormatted);
   }
+
+  setCargando(false);
+};
+
+const resetInputs = () => {
+  reset({
+    monto1: '',
+    monto2: '',
+    monto3: '',
+    monto4: '',
+  });
+  setMonto1('');
+  setMonto2('');
+  setMonto3('');
+  setMonto4('');
+};
+
+useFocusEffect(
+  React.useCallback(() => {
+    resetInputs();
+    setCantidad1(0);
+    setCantidad(0);
+  }, [])
+);
 
   useEffect(() => {
   // Verificar si setCantidad1 es un número antes de redondear
@@ -70,13 +86,18 @@ const [cargando, setCargando] = useState(false);
   }
 }, [cantidad1]);
 
-const AlertaMonto = () =>{
+const onConfirm = () => {
+  const values = getValues();
+  const monto1 = values.monto1 ? Number(values.monto1.replace(/,/g, '')) : 0;
+  const monto2 = values.monto2 ? Number(values.monto2.replace(/,/g, '')) : 0;
+  const monto3 = values.monto3 ? Number(values.monto3.replace(/,/g, '')) : 0;
+  const monto4 = values.monto4 ? Number(values.monto4.replace(/,/g, '')) : 0;
   Alert.alert(
     'Confirmar Calculo',
-    `Gasto Mensual $${gfm}
-    Meta Mensual: $${mtms}
-    Precio de venta x Unidad: $${pvp}
-    idConcepto: $${ppxp}`,
+    `Gasto Mensual $${monto1.toLocaleString()}
+    Meta Mensual: $${monto2.toLocaleString()}
+    Precio de venta x Unidad: $${monto3.toLocaleString()}
+    idConcepto: $${monto4.toLocaleString()}`,
     [
       {
         text: 'Cancelar',
@@ -84,17 +105,23 @@ const AlertaMonto = () =>{
       },
       {
         text: 'Ingresar',
-        onPress: () => Calcular(),
+        onPress: () => {
+          Calcular();
+          resetInputs();
+        },
         style: 'destructive',
       },
     ],
     { cancelable: false }
   );
-}
+};
   
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.txtTitulo}>{`Calculos `}</Text>
+      <View style={styles.containerSuperior}>
+          <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7, textAlign:'center'}}>{`Lista De Gastos`}</Text>
+      </View> 
+      <ScrollView>
       {
         cargando ==true ? 
         (
@@ -102,11 +129,23 @@ const AlertaMonto = () =>{
       ):(
         <>
         <View 
-            style={{paddingBottom:30, marginHorizontal:20}}
+            style={{paddingBottom:30, marginHorizontal:20, marginTop:20}}
             >
               <View>
                 <Text style={styles.txt}>Gasto fijo mensual:<Text style={{color:'red'}}>*</Text></Text>
-                <Imput2
+                <Imputs
+                            imagen={require('../../assets/iconos/dolar.png')}
+                            name="monto1"
+                            placeholder=" Ingrese el monto"
+                            datos={monto1}
+                            setDatos={setMonto1}
+                            control={control}
+                            rules={{
+                                required: 'El Nombre es obligatorio',
+                            }}
+                            // margin={50}
+                        />
+                {/* <Imput2
                 imagen={require('../../assets/iconos/dolar.png')}
                           name="monto1"
                           placeholder=" Ingrese el monto"
@@ -115,10 +154,22 @@ const AlertaMonto = () =>{
                               required: 'Monto de ingreso requerido',
                           }}
                           keyboardType='numeric'
-                      />
-                <Text style={styles.txt}>Meta de ganancia mensual:<Text style={{color:'red'}}>*</Text></Text>
+                      /> */}
               </View>
-                <Imput2
+                <Text style={styles.txt}>Meta de ganancia mensual:<Text style={{color:'red'}}>*</Text></Text>
+                <Imputs
+                            imagen={require('../../assets/iconos/dolar.png')}
+                            name="monto2"
+                            placeholder=" Ingrese el monto"
+                            datos={monto2}
+                            setDatos={setMonto2}
+                            control={control}
+                            rules={{
+                                required: 'El Nombre es obligatorio',
+                            }}
+                            // margin={50}
+                        />
+                {/* <Imput2
                 imagen={require('../../assets/iconos/dolar.png')}
                           name="monto2"
                           placeholder=" Ingrese el monto"
@@ -127,9 +178,21 @@ const AlertaMonto = () =>{
                               required: 'Monto de ingreso requerido',
                           }}
                           keyboardType='numeric'
-                      />
+                      /> */}
                 <Text style={styles.txt}>Precio de venta unitaria:<Text style={{color:'red'}}>*</Text></Text>
-                <Imput2
+                <Imputs
+                            imagen={require('../../assets/iconos/dolar.png')}
+                            name="monto3"
+                            placeholder=" Ingrese el monto"
+                            datos={monto3}
+                            setDatos={setMonto3}
+                            control={control}
+                            rules={{
+                                required: 'El Nombre es obligatorio',
+                            }}
+                            // margin={50}
+                        />
+                {/* <Imput2
                 imagen={require('../../assets/iconos/dolar.png')}
                           name="monto3"
                           placeholder=" Ingrese el monto"
@@ -138,38 +201,42 @@ const AlertaMonto = () =>{
                               required: 'Monto de ingreso requerido',
                           }}
                           keyboardType='numeric'
-                      />
+                      /> */}
                 <Text style={styles.txt}>Costo de produccion unitario:<Text style={{color:'red'}}>*</Text></Text>
-                <Imput2
-                imagen={require('../../assets/iconos/dolar.png')}
-                          name="monto4"
-                          placeholder=" Ingrese el monto"
-                          control={control}
-                          rules={{
-                              required: 'Monto de ingreso requerido',
-                          }}
-                          keyboardType='numeric'
-                      />
+                <Imputs
+                            imagen={require('../../assets/iconos/dolar.png')}
+                            name="monto4"
+                            placeholder=" Ingrese el monto"
+                            datos={monto4}
+                            setDatos={setMonto4}
+                            control={control}
+                            rules={{
+                                required: 'El Nombre es obligatorio',
+                            }}
+                            // margin={50}
+                        />
                       {
                         cantidad > 0 ? (
                           <>
-                          <Text>Teniendo en cuenta la operacion general para hayar la cantidad de productos que 
+                          <Text style={styles.txtInfomativo}>Teniendo en cuenta la operacion general para hayar la cantidad de productos que 
                             necesitas vender para poder suplir tu negocio y además tener las ganancias especificadas 
                           </Text>
-                          <Text>Debes vender:</Text>
-                          <Text style={{fontSize:30}}>{cantidad}</Text>
+                          <Text style={styles.txtInfomativo}>Debes vender:</Text>
+                          <Text style={{fontSize:30, color:colores.color4}}>{cantidad}</Text>
                           </>
                         ):(<></>)
                       }
         </View>
         <Botones 
-        name='Guardar'
-        funcion={handleSubmit(AlertaMonto)}
+        name='Consultar'
+        funcion={handleSubmit(onConfirm)}
         margin={100}/>
         </>
         
       )
       }
+      </ScrollView>
+      
     </SafeAreaView>
   )
 }
@@ -181,6 +248,13 @@ const styles = StyleSheet.create({
     flex:1,
     backgroundColor: colores.color6,
   },
+  containerSuperior:{
+    //flexDirection:'row',
+    backgroundColor:colores.color5,
+    alignItems:'center',
+    justifyContent:'center',
+    height:100
+},
   closeButton: {
     position: 'absolute',
     top: 7,
@@ -223,4 +297,10 @@ txt:{
   fontSize:15,
   paddingBottom:5
 },
+txtInfomativo:{
+  marginTop:20,
+  fontSize:15, 
+  fontFamily:'Roboto-Regular', 
+  color:colores.color9,
+}
 })
