@@ -217,7 +217,7 @@ export const AuthProvider = ({children}) => {
         .then(res => {
           let companyData = res.data;
           setCompanyInfo(companyData);
-          console.log(companyData);
+          console.log('Este es el emprendimiento: ',companyData.emprendimiento);
           setIsLoading(false);
           AsyncStorage.setItem('companyInfo', JSON.stringify(companyData));
           if (companyData.result === 'success') {

@@ -54,13 +54,14 @@ if (empty($data["nombreEmpresa"]) || empty($data["nit"]) || empty($data["direcci
                     'idMuni' => $idMunicipio
                 );
                 if ($stmtInsertEmpresa->execute()) {
+                    $idInsertado = $stmtInsertEmpresa->insert_id;
                     $sqlUpdateUser = "UPDATE usuarios SET RegistroEmpresa='SI' WHERE id=?";
                     $stmtUpdateUser = $conn->prepare($sqlUpdateUser);
                     $stmtUpdateUser->bind_param("i", $idUser);
             
                     if ($stmtUpdateUser->execute()) {
                         $conn->commit(); // Confirmar transacción
-                        $response = array('result' => 'success', 'message' => 'Registro exitoso y usuario modificado.', 'emprendimiento'=>$data);
+                        $response = array('result' => 'success', 'message' => 'Registro exitoso y usuario modificado.', 'emprendimiento'=> array_merge($data, array('id' => $idInsertado)));
                     } else {
                         $conn->rollback(); // Revertir transacción en caso de error
                         $response = array('result' => 'error', 'message' => 'Error al modificar el usuario: ' . $stmtUpdateUser->error);

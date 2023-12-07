@@ -187,11 +187,16 @@ const navegacion = useNavigation();
                                 control={control}
                                 rules={{
                                   pattern:
-                                {
-                                    value: NOMBRES_REGEX,
-                                    message: "Caracter No Permitido"
-                                },
-                                    required: 'Email Requerido',
+                                  {
+                                      value: NOMBRES_REGEX,
+                                      message: "Caracter No Permitido"
+                                  },
+                                    required: 'Nombre Requerido',
+                                  maxLength: 
+                                  {
+                                    value: 40,
+                                    message: 'El nombre de la empresa no puede tener más de 40 caracteres'
+                                  }
                                 }}
                                 margin={20}
 
@@ -377,6 +382,7 @@ const styles = StyleSheet.create({
     tintColor: colores.color5
   },
   txt:{
-    fontFamily:'Roboto-Medium'
+    fontFamily:'Roboto-Medium',
+    color:colores.color9
   }
 });

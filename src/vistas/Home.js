@@ -166,11 +166,34 @@ const xx = useNavigation();
                         style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
                         {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
                       </Text>
-                      
                       </>
                     ):(
-                    <>
-                    </>
+                      gastoMensualNumerico > 0?(
+                        <>
+                        <Text style={[styles.txtMontos, {marginTop:10}]}>
+                        El balance total del mes actual es el siguiente:</Text>
+                        <Text style={{color:'red', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
+                        <Text
+                          style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
+                          {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
+                        </Text>
+                        </>
+                      ):(
+                        ingresoMensualNumerico >= 0 && gastoMensualNumerico >= 0?(
+                          <>
+                          <Text style={[styles.txtMontos, {marginTop:10}]}>
+                        El balance total del mes actual es el siguiente:</Text>
+                        <Text style={{color:colores.color9, fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
+                        <Text
+                          style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
+                          {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
+                        </Text>
+                          </>
+                        ):(
+                          <>
+                          </>
+                        )
+                      )
                     )
                   )
                 }
@@ -178,14 +201,14 @@ const xx = useNavigation();
 
 
 
-                {
+                {/* {
                   ingresoMensualNumerico > 0?
                   (
                     <Text style={[styles.txtMontos, {marginTop:10}]}>
                       El monto total de ingresos del mes actual es de:
                     <Text style={{color:'green'}}> ${ingresoMensual}</Text></Text>
                   ):(
-                    <Text style={[styles.txtMontos, {marginTop:10}]}>{`En este mes no tiene ingresos registrados`}</Text>
+                    <Text style={[styles.txtMontos, {marginTop:10}]}>{`En este mes no tienes ingresos registrados`}</Text>
                   )
                 }
                 <View style={{borderBottomColor:colors.color8, width:'100%', borderWidth:1, opacity:0.1, top:0}}></View>
@@ -196,11 +219,11 @@ const xx = useNavigation();
                       El monto total de gastos del mes actual es de:
                     <Text style={{color:'red'}}> ${gastoMensual}</Text></Text>
                   ):(
-                    <Text style={[styles.txtMontos, {marginTop:10}]}>{`El dia de hoy no ha registrado gastos`}</Text>
+                    <Text style={[styles.txtMontos, {marginTop:10}]}>{`En este mes no tienes gastos registrados`}</Text>
                   )
-                }
-                <Botones name='Cerrar Sersion'
-                    funcion={salir} margin={100} padding={4}></Botones>
+                } */}
+                <Botones name='Consultar'
+                    funcion={()=>{montos()}} margin={100} padding={4}></Botones>
                 
               </View>
             </ScrollView>

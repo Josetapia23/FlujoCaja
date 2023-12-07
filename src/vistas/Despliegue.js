@@ -72,6 +72,7 @@ const Despliegue = () => {
                     </View>
                 </View>
                 <View>
+                    <ScrollView>
                     {
                         cargando == true ? (
                             <SplashScreens/>
@@ -104,10 +105,11 @@ const Despliegue = () => {
                                 </View>
                                 )
                             ):(
-                                <Text>No hay Movimientos registrados</Text>
+                                <Text style={{textAlign:'center', color:colores.color9, fontSize:16, marginTop:100}}>"No hay Movimientos registrados"</Text>
                             )
                         )
                     }
+                    </ScrollView>
                 
                 </View>
             </SafeAreaView>

@@ -27,15 +27,28 @@ const Ingresos = () => {
   const [descripcion, setDescripcion] = useState('Descripcion');
   const [tipo, setTipo] = useState(1);
   const [cargando, setCargando] = useState(false);
+  const [datosEmpresa , setDatosEmpresa] = useState({});
   //const [idUser, setIdUser] = useState(0);
 
   const idUser = userInfo.id;
-  const datosEmpresa = companyInfo.datos;
+
+  const getDatosSesion = async () => { //En esta funcion asincrona obtenemos la identificacion
+    try {
+        const datos = await AsyncStorage.getItem('companyInfo');
+        console.log('Estos son los datos de em: ',datos);
+        setDatosEmpresa(datos.idEmprendimiento || companyInfo.datos); //Y se la seteamos a el state de ID para que cuando se ejecute la funcion de ingreso de datos ya tenga el id que se necesita enviar
+      console.log("datos: ",datos,', datos empresa: ',companyInfo.datos);
+      } catch (error) {
+        console.log(error);
+    }
+};
+
 
   useEffect(()=>{
     //setIdUser(userInfo.id)
+    getDatosSesion();  //Aqui se ejecuta la funcion de inmediato sin mirar las demas
     getConceptos();
-    console.log(idUser);
+
   },[])
 
 
@@ -363,7 +376,7 @@ const navegacion = useNavigation();
             </View>            
           ) : (
             listaConceptos.length <= 0 ? (
-              <Text style={styles.txtInformativo}>No tienes categorías de ingresos registradas </Text>
+              <Text style={[styles.txtInformativo, {marginTop:100}]}>No tienes categorías de ingresos registradas </Text>
             ) : (
               <View style={{ marginTop: 40, marginBottom: 10 }}>
                 <ScrollView style={{ height: '84%' }}>
@@ -387,35 +400,45 @@ const navegacion = useNavigation();
           visible={visible}>
             <View style={styles.modal}>
               <View style={styles.modalView}>
-                <TouchableOpacity style={styles.closeButton}
-                onPress={()=>{
-                  setVisible(!visible);
-                  reset({ nombre: '' }); // Esto reseteará el campo 'nombre' del formulario
-                }}
-                >
-                    <Text style={{fontSize:20}}>X</Text>
-                </TouchableOpacity>
-                <Text style={styles.txtTitulo}>Nueva categoria de ingresos</Text>
-                
-                <View 
-                    style={{paddingBottom:30}}
-                    >
-                    <Text style={styles.txt}>Tipo de ingreso:<Text style={{color:'red'}}>*</Text></Text>
-                    <Imput2
-                    imagen={require('../../assets/iconos/lista.png')}
-                              name="nombre"
-                              placeholder=" Nombre del tipo de ingreso"
-                              control={control}
-                              rules={{
-                                  required: 'Nombre de ingreso requerido',
-                              }}
-                          />
-                    <Text style={{color:'red'}}>{errorNombre}</Text>
-                </View>
-                <Botones 
-                name='Guardar'
-                funcion={handleSubmit(guardar)}
-                margin={50}/>
+              {
+            cargando ? (
+              <View style={{marginTop:150}}>
+              <SplashScreens />
+            </View> 
+            ):(
+                <>
+                  <TouchableOpacity style={styles.closeButton}
+                  onPress={()=>{
+                    setVisible(!visible);
+                    reset({ nombre: '' }); // Esto reseteará el campo 'nombre' del formulario
+                  }}
+                  >
+                      <Text style={{fontSize:20, color:colores.color9, fontFamily:'Roboto-Medium'}}>X</Text>
+                  </TouchableOpacity>
+                  <Text style={styles.txtTitulo}>Nueva categoria de ingresos</Text>
+                  
+                  <View 
+                      style={{paddingBottom:30}}
+                      >
+                      <Text style={styles.txt}>Tipo de ingreso:<Text style={{color:'red'}}>*</Text></Text>
+                      <Imput2
+                      imagen={require('../../assets/iconos/lista.png')}
+                                name="nombre"
+                                placeholder=" Nombre del tipo de ingreso"
+                                control={control}
+                                rules={{
+                                    required: 'Nombre de ingreso requerido',
+                                }}
+                            />
+                      <Text style={{color:'red'}}>{errorNombre}</Text>
+                  </View>
+                  <Botones 
+                  name='Guardar'
+                  funcion={handleSubmit(guardar)}
+                  margin={50}/>
+                </>
+              )
+            }
               </View>
             </View>
       </Modal>
@@ -425,13 +448,20 @@ const navegacion = useNavigation();
           visible={visible2}>
             <View style={styles.modal}>
               <View style={styles.modalView}>
+              {
+            cargando ? (
+              <View style={{marginTop:150}}>
+              <SplashScreens />
+            </View> 
+            ):(
+                <>
                 <TouchableOpacity style={styles.closeButton}
                 onPress={()=>{
                   setVisible2(false);
                   reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
                 }}
                 >
-                <Text style={{fontSize:20}}>X</Text>
+                <Text style={{fontSize:20, color:colores.color9, fontFamily:'Roboto-Medium'}}>X</Text>
                 </TouchableOpacity>
                 <Text style={styles.txtTitulo}>{`Nuevo monto de ${nombreCateg}`}</Text>
                 
@@ -455,6 +485,9 @@ const navegacion = useNavigation();
                 name='Guardar'
                 funcion={handleSubmit(AlertaMonto)}
                 margin={50}/>
+                </>
+              )
+            }
               </View>
             </View>
           </Modal>
