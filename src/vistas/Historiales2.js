@@ -264,7 +264,6 @@ const Historiales = () => {
                                   />
                                   <Picker.Item label="Mes Actual" value="mes" />
                                   <Picker.Item label="Por Fecha" value="fecha" />
-                                  <Picker.Item label="Por Categoria" value="categoria" />
                                 </Picker>
                             </View>
                             {selectedValue == 'filtros'?

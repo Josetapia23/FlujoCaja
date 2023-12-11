@@ -75,6 +75,8 @@ const Registro2 = () => {
                                     value: NOMBRES_REGEX,
                                     message: "Caracter No Permitido"
                                 },
+                                minLength: { value: 8, message: "Nombre debe contener 5 caracteres minimo" },
+                                maxLength: { value: 40, message: "Nombre debe contener 20 caracteres maximo" },
                                 required: 'El Nombre es obligatorio',
                             }}
                             margin={50}
@@ -107,6 +109,7 @@ const Registro2 = () => {
                             placeholder="Email"
                             datos={email}
                             setDatos={setEmail}
+                            keyboardType='email-address'
                             control={control}
                             rules={{
                                 pattern:
@@ -114,6 +117,7 @@ const Registro2 = () => {
                                     value: EMAIL_REGEX,
                                     message: "Email Invalido"
                                 },
+                                maxLength: { value: 60, message: "El correo debe contener 60 caracteres maximo" },
                                 required: 'El Email es obligatorio',
                             }}
                             margin={50}
@@ -134,7 +138,8 @@ const Registro2 = () => {
                             setDatos={setContrasena}
                             rules={{
                                 required: 'La Contraseña es obligatoria',
-                                minLength: { value: 5, message: "Contraseña debe contener 5 caracteres minimos" }
+                                minLength: { value: 5, message: "Contraseña debe contener 5 caracteres minimo" },
+                                maxLength: { value: 20, message: "Contraseña debe contener 20 caracteres maximo" },
                             }}
                             secureTextEntry
                             margin={50}
@@ -149,6 +154,8 @@ const Registro2 = () => {
                             control={control}
                             rules={{
                                 required: 'La Contraseña es obligatoria',
+                                minLength: { value: 5, message: "Contraseña debe contener 5 caracteres minimo" },
+                                maxLength: { value: 20, message: "Contraseña debe contener 20 caracteres maximo" },
                                 validate: value => value === conRep || 'La contraseña no coincide'
                             }}
                             secureTextEntry

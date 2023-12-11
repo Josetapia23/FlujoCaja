@@ -13,6 +13,7 @@ import axios from 'axios';
 import Imput2 from '../componentes/Imput2';
 import SplashScreens from '../vistas/SplashScreens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Tabla2 from '../componentes/Tabla2';
 
 
 
@@ -20,11 +21,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Gastos = () => {
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
+  const [visible3, setVisible3] = useState(false);
   const [errorNombre, setErrorNombre] = useState('');
   const [listaConceptos , setListaConceptos] = useState([]);
   const { isLoading, userInfo, registerEmpresa, companyInfo} = useContext(AuthContext);
   const [idConcepto, setIdConcepto] = useState('');
   const [descripcion, setDescripcion] = useState('Descripcion');
+  const [listaMovimientos1, setListaMovimientos1] = useState([]); //Lista de movimientos completa por categoria
+  const [montoTotal3, setMontoTotal3] = useState('');
   const [tipo, setTipo] = useState(2);
   const [nombreCateg, setNombreCat] = useState('');
   const [cargando, setCargando] = useState(false);
@@ -33,16 +37,22 @@ const Gastos = () => {
 
   const idUser = userInfo.id;
 
-  const getDatosSesion = async () => { //En esta funcion asincrona obtenemos la identificacion
+  const getDatosSesion = async () => {
     try {
-        const datos = await AsyncStorage.getItem('companyInfo');
-        console.log('Estos son los datos de em: ',datos);
-        setDatosEmpresa(datos.idEmprendimiento || companyInfo.datos); //Y se la seteamos a el state de ID para que cuando se ejecute la funcion de ingreso de datos ya tenga el id que se necesita enviar
-      console.log("datos: ",datos,', datos empresa: ',companyInfo.datos);
-      } catch (error) {
-        console.log(error);
+      const datosString = await AsyncStorage.getItem('companyInfo');
+      if (datosString) {
+        const datos = JSON.parse(datosString);
+        console.log('Estos son los datos de em: ', datos);
+        setDatosEmpresa(datos.emprendimiento);
+        console.log("datos: ", datos, ', datos empresa: ', companyInfo.datos);
+      } else {
+        console.log("No hay datos en AsyncStorage");
+        setDatosEmpresa(companyInfo.datos);
+      }
+    } catch (error) {
+      console.log(error);
     }
-};
+  };
 
 
   useEffect(()=>{
@@ -151,7 +161,7 @@ const Gastos = () => {
           'https://www.plataforma50.com/pruebas/gestionP/addMovimiento.php',
           {
             monto: getValues('monto'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
-            descripcion: descripcion,
+            descripcion: getValues('descripcion'),
             idTipo: 2,
             idUser: idUser,
             idConcepto:idConcepto,
@@ -232,6 +242,47 @@ const Gastos = () => {
     });
   }
 
+  const listarMovimientos = (id) => {
+    setCargando(true);
+  return new Promise((resolve, reject) => {
+  axios
+    .post(
+      'https://www.plataforma50.com/pruebas/gestionP/lis_mov_ingresos3.php',
+      {
+        idUser: idUser,
+        idTipo: tipo,
+        idConcepto : id
+      },
+    )
+    .then(res => {
+      if (res.data.result === 'success') {
+        // Registro exitoso
+        setListaMovimientos1(res.data.listaMovimientos4);
+        setMontoTotal3(res.data.monTotal2);
+        setCargando(false);
+        console.log(setListaMovimientos1);
+      } else if (res.data.result === 'error') {
+        // Error en la consulta
+        console.log('Error en la consulta de listar movimientos Ingresos1:', res.data.message);
+        reject('Error en el registro: ' + res.data.message);
+        setCargando(false);
+
+      } else {
+        console.log('Respuesta inesperada del servidor:', res.data);
+        reject('Error inesperado del servidor');
+        setCargando(false);
+
+      }
+    })
+    .catch(error => {
+      console.error('Error de axios para listar movimientos Ingresos2:', error.message);
+      reject('Error con axios: ' + error.message);
+        setCargando(false);
+
+    });
+});
+}
+
 
   const AlertaEliminar = (id) =>{
     Alert.alert(
@@ -252,13 +303,12 @@ const Gastos = () => {
     );
   }
   const AlertaMonto = () =>{
+    const values = getValues();
+    const montoOne = values.monto ? Number(values.monto.replace(/,/g, '')) : 0;
     Alert.alert(
       'Confirmar Monto',
-      `El monto es de ${getValues('monto')}
-      descripcion: ${descripcion}
-      idUser: ${idUser}
-      idConcepto: ${idConcepto}
-      idEmprendimiento: ${datosEmpresa.id}`,
+      `El monto es de $${montoOne.toLocaleString()}
+      descripcion: ${getValues('descripcion')}`,
       [
         {
           text: 'Cancelar',
@@ -304,19 +354,29 @@ const add = () =>{
 
 }
 
-const ItemConcepto = ({nombre, onPressEliminar, onPressConcepto, id}) => {
+const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, id}) => {
   return (
     <View style={styles.cardView}>
+         <View>
         <TouchableOpacity onPress={()=>{
           onPressConcepto(id, nombre)
         }}>
-            <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:23, color:colores.color8}}>{nombre}</Text>
+            <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:20, color:colores.color8}}>{nombre}</Text>
         </TouchableOpacity>
+      </View>
+      <View style={{flexDirection:'row'}}>
         <TouchableOpacity onPress={()=>{
-          onPressEliminar(id)
-        }}>
-            <Material name='delete-circle-outline' size={35} color='#b75555'/>
-        </TouchableOpacity>
+            onPressSearch(id, nombre)
+          }}>
+              <Material name='magnify' size={30} color={colores.color4} />
+          </TouchableOpacity>
+        <TouchableOpacity style={{marginHorizontal:5}}
+         onPress={()=>{
+            onPressEliminar(id)
+          }}>
+              <Material name='delete' size={30} color={colores.color4} />
+          </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -328,6 +388,7 @@ const renderItem = ({item}) =>{
     id = {item.id}
     onPressEliminar={AlertaEliminar}
     onPressConcepto={activarModal2}
+    onPressSearch={activarModal3}
     />
   )
 }
@@ -337,6 +398,15 @@ const activarModal2 = (id, nombre) => {
   setVisible2(true);
   setNombreCat(nombre);
   setIdConcepto(id);
+}
+
+const activarModal3 = (id, nombre) => {
+  console.log("El id es:",id,);
+  listarMovimientos(id);
+  setVisible3(true);
+  setIdConcepto(id);
+  setNombreCat(nombre);
+
 }
 
 const navegacion = useNavigation();
@@ -419,6 +489,8 @@ const navegacion = useNavigation();
                               control={control}
                               rules={{
                                   required: 'Nombre de gasto requerido',
+                                  minLength: { value: 5, message: "Debe contener 5 caracteres minimo" },
+                                  maxLength: { value: 18, message: "Debe contener 18 caracteres maximo" }
                               }}
                           />
                     <Text style={{color:'red'}}>{errorNombre}</Text>
@@ -462,9 +534,9 @@ const navegacion = useNavigation();
                 <View 
                     style={{paddingBottom:30}}
                     >
-                    <Text style={styles.txt}>Tipo de ingreso:<Text style={{color:'red'}}>*</Text></Text>
+                    <Text style={styles.txt}>Nuevo monto:<Text style={{color:'red'}}>*</Text></Text>
                     <Imput2
-                    imagen={require('../../assets/iconos/lista.png')}
+                    imagen={require('../../assets/iconos/dolar.png')}
                               name="monto"
                               placeholder=" Ingrese el monto"
                               control={control}
@@ -472,6 +544,17 @@ const navegacion = useNavigation();
                                   required: 'Monto de ingreso requerido',
                               }}
                               keyboardType='numeric'
+                          />
+                    <Text style={[styles.txt,{marginTop:20}]}>Descripcion sobre el gasto:<Text style={{color:'red'}}>*</Text></Text>
+                    <Imput2
+                    imagen={require('../../assets/iconos/lista.png')}
+                              name="descripcion"
+                              placeholder=" Describir utilidad del monto ingresado"
+                              control={control}
+                              rules={{
+                                  required: 'descripcion requerida',
+                              }}
+                              keyboardType='text'
                           />
                     <Text style={{color:'red'}}>{errorNombre}</Text>
                 </View>
@@ -482,6 +565,46 @@ const navegacion = useNavigation();
               </>
               )
               }
+              </View>
+            </View>
+          </Modal>
+
+          <Modal 
+          visible={visible3}>
+            <View style={styles.modal}>
+              <View style={styles.modalView}>
+              {
+            cargando ? (
+              <View style={{marginTop:150}}>
+              <SplashScreens />
+            </View> 
+            ):(
+                <>
+                <TouchableOpacity style={styles.closeButton}
+                onPress={()=>{
+                  setVisible3(false);
+                  reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
+                }}
+                >
+                <Text style={{fontSize:20, color:colores.color9, fontFamily:'Roboto-Medium'}}>X</Text>
+                </TouchableOpacity>
+                <Text style={styles.txtTitulo}>{`Categoria ${nombreCateg}`}</Text>
+                
+                {
+                  listaMovimientos1.length>0?
+                  (
+                    <Tabla2 columnas={2}
+                      datos={listaMovimientos1}
+                      Total={montoTotal3}
+                    />
+                  ):
+                  (
+                    <Text style={{fontFamily:'Roboto-Medium', textAlign:'center'}}>"En esta categoria no hay movimientos registrados aún"</Text>
+                  )
+                }
+                </>
+              )
+            }
               </View>
             </View>
           </Modal>
@@ -535,7 +658,7 @@ atras:{
     borderRadius: 20,
     width: '90%',
     paddingVertical: 30,
-    paddingHorizontal:25,
+    paddingHorizontal:15,
     shadowColor: colores.color3,
     shadowOffset: {
         width: 0,
@@ -545,7 +668,7 @@ atras:{
     shadowRadius: 4,
     elevation: 20,
     backgroundColor: colores.color8,
-    height:400
+    height:500
 },
 txtTitulo:{
   paddingVertical:20,
@@ -566,7 +689,7 @@ listaConceptos:{
   height:420
 },
 cardView:{
-  backgroundColor:colores.color1,
+  backgroundColor:colores.color5,
   borderRadius:20,
   marginVertical:8,
   paddingVertical:15,

@@ -10,6 +10,10 @@ import { ScrollView } from 'react-native';
 import Imputs from '../componentes/Imputs';
 import { useFocusEffect } from '@react-navigation/native';
 
+
+const numeros_regex = /^[0-9]{1,1000}$/;
+
+
 const Graficos = () => {
   const {
     control,
@@ -122,8 +126,7 @@ const onConfirm = () => {
     `Gasto Mensual $${montoOne.toLocaleString()}
     Meta Mensual: $${montoTwo.toLocaleString()}
     Precio de venta x Unidad: $${montoThree.toLocaleString()}
-    idConcepto: $${montoFour.toLocaleString()}
-    monto11 $${monto11}`,
+    Costo de Produccion: $${montoFour.toLocaleString()}`,
     [
       {
         text: 'Cancelar',
@@ -145,7 +148,7 @@ const onConfirm = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containerSuperior}>
-          <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7, textAlign:'center'}}>{`Calculo`}</Text>
+          <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7, textAlign:'center', marginHorizontal:20}}>{`Rentabilidad Emprendedora Mensual`}</Text>
       </View> 
       <ScrollView>
       {
@@ -155,7 +158,7 @@ const onConfirm = () => {
       ):(
         <>
         <View 
-            style={{paddingBottom:30, marginHorizontal:20, marginTop:20}}
+            style={{paddingBottom:30, marginHorizontal:20, marginVertical:20}}
             >
               <View>
                 <Text style={styles.txt}>Gasto fijo mensual:<Text style={{color:'red'}}>*</Text></Text>
@@ -167,8 +170,14 @@ const onConfirm = () => {
                             setDatos={setMonto1}
                             control={control}
                             rules={{
-                                required: 'El Nombre es obligatorio',
+                              pattern:
+                                {
+                                    value: numeros_regex,
+                                    message: "Caracter No Permitido"
+                                },
+                                required: 'El monto de gasto mensual es obligatorio',
                             }}
+                            keyboardType='numeric'
                             // margin={50}
                         />
               </View>
@@ -181,8 +190,14 @@ const onConfirm = () => {
                             setDatos={setMonto2}
                             control={control}
                             rules={{
-                                required: 'El Nombre es obligatorio',
+                              pattern:
+                                {
+                                    value: numeros_regex,
+                                    message: "Caracter No Permitido"
+                                },
+                                required: 'El monto de ganancia mensual es obligatorio',
                             }}
+                            keyboardType='numeric'
                             // margin={50}
                         />
                 <Text style={styles.txt}>Precio de venta unitaria:<Text style={{color:'red'}}>*</Text></Text>
@@ -194,8 +209,14 @@ const onConfirm = () => {
                             setDatos={setMonto3}
                             control={control}
                             rules={{
-                                required: 'El Nombre es obligatorio',
+                              pattern:
+                                {
+                                    value: numeros_regex,
+                                    message: "Caracter No Permitido"
+                                },
+                                required: 'El monto de venta es obligatorio',
                             }}
+                            keyboardType='numeric'
                             // margin={50}
                         />
                 <Text style={styles.txt}>Costo de produccion unitario:<Text style={{color:'red'}}>*</Text></Text>
@@ -207,42 +228,52 @@ const onConfirm = () => {
                             setDatos={setMonto4}
                             control={control}
                             rules={{
-                                required: 'El Nombre es obligatorio',
+                              pattern:
+                                {
+                                    value: numeros_regex,
+                                    message: "Caracter No Permitido"
+                                },
+                                required: 'El costo de inversion unitario es obligatorio',
                             }}
+                            keyboardType='numeric'
                             // margin={50}
                         />
                       {
                         cantidad > 0 ? (
-                          <Text style={{textAlign:'center', marginTop:30}}>
-                          <Text style={styles.txtInfomativo}>
-                            {`En el mes debes vender un total de `} 
-                          </Text>
-                          <Text style={styles.txtInfomativo2}>
-                            {`${cantidad}`} 
-                          </Text>
-                          <Text style={styles.txtInfomativo}>
-                            {`unidades es decir alrededor de `} 
-                          </Text>
-                          <Text style={styles.txtInfomativo2}>
-                            {`${uXmes}`} 
-                          </Text>
-                          <Text style={styles.txtInfomativo}>
-                            {` por dia para obetner la meta de: `} 
-                          </Text>
-                          <Text style={styles.txtInfomativo2}>
-                            {`$${monto22.toLocaleString()}`} 
-                          </Text>
-                          <Text style={styles.txtInfomativo}>
-                            {` y cubrir los gastos fijos del mes.`} 
-                          </Text>
-                          </Text>
-                        ):(<></>)
+                          <View style={{backgroundColor:colores.color8, justifyContent:'center', borderRadius:10, alignItems:'center', padding:7}}>
+                              <Text style={{textAlign:'center'}}>
+                                  <Text style={styles.txtInfomativo}>
+                                    {`En el mes debes vender un total de `} 
+                                  </Text>
+                                  <Text style={styles.txtInfomativo2}>
+                                    {`${cantidad}`} 
+                                  </Text>
+                                  <Text style={styles.txtInfomativo}>
+                                    {` unidades es decir alrededor de `} 
+                                  </Text>
+                                  <Text style={styles.txtInfomativo2}>
+                                    {`${uXmes}`} 
+                                  </Text>
+                                  <Text style={styles.txtInfomativo}>
+                                    {` por dia para obetener la meta de: `} 
+                                  </Text>
+                                  <Text style={styles.txtInfomativo2}>
+                                    {`$${monto22.toLocaleString()}`} 
+                                  </Text>
+                                  <Text style={styles.txtInfomativo}>
+                                    {` y cubrir los gastos fijos del mes.`} 
+                                  </Text>
+                              </Text>
+                          </View>
+                        ):(<>
+
+                        </>)
                       }
+                <Botones 
+                name='Consultar'
+                funcion={handleSubmit(onConfirm)}
+                margin={100}/>
         </View>
-        <Botones 
-        name='Consultar'
-        funcion={handleSubmit(onConfirm)}
-        margin={100}/>
         </>
         
       )

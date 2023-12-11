@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Modal, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Modal, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { colores, colors } from '../componentes/Colors';
 import { AuthContext } from '../context/AuthContext';
@@ -145,25 +145,27 @@ const navegacion = useNavigation();
       {pasar == 'si' ?  
       (
         <SafeAreaView style={styles.containForm}>
-          <View style={{marginBottom:40, marginTop:10}}>
-          <View style={{alignItems:'center', marginBottom:20}}>
-            <AntDesign name='account-circle' size={150} color={colores.color5}/>
-            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Nombre Emprendedor: {userInfo.nombre}</Text>
-            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Correo Emprendedor: {userInfo.email}</Text>
-          </View>
-          <View style={{alignItems:'center', marginBottom:20}}>
-            <AntDesign name='domain' size={150} color={colores.color2}/>
-            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Nombre Empresa: {datosEmpresa.nombreEmprendimiento}</Text>
-            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Nit: {datosEmpresa.nit}</Text>
-            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Direccion: {datosEmpresa.direccion}</Text>
-            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Tel Empresa: {datosEmpresa.telefonoEmpresarial}</Text>
-            <Text style={{color:'black', marginBottom:5, fontFamily:'Roboto-Medium'}}>Correo Empresa: {datosEmpresa.emailEmpresarial}</Text>
-          </View>
-          </View>
-          <Botones name='Cerrar Sersion'
-            funcion={salir} margin={100} padding={4}>
-            <AntDesign name='logout-variant' size={35} color={colores.color8}/>
-          </Botones>
+          <ScrollView>
+            <View style={{marginBottom:40, marginTop:30}}>
+            <View style={{alignItems:'center', marginBottom:30}}>
+            <Image source={require('../../assets/iconos/usuarioLogo.png')} style={{width:150, height:150, borderRadius:80, marginBottom:10}} />
+              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Nombre Emprendedor: <Text style={{color:'black', fontSize:16}}>{userInfo.nombre}</Text></Text>
+              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Correo Emprendedor: <Text style={{color:'black', fontSize:16}}>{userInfo.email}</Text></Text>
+            </View>
+            <View style={{alignItems:'center', marginBottom:20}}>
+              <Image source={require('../../assets/iconos/empresaLogo.png')} style={{width:150, height:150, borderRadius:80, marginBottom:10}} />
+              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Nombre Empresa: <Text style={{color:'black', fontSize:16}}>{datosEmpresa.nombreEmprendimiento}</Text></Text>
+              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Nit: <Text style={{color:'black', fontSize:16}}>{datosEmpresa.nit}</Text></Text>
+              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Direccion: <Text style={{color:'black', fontSize:16}}>{datosEmpresa.direccion}</Text></Text>
+              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Tel Empresa: <Text style={{color:'black', fontSize:16}}>{datosEmpresa.telefonoEmpresarial}</Text></Text>
+              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Correo Empresa: <Text style={{color:'black', fontSize:16}}>{datosEmpresa.emailEmpresarial}</Text></Text>
+            </View>
+            <Botones2 name='Cerrar Sersion'
+                funcion={salir} margin={'25%'} padding={4}>
+              < AntDesign name='logout-variant' size={35} color={colores.color8}/>
+            </Botones2>
+            </View>
+          </ScrollView>
       </SafeAreaView>
       ) : (
         <>
@@ -186,17 +188,10 @@ const navegacion = useNavigation();
                                 setDatos={setEmpresa}
                                 control={control}
                                 rules={{
-                                  pattern:
-                                  {
-                                      value: NOMBRES_REGEX,
-                                      message: "Caracter No Permitido"
-                                  },
-                                    required: 'Nombre Requerido',
-                                  maxLength: 
-                                  {
-                                    value: 40,
-                                    message: 'El nombre de la empresa no puede tener más de 40 caracteres'
-                                  }
+                                  pattern:{value: NOMBRES_REGEX,message: "Caracter No Permitido"},
+                                  required: 'Nombre Requerido',
+                                  minLength: { value: 5, message: "Debe contener 5 caracteres minimo" },
+                                  maxLength:{value: 40,  message: 'El nombre de la empresa no puede tener más de 40 caracteres' }
                                 }}
                                 margin={20}
 
@@ -214,11 +209,9 @@ const navegacion = useNavigation();
                                 setDatos={setNit}
                                 control={control}
                                 rules={{
-                                  pattern:
-                                {
-                                    value: NIT_REGEX,
-                                    message: "Caracter No Permitido"
-                                },
+                                pattern:{value: NIT_REGEX,  message: "El formato de nit es 12..34-1, solo numeros ,un solo '-' y el numero que termina."},
+                                minLength: { value: 10, message: "Debe contener 10 caracteres minimo" },
+                                maxLength:{value: 12,  message: 'El nit no puede tener más de 12 caracteres' },
                                     required: 'Nit Requerido',
                                 }}
                                 margin={20}
@@ -236,12 +229,10 @@ const navegacion = useNavigation();
                                 setDatos={setDireccion}
                                 control={control}
                                 rules={{
-                                  pattern:
-                                {
-                                    value: DIRECCION_REGEX,
-                                    message: "Direccion o Caracter No Permitido"
-                                },
-                                    required: 'Direccion Requerida',
+                                pattern:  {value: DIRECCION_REGEX, message: "Direccion o Caracter No Permitido" },
+                                minLength: { value: 8, message: "Debe contener 8 caracteres minimo" },
+                                maxLength:{value: 30,  message: 'La direccion no puede tener más de 30 caracteres' },
+                                required: 'Direccion Requerida',
                                 }}
                                 margin={20}
                             />
@@ -287,12 +278,15 @@ const navegacion = useNavigation();
                                 datos={telefonoEmpresarial}
                                 setDatos={setTelefono}
                                 control={control}
+                                keyboardType='numeric'
                                 rules={{
                                   pattern:
                                 {
                                     value: TELEFONO_REGEX,
-                                    message: "Telefono ó Caracter No Permitido"
+                                    message: "Caracter No Permitido"
                                 },
+                                minLength: { value: 7, message: "Debe contener 7 caracteres minimo" },
+                                maxLength:{value: 10,  message: 'El telefono no puede tener más de 10 caracteres' },
                                     required: 'Telefono Requerida',
                                 }}
                                 margin={20}
@@ -308,6 +302,7 @@ const navegacion = useNavigation();
                                 placeholder=" Email de la empresa"
                                 datos={emailEmpresarial}
                                 setDatos={setEmail}
+                                keyboardType='email-address'
                                 control={control}
                                 rules={{
                                   pattern:
@@ -315,6 +310,7 @@ const navegacion = useNavigation();
                                     value: EMAIL_REGEX,
                                     message: "Caracter No Permitido"
                                 },
+                                maxLength:{value: 59,  message: 'El correo no puede tener más de 59 caracteres' },
                                     required: 'Telefono Requerida',
                                 }}
                                 margin={20}

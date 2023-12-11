@@ -88,7 +88,7 @@ const Despliegue = () => {
                                         fontSize:25
                                         }}>{`Ultimos ${listaMovimientos.length} movimientos`}</Text>
                                     <Tablas datos={listaMovimientos}
-                                    categoria={'Categorias-Tipo'}
+                                    categoria={'Categorias'}
                                     ambos={'1'} />
                                 </View>
                                 ):(
@@ -100,7 +100,7 @@ const Despliegue = () => {
                                         fontSize:25
                                         }}>Ultimos 10 movimientos</Text>
                                     <Tablas datos={listaMovimientos}
-                                    categoria={'Categorias  -  Tipo'}
+                                    categoria={'Categorias'}
                                     ambos={'1'} />
                                 </View>
                                 )
