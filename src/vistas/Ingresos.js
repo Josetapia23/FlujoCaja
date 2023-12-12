@@ -379,7 +379,7 @@ const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, 
          onPress={()=>{
             onPressEliminar(id)
           }}>
-              <Material name='delete' size={30} color={colores.color4} />
+              <Material name='delete' size={30} color={colores.color11} />
           </TouchableOpacity>
       </View>
     </View>
@@ -698,7 +698,7 @@ listaConceptos:{
   height:420
 },
 cardView:{
-  backgroundColor:colores.color5,
+  backgroundColor:colores.color1,
   borderRadius:20,
   marginVertical:8,
   paddingVertical:15,

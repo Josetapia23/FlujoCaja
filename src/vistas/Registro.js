@@ -75,7 +75,6 @@ const Registro2 = () => {
                                     value: NOMBRES_REGEX,
                                     message: "Caracter No Permitido"
                                 },
-                                minLength: { value: 8, message: "Nombre debe contener 5 caracteres minimo" },
                                 maxLength: { value: 40, message: "Nombre debe contener 20 caracteres maximo" },
                                 required: 'El Nombre es obligatorio',
                             }}

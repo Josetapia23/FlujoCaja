@@ -80,7 +80,7 @@ function TabGroup() {
                     }else if(route.name === 'Despliegue'){
                         iconName = 'currency-usd';
                     }else if(route.name === 'Empresa'){
-                        iconName = 'domain';
+                        iconName = 'account-tie';
                     }
                     // Retorna el componente de ícono
                     return <AntDesign name={iconName} size={35} color={iconColor} />;

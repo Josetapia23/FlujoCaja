@@ -190,7 +190,6 @@ const navegacion = useNavigation();
                                 rules={{
                                   pattern:{value: NOMBRES_REGEX,message: "Caracter No Permitido"},
                                   required: 'Nombre Requerido',
-                                  minLength: { value: 5, message: "Debe contener 5 caracteres minimo" },
                                   maxLength:{value: 40,  message: 'El nombre de la empresa no puede tener más de 40 caracteres' }
                                 }}
                                 margin={20}

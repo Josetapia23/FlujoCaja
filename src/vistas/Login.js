@@ -60,7 +60,7 @@ const Login = () => {
             <View >
                   <View style={{flex:30, alignItems:'center'}}>
                    <Image
-                        source={require('../../assets/Logo.png')}
+                        source={require('../../assets/Logo2_2.png')}
                         style={styles.imgLogo}
                     />  
                   </View>
@@ -141,8 +141,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     imgLogo: {
-        width: 220,
-        height: 200,
+        width: 230,
+        height: 230,
         objectFit: 'fill',
         marginVertical: 20,
     },
