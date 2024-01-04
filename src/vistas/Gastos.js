@@ -14,6 +14,7 @@ import Imput2 from '../componentes/Imput2';
 import SplashScreens from '../vistas/SplashScreens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Tabla2 from '../componentes/Tabla2';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
 
@@ -414,9 +415,9 @@ const navegacion = useNavigation();
     <SafeAreaView>
       <View style={styles.containerSuperior}>
             <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Despliegue')}>
-                <Material name='arrow-left' size={20} color={colores.color7}/>
+                <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
-            <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7, textAlign:'center'}}>{`Lista De Gastos`}</Text>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:25, color:colores.color7, textAlign:'center'}}>{`Lista De Gastos`}</Text>
         </View>
       <View>
         <View style={styles.BarraSuperior}>
@@ -474,7 +475,7 @@ const navegacion = useNavigation();
                   reset({ nombre: '' }); // Esto reseteará el campo 'nombre' del formulario
                 }}
                 >
-                    <Text style={{fontSize:20, color:colores.color9, fontFamily:'Roboto-Medium'}}>X</Text>
+                <Material name='close-thick' size={35} color={colores.color9}/>
                 </TouchableOpacity>
                 <Text style={styles.txtTitulo}>Nueva categoria de Gastos</Text>
                 
@@ -527,7 +528,7 @@ const navegacion = useNavigation();
                   reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
                 }}
                 >
-                <Text style={{fontSize:20, color:colores.color9, fontFamily:'Roboto-Medium'}}>X</Text>
+                <Material name='close-thick' size={35} color={colores.color9}/>
                 </TouchableOpacity>
                 <Text style={styles.txtTitulo}>{`Nuevo monto de ${nombreCateg}`}</Text>
 
@@ -586,7 +587,7 @@ const navegacion = useNavigation();
                   reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
                 }}
                 >
-                <Text style={{fontSize:20, color:colores.color9, fontFamily:'Roboto-Medium'}}>X</Text>
+                <Material name='close-thick' size={35} color={colores.color9}/>
                 </TouchableOpacity>
                 <Text style={styles.txtTitulo}>{`Categoria ${nombreCateg}`}</Text>
                 
@@ -628,7 +629,7 @@ const styles = StyleSheet.create({
 },
 atras:{
   position:'absolute',
-  left:10,
+  left:15,
   top:20
 },
   BarraSuperior:{
@@ -637,10 +638,10 @@ atras:{
     justifyContent:'space-around'
   },
   closeButton: {
-    position: 'absolute',
-    top: 7,
-    right: 12,
-    padding: 10,
+    //position: 'absolute',
+    alignSelf:'flex-end',
+    top: 8,
+    right:10
   },
   txtSuperior:{
     fontFamily:'Roboto-Medium',
@@ -689,7 +690,7 @@ listaConceptos:{
   height:420
 },
 cardView:{
-  backgroundColor:colores.color1,
+  backgroundColor:colores.color5,
   borderRadius:20,
   marginVertical:8,
   paddingVertical:15,

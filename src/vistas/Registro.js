@@ -33,6 +33,8 @@ const Registro2 = () => {
     const { control, handleSubmit, watch } = useForm()
     const conRep = watch('contrasena')
 
+    console.log(txtErrorEmail);
+
     //funcion Registrar
     const registrar = () => {
         register(nombre, edad, email, contrasena)
@@ -41,7 +43,7 @@ const Registro2 = () => {
                 navigation.navigate('Login'); // Reemplaza 'PantallaDespuesDelRegistro' con el nombre de la pantalla a la que deseas navegar después del registro exitoso.
             })
             .catch(error => {
-                // Manejar el error si es necesario
+                console.log(txtErrorEmail + " "+ error);
             });
     }
     
@@ -54,7 +56,7 @@ const Registro2 = () => {
                 <View>
                     <View style={{flex:30, alignItems:'center'}}>
                        <Image
-                              source={require('../../assets/Logo.png')}
+                              source={require('../../assets/Logo2_2.png')}
                               style={styles.imgLogo}
                           /> 
                     </View>
@@ -121,13 +123,13 @@ const Registro2 = () => {
                             }}
                             margin={50}
                         />
-                        {txtErrorEmail && (
+                        {txtErrorEmail &&
                             <Text style={{
                                 color: 'red',
                                 paddingLeft: 60
                             }}>
                                 El email que ingresaste ya fue usado
-                            </Text>)
+                            </Text>
                         }
                         <Imputs
                             imagen={icoContrasena}

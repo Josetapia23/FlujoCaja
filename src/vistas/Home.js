@@ -102,7 +102,7 @@ const xx = useNavigation();
     <View style={styles.container}>
             <Spinner visible={isLoading} />
             <View style={styles.containerSuperior}>
-              <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7, textAlign:'center'}}>{`Hola ${userInfo.nombre}`}</Text>
+              <Text style={{fontFamily:'Roboto-Medium', fontSize:25, color:colores.color7, textAlign:'center'}}>{`Hola ${userInfo.nombre}`}</Text>
             </View>
             <ScrollView 
             style={{marginVertical:20}}

@@ -14,6 +14,7 @@ export const AuthProvider = ({children}) => {
   const [arrayGastos, setArrayGastos] = useState([]);
   const [errorMessage, setErrorMessage] = useState(false);
   const [txtErrorEmail, setTxtErrorEmail] = useState('');
+  const [txtErrorNit, setTxtErrorNit] = useState('');
   const [ok, setOk] = useState(false);
   const [success, setSuccess] = useState('no');
   const [activo, setActivo] = useState(false);
@@ -50,8 +51,7 @@ export const AuthProvider = ({children}) => {
           } else if (userInfo.result === 'error') {
             // Error en el registro, muestra un mensaje de error
             console.log('Error en el registro:', userInfo.message);
-            setErrorMessage(userInfo.message); // Almacena el mensaje de error en el estado
-            setTxtErrorEmail(true);
+            setTxtErrorEmail(userInfo.message); // Almacena el mensaje de error en el estado
             reject(userInfo.message); // Rechaza la promesa si hay un error en el registro
             // Aquí puedes mostrar el mensaje de error al usuario o realizar una acción adicional
             //https://www.plataforma50.com/pruebas/gestionP/login.php
@@ -64,6 +64,7 @@ export const AuthProvider = ({children}) => {
         })
         .catch(error => {
           console.error('Error al registrar usuario con axios:', error.message);
+          setTxtErrorEmail('Error de conexion');
           setIsLoading(false);
           reject(error.message); // Rechaza la promesa si hay un error en la solicitud
         });
@@ -234,15 +235,14 @@ export const AuthProvider = ({children}) => {
           } else if (companyData.result === 'error') {
             // Error en el registro, muestra un mensaje de error
             console.log('Error en el registro:', userInfo.message);
-            setErrorMessage(companyData.message); // Almacena el mensaje de error en el estado
+            setTxtErrorNit(companyData.message); // Almacena el mensaje de error en el estado
             reject(companyData.message); // Rechaza la promesa si hay un error en el registro
             // Aquí puedes mostrar el mensaje de error al usuario o realizar una acción adicional
           }
 
-          if (nit === companyData.nit) {
+          if (nit === companyData.emprendimiento.nit) {
             console.log('El Nit ya existe');
-            setTxtErrorEmail('El email existe');
-            setTxtErrorNit('El email existe');
+            setTxtErrorNit('El Nit ya fue utilizado por otra persona');
           }
         })
         .catch(error => {
@@ -319,6 +319,7 @@ export const AuthProvider = ({children}) => {
       value={{
         errorMessage,
         txtErrorEmail,
+        txtErrorNit,
         isLoading,
         userInfo,
         companyInfo,

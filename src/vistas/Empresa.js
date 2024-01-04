@@ -23,7 +23,7 @@ const NIT_REGEX = /^[0-9]{1,10}-[0-9]{1}$/;
 const DIRECCION_REGEX = /^[0-9A-Za-z\s#áéíóúÁÉÍÓÚñÑ.,-/]+$/;
 
 const Empresa2 = () => {
-  const { isLoading, userInfo, registerEmpresa, companyInfo, logout} = useContext(AuthContext);
+  const { isLoading, userInfo, registerEmpresa, companyInfo, logout, txtErrorNit} = useContext(AuthContext);
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   const [idDepartamento, setIdDepartamen] = useState(8);
@@ -161,7 +161,7 @@ const navegacion = useNavigation();
               <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Correo Empresa: <Text style={{color:'black', fontSize:16}}>{datosEmpresa.emailEmpresarial}</Text></Text>
             </View>
             <Botones2 name='Cerrar Sersion'
-                funcion={salir} margin={'25%'} padding={4}>
+                funcion={salir} margin={'25%'} padding={6}>
               < AntDesign name='logout-variant' size={35} color={colores.color8}/>
             </Botones2>
             </View>
@@ -215,6 +215,14 @@ const navegacion = useNavigation();
                                 }}
                                 margin={20}
                             />
+                            {txtErrorNit &&
+                            <Text style={{
+                                color: 'red',
+                                paddingLeft: 60
+                            }}>
+                                {txtErrorNit}
+                            </Text>
+                        }
                       </View>
                       <View 
                         style={{paddingBottom:10}}                      
@@ -322,12 +330,9 @@ const navegacion = useNavigation();
                             margin={60}
                             />
                       <Botones2 name='Cerrar Sersion'
-                          funcion={salir} margin={60} padding={4}>
+                          funcion={salir} margin={60} padding={6}>
                         < AntDesign name='logout-variant' size={35} color={colores.color8}/>
                       </Botones2>
-                      
-                            
-                    <Text>{estado} {idUser} {idDepartamento} {idMunicipio}</Text>
                   </ScrollView>
                 </View>
               </View>

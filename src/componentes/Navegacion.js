@@ -19,6 +19,7 @@ import Empresa3 from '../vistas/Empresa3';
 import Gastos from '../vistas/Gastos';
 import Historiales from '../vistas/Historiales';
 import Historiales2 from '../vistas/Historiales2';
+import OnboardingScreen from '../vistas/OnboardingScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,7 @@ useEffect(()=>(
           :
           tokenUsuario !== 1 ? (
                           <>
+                              {/* <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} options={{ headerShown: false,}}/> */}
                               <Stack.Screen name="Login" component={Login} options={{ headerShown: false,}}/>
                               <Stack.Screen name="Registro" component={Registro} options={{ headerShown: false,}}/>
                           </>

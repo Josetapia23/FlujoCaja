@@ -239,9 +239,9 @@ const Historiales = () => {
     <SafeAreaView style={styles.container}>
         <View style={styles.containerSuperior}>
             <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Ingresos')}>
-                <Material name='arrow-left' size={20} color={colores.color7}/>
+                <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
-            <Text style={{fontFamily:'Roboto-Medium', fontSize:30, color:colores.color7, textAlign:'center'}}>{`Historial de Ingresos\nTotal`}</Text>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:25, color:colores.color7, textAlign:'center'}}>{`Historial de Ingresos\nTotal`}</Text>
         </View>
         <ScrollView>
                     {
@@ -253,7 +253,7 @@ const Historiales = () => {
                           <View>
                             {/* <Text style={styles.txtSubtitulos}>Filtros</Text> */}
                             <View style={styles.filaFiltro}>
-                                <Text style={{width:'50%', paddingLeft:30}}>Seleccionar filtro:</Text>
+                                <Text style={{width:'50%', paddingLeft:30, color:colores.color9}}>Seleccionar filtro:</Text>
                                 <Picker
                                 style={{width:'50%'}}
                                   selectedValue={selectedValue}
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
     },
     atras:{
         position:'absolute',
-        left:10,
+        left:15,
         top:20
     },
     txtSubtitulos:{
