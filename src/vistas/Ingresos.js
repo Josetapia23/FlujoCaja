@@ -362,11 +362,11 @@ const add = () =>{
 const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, id}) => {
   return (
     <View style={styles.cardView}>
-      <View>
+      <View style={{justifyContent:'center', alignItems:'center'}}>
         <TouchableOpacity onPress={()=>{
           onPressConcepto(id, nombre)
         }}>
-            <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:20, color:colores.color8}}>{nombre}</Text>
+            <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:14, color:colores.color8}}>{nombre}</Text>
         </TouchableOpacity>
       </View>
       <View style={{flexDirection:'row'}}>

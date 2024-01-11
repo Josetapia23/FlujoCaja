@@ -64,11 +64,11 @@ const Despliegue = () => {
                 <View style={styles.view}>
                     <View style={{alignItems:'center'}}>
                         <ImgPress img={ingresos} funcion={() => navegacion.navigate('Ingresos')}/>
-                        <Text style={{color:colores.color3, fontFamily:'Roboto-Medium'}}>Ingresos</Text>
+                        <Text style={{color:colores.color5, fontFamily:'Roboto-Medium'}}>Ingresos</Text>
                     </View>
                     <View style={{alignItems:'center'}}>
                         <ImgPress img={perdida} funcion={() => navegacion.navigate('Gastos')}/>
-                        <Text style={{color:colores.color3, fontFamily:'Roboto-Medium'}}>Gastos</Text>
+                        <Text style={{color:colores.color5, fontFamily:'Roboto-Medium'}}>Gastos</Text>
                     </View>
                 </View>
                 <View>
@@ -83,7 +83,7 @@ const Despliegue = () => {
                                 <View>
                                     <Text style={{
                                         textAlign:'center', 
-                                        color:colores.color3, 
+                                        color:colores.color5, 
                                         fontFamily:'Roboto-Medium',
                                         fontSize:25
                                         }}>{`Ultimos ${listaMovimientos.length} movimientos`}</Text>
@@ -95,7 +95,7 @@ const Despliegue = () => {
                                 <View>
                                     <Text style={{
                                         textAlign:'center', 
-                                        color:colores.color3, 
+                                        color:colores.color5, 
                                         fontFamily:'Roboto-Medium',
                                         fontSize:25
                                         }}>Ultimos 10 movimientos</Text>
@@ -105,7 +105,7 @@ const Despliegue = () => {
                                 </View>
                                 )
                             ):(
-                                <Text style={{textAlign:'center', color:colores.color9, fontSize:16, marginTop:100}}>"No hay Movimientos registrados"</Text>
+                                <Text style={{textAlign:'center', color:colores.color5, fontSize:16, marginTop:100}}>"No hay Movimientos registrados"</Text>
                             )
                         )
                     }

@@ -358,18 +358,18 @@ const add = () =>{
 const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, id}) => {
   return (
     <View style={styles.cardView}>
-         <View>
+         <View style={{justifyContent:'center', alignItems:'center'}}>
         <TouchableOpacity onPress={()=>{
           onPressConcepto(id, nombre)
         }}>
-            <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:20, color:colores.color8}}>{nombre}</Text>
+            <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:14, color:colores.color8}}>{nombre}</Text>
         </TouchableOpacity>
       </View>
       <View style={{flexDirection:'row'}}>
         <TouchableOpacity onPress={()=>{
             onPressSearch(id, nombre)
           }}>
-              <Material name='magnify' size={30} color={colores.color4} />
+              <Material name='magnify' size={30} color={colores.color3} />
           </TouchableOpacity>
         <TouchableOpacity style={{marginHorizontal:5}}
          onPress={()=>{
@@ -417,7 +417,7 @@ const navegacion = useNavigation();
             <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Despliegue')}>
                 <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
-            <Text style={{fontFamily:'Roboto-Medium', fontSize:25, color:colores.color7, textAlign:'center'}}>{`Lista De Gastos`}</Text>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:25, color:colores.color6, textAlign:'center'}}>{`Lista De Gastos`}</Text>
         </View>
       <View>
         <View style={styles.BarraSuperior}>
@@ -499,7 +499,7 @@ const navegacion = useNavigation();
                 <Botones 
                 name='Guardar'
                 funcion={handleSubmit(guardar)}
-                margin={50}/>
+                margin={80}/>
                 </>
             )
         
@@ -562,7 +562,7 @@ const navegacion = useNavigation();
                 <Botones 
                 name='Guardar'
                 funcion={handleSubmit(AlertaMonto)}
-                margin={50}/>
+                margin={80}/>
               </>
               )
               }
@@ -640,8 +640,8 @@ atras:{
   closeButton: {
     //position: 'absolute',
     alignSelf:'flex-end',
-    top: 8,
-    right:10
+    top: 1,
+    right:5
   },
   txtSuperior:{
     fontFamily:'Roboto-Medium',
@@ -660,7 +660,7 @@ atras:{
     width: '90%',
     paddingVertical: 30,
     paddingHorizontal:15,
-    shadowColor: colores.color3,
+    shadowColor: colores.color5,
     shadowOffset: {
         width: 0,
         height: 2
@@ -675,7 +675,7 @@ txtTitulo:{
   paddingVertical:20,
   fontFamily:'Roboto-Bold',
   fontSize:30,
-  color:colors.color1,
+  color:colors.color7,
   textAlign:'center'
 },
 txt:{

@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         margin:10
     },
     img:{
-        tintColor:colores.color3,
+        tintColor:colores.color6,
         width:100,
         height:100,
         objectFit:'fill'

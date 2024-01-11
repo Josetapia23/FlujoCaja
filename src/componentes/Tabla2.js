@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         borderColor:colores.color5,
         height:260,
         borderWidth:1,
-        borderColor:colores.color3
+        borderColor:colores.color5
     },
     header: {
         fontFamily: 'Roboto-Bold',
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     conceptos: {
         fontFamily: 'Roboto-Bold',
         textTransform: 'uppercase',
-        color: colors.color9,
+        color: colores.color6,
         flex:1,
         textAlign:'center'
     },
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingVertical: 4,
         borderBottomWidth: 1,
-        borderBottomColor: colores.color3,
+        borderBottomColor: colores.color5,
         color: 'black',
         paddingHorizontal:5,
         alignItems:'center',
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingVertical: 10,
         color: 'black',
-        backgroundColor:colores.color3,
+        backgroundColor:colores.color5,
         paddingHorizontal:5,
         //justifyContent:'center',
         alignItems:'center'
