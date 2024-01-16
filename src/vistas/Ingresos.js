@@ -370,16 +370,21 @@ const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, 
         </TouchableOpacity>
       </View>
       <View style={{flexDirection:'row'}}>
-        <TouchableOpacity onPress={()=>{
+        <TouchableOpacity  onPress={()=>{
+            onPressConcepto(id, nombre)
+          }}>
+              <Material name='plus-thick' size={25} color={colores.color4} />
+        </TouchableOpacity>
+        <TouchableOpacity style={{marginHorizontal:5}} onPress={()=>{
             onPressSearch(id, nombre)
           }}>
-              <Material name='magnify' size={30} color={colores.color4} />
+              <Material name='eye-outline' size={25} color={colores.color3} />
           </TouchableOpacity>
-        <TouchableOpacity style={{marginHorizontal:5}}
+        <TouchableOpacity 
          onPress={()=>{
             onPressEliminar(id)
           }}>
-              <Material name='delete' size={30} color={colores.color11} />
+              <Material name='delete' size={25} color={colores.color11} />
           </TouchableOpacity>
       </View>
     </View>
@@ -421,21 +426,21 @@ const navegacion = useNavigation();
             <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Despliegue')}>
                 <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
-            <Text style={{fontFamily:'Roboto-Medium', fontSize:25, color:colores.color7, textAlign:'center'}}>{`Lista De Ingresos`}</Text>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center'}}>{`Lista De Ingresos`}</Text>
         </View>
       <View>
         <View style={styles.BarraSuperior}>
           <View style={{alignItems:'center'}}>
           <ImgPress2 funcion={()=>{navegacion.navigate('Historiales')}}>
-            <Material name='database-search' size={35} color={colores.color4}/>
+            <Material name='database-search' size={35} color={colores.color8}/>
           </ImgPress2>
-          <Text style={{color:'black', fontSize:10}}>Buscar</Text>
+          <Text style={{color:'black', fontSize:10}}>Historial de ingresos</Text>
           </View>
             <View style={{alignItems:'center'}}>
           <ImgPress2 funcion={add}>
-              <Material name='plus-thick' size={35} color={colores.color4}/>
+              <Material name='plus-thick' size={35} color={colores.color8}/>
           </ImgPress2>
-              <Text style={{color:'black', fontSize:10}}>Añadir</Text>
+              <Text style={{color:'black', fontSize:10}}>Añadir categoria</Text>
             </View>
         </View>
 
@@ -535,7 +540,7 @@ const navegacion = useNavigation();
                   reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
                 }}
                 >
-                                <Material name='close-thick' size={35} color={colores.color9}/>
+                     <Material name='close-thick' size={35} color={colores.color9}/>
 
                 </TouchableOpacity>
                 <Text style={styles.txtTitulo}>{`Nuevo monto de ${nombreCateg}`}</Text>
@@ -595,15 +600,14 @@ const navegacion = useNavigation();
                   reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
                 }}
                 >
-                                <Material name='close-thick' size={35} color={colores.color9}/>
-
+                <Material name='close-thick' size={35} color={colores.color9}/>
                 </TouchableOpacity>
                 <Text style={styles.txtTitulo}>{`Categoria ${nombreCateg}`}</Text>
                 
                 {
                   listaMovimientos1.length>0?
                   (
-                    <Tabla2 columnas={2}
+                    <Tabla2
                       datos={listaMovimientos1}
                       Total={montoTotal3}
                     />
@@ -685,7 +689,7 @@ txtTitulo:{
   paddingVertical:20,
   fontFamily:'Roboto-Bold',
   fontSize:30,
-  color:colors.color1,
+  color:colores.color5,
   textAlign:'center'
 },
 txt:{

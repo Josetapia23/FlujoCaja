@@ -14,12 +14,14 @@ import SplashScreens from '../vistas/SplashScreens';
 import Graficos from '../vistas/Graficos';
 import Ingresos from '../vistas/Ingresos';
 import Despliegue from '../vistas/Despliegue';
-import Empresa from '../vistas/Empresa';
 import Empresa3 from '../vistas/Empresa3';
 import Gastos from '../vistas/Gastos';
 import Historiales from '../vistas/Historiales';
 import Historiales2 from '../vistas/Historiales2';
 import OnboardingScreen from '../vistas/OnboardingScreen';
+import Logout from '../vistas/Logout';
+import Company from '../vistas/Company';
+import Perfil from '../vistas/Perfil';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,7 +48,7 @@ useEffect(()=>(
                           </>
                       ) : (
                         <>
-                            <Stack.Screen name="Empresa" component={TabGroup} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Logout" component={TabGroup} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Home" component={Home} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Graficos" component={Graficos} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Despliegue" component={Despliegue} options={{ headerShown: false,}}/>
@@ -54,6 +56,8 @@ useEffect(()=>(
                             <Stack.Screen name="Gastos" component={Gastos} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Historiales" component={Historiales} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Historiales2" component={Historiales2} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Company" component={Company} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false,}}/>
                           </> 
                       )
         }
@@ -68,7 +72,7 @@ const Tab = createBottomTabNavigator(); //Instanciamos la clase createBottomTabN
 function TabGroup() {
     return (
         <Tab.Navigator
-            initialRouteName="Empresa"
+            initialRouteName="Logout"
             screenOptions={({ route }) => ({
                 tabBarShowLabel: false,
                 tabBarIcon: ({ focused, color, size }) => {
@@ -81,7 +85,7 @@ function TabGroup() {
                       iconName = 'calculator-variant-outline';
                     }else if(route.name === 'Despliegue'){
                         iconName = 'currency-usd';
-                    }else if(route.name === 'Empresa'){
+                    }else if(route.name === 'Logout'){
                         iconName = 'account-tie';
                     }
                     // Retorna el componente de ícono
@@ -98,7 +102,7 @@ function TabGroup() {
             <Tab.Screen name="Inicio" component={Home} options={{ headerShown: false }} />
             <Tab.Screen name="Despliegue" component={Despliegue} options={{ headerShown: false }} />
             <Tab.Screen name="Graficos" component={Graficos} options={{ headerShown: false }} />
-            <Tab.Screen name="Empresa" component={Empresa} options={{ headerShown: false }} />
+            <Tab.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
         </Tab.Navigator>
     );
 }

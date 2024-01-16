@@ -278,12 +278,15 @@ const Historiales = () => {
                                 selectedValue == 'mes' ? 
                                 (
                                   listaMovimientos2.length>0?(
-                                    <Tabla2 
-                                  datos={listaMovimientos2} //Tabla que muestra movimientos del mes actual
-                                  columnas={3}
-                                  Total={montoTotal}/>
+                                    <View style={styles.containerTable}>
+                                      <Text style={styles.txtSubtitulos}>{`Estos son los movimientos del mers actual`}</Text>
+                                      <Tabla2 
+                                    datos={listaMovimientos2} //Tabla que muestra movimientos del mes actual
+                                    columnas={3}
+                                    Total={montoTotal}/>
+                                    </View>
                                   ):(
-                                    <Text style={{fontFamily:'Roboto-Medium', textAlign:'center'}}>"Este mes aun no tiene movimientos registrados"</Text>                                  )
+                                    <Text style={{fontFamily:'Roboto-Medium', textAlign:'center', color:colores.color5}}>"Este mes aun no tiene movimientos registrados"</Text>                                  )
                                   
                                 ):
                                 (
@@ -294,17 +297,17 @@ const Historiales = () => {
                                         <TouchableOpacity
                                             style={[styles.contenedorSubmit2]}
                                             onPress={handleOnPress}>
-                                            <Text style={{ color:colores.color4, fontSize: 20, padding: 3 }}>Fecha inicial</Text>
+                                            <Text style={{ color:colores.color5, fontSize: 20, padding: 3 }}>Fecha inicial</Text>
                                         </TouchableOpacity>
-                                        <Text style={{ color: colores.color5, fontSize: 14, }}>{date}</Text>
+                                        <Text style={{ color: colores.color4, fontSize: 14, }}>{date}</Text>
                                     </View>
                                     <View style={{alignItems:'center'}}>
                                         <TouchableOpacity
                                             style={[styles.contenedorSubmit2]}
                                             onPress={handleOnPress2}>
-                                            <Text style={{ color: colores.color4, fontSize: 20, padding: 3 }}>Fecha Final</Text>
+                                            <Text style={{ color: colores.color5, fontSize: 20, padding: 3 }}>Fecha Final</Text>
                                         </TouchableOpacity>
-                                        <Text style={{ color: colores.color5, fontSize: 14 }}>{date2}</Text>
+                                        <Text style={{ color: colores.color4, fontSize: 14 }}>{date2}</Text>
                                     </View>
                                 </View>
                                 <Botones funcion={()=> pressBuscar()}
@@ -316,11 +319,13 @@ const Historiales = () => {
                                    listaMovimientos3.length>0 ? 
                                     (
                                       <>
+                                      <View style={[styles.containerTable,{ marginTop:5}]}>
                                       <Text style={styles.txtSubtitulos}>{`Entre ${date} y ${date2} estos son los movimientos de ingresos`}</Text>
                                         <Tabla2 
-                                      datos={listaMovimientos3} //Tabla que muestra movimientos del mes actual
-                                      columnas={4}
-                                      Total={montoTotal2}/>
+                                        datos={listaMovimientos3} //Tabla que muestra movimientos del mes actual
+                                        columnas={4}
+                                        Total={montoTotal2}/>
+                                      </View>
                                       </>
                                     ):
                                     (
@@ -469,7 +474,7 @@ const styles = StyleSheet.create({
         top:20
     },
     txtSubtitulos:{
-      color:colores.color3,
+      color:colores.color5,
       fontSize:18, 
       textAlign:'center',
       fontFamily:'Roboto-Medium',
@@ -520,5 +525,15 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       borderRadius: 10,
       marginHorizontal: 8,
-  },
+    },
+    containerTable:{
+      paddingBottom:5, 
+      borderBottomColor:colores.color5, 
+      borderBottomWidth:1,
+      hadowColor: colores.color5,
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.5,
+      shadowRadius: 3,
+      elevation: 6,
+    }
 })

@@ -102,7 +102,7 @@ const xx = useNavigation();
     <View style={styles.container}>
             <Spinner visible={isLoading} />
             <View style={styles.containerSuperior}>
-              <Text style={{fontFamily:'Roboto-Medium', fontSize:25, color:colores.color7, textAlign:'center'}}>{`Hola, ${userInfo.nombre}`}</Text>
+              <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center'}}>{`Hola,\n ${userInfo.nombre}`}</Text>
             </View>
             <ScrollView 
             style={{marginVertical:20}}
@@ -110,6 +110,65 @@ const xx = useNavigation();
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }>
             <View style={styles.containerBody}>
+            {
+                  ingresoMensualNumerico > 0 && gastoMensualNumerico > 0?(
+                    <View style={{backgroundColor:colores.color5, alignItems:'center', paddingVertical:5, borderRadius:3, marginBottom:10}}>
+                    <Text style={[styles.txtMontos, {marginTop:10}]}>
+                      El balance total del mes actual es el siguiente:</Text>
+                      {
+                        balanceMensual2 > 0 ?
+                        (<Text style={{color:'green', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>):
+                        (<Text style={{color:'red', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>)
+                      }
+                      <Text
+                      style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
+                        {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
+                        </Text>
+                    </View>
+                  ):(
+                    ingresoMensualNumerico > 0?
+                    (
+                      <View style={{backgroundColor:colores.color5, alignItems:'center', paddingVertical:5, borderRadius:3, marginBottom:10}}>
+                      <Text style={[styles.txtMontos, {marginTop:10}]}>
+                      El balance total del mes actual es el siguiente:</Text>
+                      <Text style={{color:'green', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
+                      <Text
+                        style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
+                        {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
+                      </Text>
+                      </View>
+                    ):(
+                      gastoMensualNumerico > 0?(
+                        <View style={{backgroundColor:colores.color5, alignItems:'center', paddingVertical:5, borderRadius:3, marginBottom:10}}>
+                        <Text style={[styles.txtMontos, {marginTop:10}]}>
+                        El balance total del mes actual es el siguiente:</Text>
+                        <Text style={{color:'red', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
+                        <Text
+                          style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
+                          {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
+                        </Text>
+                        </View>
+                      ):(
+                        ingresoMensualNumerico >= 0 && gastoMensualNumerico >= 0?(
+                          <View style={{backgroundColor:colores.color5, alignItems:'center', paddingVertical:5, borderRadius:3, marginBottom:10}}>
+                            <Text style={[styles.txtMontos, {marginTop:10}]}>
+                            El balance total del mes actual es el siguiente:</Text>
+                            <Text style={{color:colores.color9, fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
+                            <Text
+                              style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
+                              {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
+                            </Text>
+                          </View>
+                        ):(
+                          <>
+                          </>
+                        )
+                      )
+                    )
+                  )
+                }
+                
+
                 {
                   ingresoDiarioNumerico > 0?
                   (
@@ -138,65 +197,8 @@ const xx = useNavigation();
                     <Text style={[styles.txtMontos, {marginTop:10}]}>{`El dia de hoy no ha registrado gastos`}</Text>
                   )
                 }
-                <View style={{borderBottomColor:colors.color8, width:'100%', borderWidth:1, opacity:0.1, top:0}}></View>
                 
-                {
-                  ingresoMensualNumerico > 0 && gastoMensualNumerico > 0?(
-                    <>
-                    <Text style={[styles.txtMontos, {marginTop:10}]}>
-                      El balance total del mes actual es el siguiente:</Text>
-                      {
-                        balanceMensual2 > 0 ?
-                        (<Text style={{color:'green', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>):
-                        (<Text style={{color:'red', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>)
-                      }
-                      <Text
-                      style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
-                        {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
-                        </Text>
-                    </>
-                  ):(
-                    ingresoMensualNumerico > 0?
-                    (
-                      <>
-                      <Text style={[styles.txtMontos, {marginTop:10}]}>
-                      El balance total del mes actual es el siguiente:</Text>
-                      <Text style={{color:'green', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
-                      <Text
-                        style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
-                        {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
-                      </Text>
-                      </>
-                    ):(
-                      gastoMensualNumerico > 0?(
-                        <>
-                        <Text style={[styles.txtMontos, {marginTop:10}]}>
-                        El balance total del mes actual es el siguiente:</Text>
-                        <Text style={{color:'red', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
-                        <Text
-                          style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
-                          {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
-                        </Text>
-                        </>
-                      ):(
-                        ingresoMensualNumerico >= 0 && gastoMensualNumerico >= 0?(
-                          <>
-                          <Text style={[styles.txtMontos, {marginTop:10}]}>
-                        El balance total del mes actual es el siguiente:</Text>
-                        <Text style={{color:colores.color9, fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
-                        <Text
-                          style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
-                          {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
-                        </Text>
-                          </>
-                        ):(
-                          <>
-                          </>
-                        )
-                      )
-                    )
-                  )
-                }
+                
 
 
 

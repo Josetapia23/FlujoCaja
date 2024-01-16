@@ -417,21 +417,21 @@ const navegacion = useNavigation();
             <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Despliegue')}>
                 <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
-            <Text style={{fontFamily:'Roboto-Medium', fontSize:25, color:colores.color6, textAlign:'center'}}>{`Lista De Gastos`}</Text>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color6, textAlign:'center'}}>{`Lista De Gastos`}</Text>
         </View>
       <View>
         <View style={styles.BarraSuperior}>
           <View style={{alignItems:'center'}}>
             <ImgPress2 funcion={()=>{navegacion.navigate('Historiales2')}}>
-              <Material name='database-search' size={35} color={colores.color4}/>
+              <Material name='database-search' size={35} color={colores.color8}/>
             </ImgPress2>
-            <Text style={{color:'black', fontSize:10}}>Buscar</Text>
+            <Text style={{color:'black', fontSize:10}}>Historial de gastos</Text>
           </View>
           <View style={{alignItems:'center'}}>
               <ImgPress2 funcion={add}>
-                  <Material name='plus-thick' size={35} color={colores.color4}/>
+                  <Material name='plus-thick' size={35} color={colores.color8}/>
               </ImgPress2>
-              <Text style={{color:'black', fontSize:10}}>Añadir</Text>
+              <Text style={{color:'black', fontSize:10}}>Añadir categoria</Text>
           </View>
         </View>
         {

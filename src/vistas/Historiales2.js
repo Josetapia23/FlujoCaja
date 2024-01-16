@@ -278,10 +278,14 @@ const Historiales = () => {
                                 selectedValue == 'mes' ? 
                                 (
                                   listaMovimientos2.length>0?(
-                                    <Tabla2 
-                                  datos={listaMovimientos2} //Tabla que muestra movimientos del mes actual
-                                  columnas={3}
-                                  Total={montoTotal}/>
+                                    <View style={styles.containerTable}>
+                                      <Text style={styles.txtSubtitulos}>{`Estos son los movimientos del mers actual`}</Text>
+                                      <Tabla2 
+                                      datos={listaMovimientos2} //Tabla que muestra movimientos del mes actual
+                                      columnas={3}
+                                      Total={montoTotal}
+                                      />
+                                    </View>
                                   ):(
                                     <Text style={{fontFamily:'Roboto-Medium', textAlign:'center'}}>"Este mes aun no tiene movimientos de gatos registrados"</Text>                                  )
                                   
@@ -316,11 +320,14 @@ const Historiales = () => {
                                    listaMovimientos3.length>0 ? 
                                     (
                                       <>
-                                      <Text style={styles.txtSubtitulos}>{`Entre ${date} y ${date2} estos son los movimientos de gastos`}</Text>
+                                    <View style={styles.containerTable}>
+                                        <Text style={styles.txtSubtitulos}>{`Entre ${date} y ${date2} estos son los movimientos de gastos`}</Text>
                                         <Tabla2 
-                                      datos={listaMovimientos3} //Tabla que muestra movimientos del mes actual
-                                      columnas={4}
-                                      Total={montoTotal2}/>
+                                          datos={listaMovimientos3} //Tabla que muestra movimientos del mes actual
+                                          columnas={4}
+                                          Total={montoTotal2}
+                                        />
+                                    </View>
                                       </>
                                     ):
                                     (
@@ -469,7 +476,7 @@ const styles = StyleSheet.create({
         top:20
     },
     txtSubtitulos:{
-      color:colores.color3,
+      color:colores.color5,
       fontSize:18, 
       textAlign:'center',
       fontFamily:'Roboto-Medium',
@@ -521,4 +528,14 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       marginHorizontal: 8,
   },
+  containerTable:{
+    paddingBottom:5, 
+    borderBottomColor:colores.color5, 
+    borderBottomWidth:1,
+    hadowColor: colores.color5,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 6,
+  }
 })

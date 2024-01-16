@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Modal, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Modal, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { colores, colors } from '../componentes/Colors';
 import { AuthContext } from '../context/AuthContext';
@@ -22,7 +22,7 @@ const TELEFONO_REGEX = /^[0-9]{7,10}$/;
 const NIT_REGEX = /^[0-9]{1,10}-[0-9]{1}$/;
 const DIRECCION_REGEX = /^[0-9A-Za-z\s#áéíóúÁÉÍÓÚñÑ.,-/]+$/;
 
-const Empresa2 = () => {
+const Logout = () => {
   const { isLoading, userInfo, registerEmpresa, companyInfo, logout, txtErrorNit} = useContext(AuthContext);
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
@@ -36,6 +36,9 @@ const Empresa2 = () => {
   const [telefonoEmpresarial, setTelefono] = useState('');
   const [emailEmpresarial, setEmail] = useState('');
   const registroEmpr = 'Si';
+
+  const [userName, setUserName] = useState(userInfo.nombre);
+  const [emailUser, setEmailUser] = useState(userInfo.email)
 
 
   const salir = () => {
@@ -145,25 +148,52 @@ const navegacion = useNavigation();
       {pasar == 'si' ?  
       (
         <SafeAreaView style={styles.containForm}>
+            <View style={{ marginBottom:70, backgroundColor:colores.color5, paddingVertical:30, height:100}}>
+              <View style={{flexDirection:'row', alignItems:'center', paddingLeft:5, paddingBottom:10}}> 
+                <Image source={require('../../assets/iconos/usuario.png')} style={{width:50, height:50, borderRadius:50, marginHorizontal:20 ,backgroundColor:colores.color5 ,tintColor:colores.color8}} />
+                <View>
+                  <Text style={{color:colores.color8, fontSize:16, fontWeight:'800'}}>{userInfo.nombre}</Text>
+                  <Text style={{color:colors.color8, fontSize:16, paddingTop:3}}>{userInfo.email}</Text>
+                </View>
+              </View>
+            </View>
           <ScrollView>
-            <View style={{marginBottom:40, marginTop:30}}>
-            <View style={{alignItems:'center', marginBottom:30}}>
-            <Image source={require('../../assets/iconos/usuarioLogo.png')} style={{width:150, height:150, borderRadius:80, marginBottom:10}} />
-              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Nombre Emprendedor: <Text style={{color:'black', fontSize:16}}>{userInfo.nombre}</Text></Text>
-              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Correo Emprendedor: <Text style={{color:'black', fontSize:16}}>{userInfo.email}</Text></Text>
+            <View style={{marginBottom:40,}}>
+
+            <TouchableOpacity onPress={()=>{navegacion.navigate('Perfil')}}>
+              <View style={styles.containerOptions}> 
+                  <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Perfil</Text>
+                  < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={()=>{navegacion.navigate('Company')}}>
+              <View style={styles.containerOptions}> 
+                  <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Empresa</Text>
+                  < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.containerOptions}> 
+                  <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Privacidad</Text>
+                  < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.containerOptions}> 
+                  <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Terminos y condiciones</Text>
+                  < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
+              </View>
+            </TouchableOpacity>
+            
+            
+
+
+            <View style={{marginTop:'40%'}}>
+              <Botones2 name='Cerrar Sersion'
+                  funcion={salir} margin={'25%'} padding={6}>
+                < AntDesign name='logout-variant' size={30} color={colores.color8}/>
+              </Botones2>
             </View>
-            <View style={{alignItems:'center', marginBottom:20}}>
-              <Image source={require('../../assets/iconos/empresaLogo.png')} style={{width:150, height:150, borderRadius:80, marginBottom:10}} />
-              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Nombre Empresa: <Text style={{color:'black', fontSize:16}}>{datosEmpresa.nombreEmprendimiento}</Text></Text>
-              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Nit: <Text style={{color:'black', fontSize:16}}>{datosEmpresa.nit}</Text></Text>
-              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Direccion: <Text style={{color:'black', fontSize:16}}>{datosEmpresa.direccion}</Text></Text>
-              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Tel Empresa: <Text style={{color:'black', fontSize:16}}>{datosEmpresa.telefonoEmpresarial}</Text></Text>
-              <Text style={{color:colores.color9, marginBottom:5, fontFamily:'Roboto-Medium'}}>Correo Empresa: <Text style={{color:'black', fontSize:16}}>{datosEmpresa.emailEmpresarial}</Text></Text>
-            </View>
-            <Botones2 name='Cerrar Sersion'
-                funcion={salir} margin={'25%'} padding={6}>
-              < AntDesign name='logout-variant' size={35} color={colores.color8}/>
-            </Botones2>
             </View>
           </ScrollView>
       </SafeAreaView>
@@ -225,7 +255,7 @@ const navegacion = useNavigation();
                         }
                       </View>
                       <View 
-                        style={{paddingBottom:10}}                      
+                        style={{paddingBottom:10, paddingHorizontal:30}}                      
                         >
                         <Text style={styles.txt}>Direccion:<Text style={{color:'red'}}>*</Text></Text>
                       <Imputs
@@ -344,7 +374,7 @@ const navegacion = useNavigation();
   );
 };
 
-export default Empresa2;
+export default Logout;
 
 const styles = StyleSheet.create({
   containForm: {
@@ -384,5 +414,16 @@ const styles = StyleSheet.create({
   txt:{
     fontFamily:'Roboto-Medium',
     color:colores.color9
+  },
+  containerOptions:{
+    //backgroundColor:colores.color5, 
+    height:55, 
+    borderBottomWidth:1, 
+    borderBottomColor:colors.color7,
+    //borderRadius:3,
+    flexDirection:'row', 
+    justifyContent:'space-between', 
+    alignItems:'center',
+    marginHorizontal:20
   }
 });

@@ -1,8 +1,16 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { colores, colors } from './Colors'
 
 const Tabla2 = ({datos, columnas, Total}) => {
+
+    const funcion1 = (id)=>{
+        console.log(id);
+    }
+
+    const funcion2 = (id,descripcion, monto)=>{
+        console.log(id, descripcion, monto);
+    }
 
   return (
     <View>
@@ -69,6 +77,7 @@ const Tabla2 = ({datos, columnas, Total}) => {
                         <View style={styles.row}>
                                 <Text style={ styles.conceptos}>Descripcion</Text>
                                 <Text style={ styles.conceptos}>Monto</Text>
+                                <Text style={ styles.conceptos}>Acciones</Text>
                         </View>
                         <FlatList
                             data={datos}
@@ -78,7 +87,15 @@ const Tabla2 = ({datos, columnas, Total}) => {
                                 <>
                                 <View style={styles.contenedorLista}>
                                     <Text style={[styles.txtContenidoTabla2,{textAlign:'justify', paddingHorizontal:2}]}>{item.descripcion}</Text>
-                                    <Text style={[styles.txtContenidoTabla,{textAlign:'center'}]}>${item.monto}</Text>
+                                    <Text style={[styles.txtContenidoTabla2,{textAlign:'center'}]}>${item.monto}</Text>
+                                    <View style={[styles.txtContenidoTabla,{textAlign:'center'}]}>
+                                        <TouchableOpacity onPress={()=>{funcion1(item.id)}}>
+                                            <Text>EL</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={()=>{funcion2(item.id, item.descripcion, item.monto)}}>
+                                            <Text>ED</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                                 </>
                             )}

@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         color: colors.color6,
         textAlign: 'center', 
-        fontSize: 20,
+        fontSize: 17,
         padding:8
     },
     conceptos: {
@@ -68,7 +68,9 @@ const styles = StyleSheet.create({
         textTransform: 'uppercase',
         color: colores.color6,
         flex:1,
-        textAlign:'center'
+        textAlign:'center',
+        fontSize: 12,
+
     },
     contenedorLista: {
         flexDirection: 'row',

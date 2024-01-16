@@ -58,7 +58,7 @@ const Despliegue = () => {
                     <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Inicio')}>
                         <Material name='arrow-left' size={25} color={colores.color7}/>
                     </TouchableOpacity>
-                    <Text style={{fontFamily:'Roboto-Medium', fontSize:25, color:colores.color7, textAlign:'center', }}>{`Historiales`}</Text>
+                    <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center', }}>{`Historiales`}</Text>
                 </View>
                 
                 <View style={styles.view}>
@@ -85,7 +85,7 @@ const Despliegue = () => {
                                         textAlign:'center', 
                                         color:colores.color5, 
                                         fontFamily:'Roboto-Medium',
-                                        fontSize:25
+                                        fontSize:18
                                         }}>{`Ultimos ${listaMovimientos.length} movimientos`}</Text>
                                     <Tablas datos={listaMovimientos}
                                     categoria={'Categorias'}
@@ -97,7 +97,7 @@ const Despliegue = () => {
                                         textAlign:'center', 
                                         color:colores.color5, 
                                         fontFamily:'Roboto-Medium',
-                                        fontSize:25
+                                        fontSize:18
                                         }}>Ultimos 10 movimientos</Text>
                                     <Tablas datos={listaMovimientos}
                                     categoria={'Categorias'}

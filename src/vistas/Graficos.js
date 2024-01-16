@@ -148,7 +148,7 @@ const onConfirm = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.containerSuperior}>
-          <Text style={{lineHeight:30 ,fontFamily:'Roboto-Medium', fontSize:25, color:colores.color7, textAlign:'center', marginHorizontal:20}}>{`Rentabilidad Emprendedora Mensual`}</Text>
+          <Text style={{lineHeight:30 ,fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center', marginHorizontal:20}}>{`Rentabilidad Emprendedora \n Mensual`}</Text>
       </View> 
       <ScrollView>
       {

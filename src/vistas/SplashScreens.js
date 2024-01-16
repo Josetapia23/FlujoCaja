@@ -11,7 +11,7 @@ const SplashScreens = () => {
             alignItems:'center', 
             flexDirection:'column'
             }}>
-            <ActivityIndicator size="large" color={colores.color3} />
+            <ActivityIndicator size="large" color={colores.color4} />
         </View>
     )
 }

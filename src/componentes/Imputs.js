@@ -14,7 +14,9 @@ export default function Imputs({
   keyboardType,
   datos,
   setDatos,
-  margin }) {
+  margin,
+  editable = true,
+  backgroundColor }) {
 
   return (
 
@@ -25,7 +27,7 @@ export default function Imputs({
       rules={rules}//Reglas del imput requerido o obligatorio
       render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
         <>
-          <View style={[styles.container, { borderColor: error ? "red" : colores.color5, marginHorizontal:margin }]}>
+          <View style={[styles.container, { borderColor: error ? "red" : colores.color5, marginHorizontal:margin, backgroundColor: editable? colores.color6 : colores.color7}]}>
             <Image
               style={styles.iconos}
               source={imagen}
@@ -42,6 +44,7 @@ export default function Imputs({
               style={[styles.txtInput]}
               secureTextEntry={secureTextEntry}
               keyboardType={keyboardType}
+              editable = {editable}
             />
           </View>
           {error && (
