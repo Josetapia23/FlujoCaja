@@ -1,15 +1,41 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { colores, colors } from './Colors'
+import AntDesign from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Tabla2 = ({datos, columnas, Total}) => {
 
-    const funcion1 = (id)=>{
-        console.log(id);
-    }
+const Tabla2 = ({datos, columnas, Total, onEliminar, onEditar}) => {
 
-    const funcion2 = (id,descripcion, monto)=>{
-        console.log(id, descripcion, monto);
+    const funcion1 = (id) => {
+        const movimiento = {
+            id: id
+          };
+        //const movimiento = datos.find((item) => item.id === id);
+        // Almacena los datos en el estado local o en variables temporales según tus necesidades
+        // Puedes usar el prop onEliminar para pasar los datos al componente padre (Ingresos)
+        onEliminar(movimiento);
+        // Luego, puedes comentar o eliminar la siguiente línea
+        // AsyncStorage.setItem('idMovimientoIngreso', id);
+      };
+    
+      const funcion2 = (id, descripcion, monto) => {
+        const movimiento = {
+          id: id,
+          descripcion: descripcion,
+          monto: monto,
+        };
+        // Almacena los datos en el estado local o en variables temporales según tus necesidades
+        // Puedes usar el prop onEditar para pasar los datos al componente padre (Ingresos)
+        onEditar(movimiento);
+        // Luego, puedes comentar o eliminar las siguientes líneas
+        // AsyncStorage.setItem('idMov', id);
+        // AsyncStorage.setItem('descripcionMov', descripcion);
+        // AsyncStorage.setItem('montoMov', monto);
+      };
+
+    const eliminarMovimiento = ()=>{
+
     }
 
   return (
@@ -88,12 +114,12 @@ const Tabla2 = ({datos, columnas, Total}) => {
                                 <View style={styles.contenedorLista}>
                                     <Text style={[styles.txtContenidoTabla2,{textAlign:'justify', paddingHorizontal:2}]}>{item.descripcion}</Text>
                                     <Text style={[styles.txtContenidoTabla2,{textAlign:'center'}]}>${item.monto}</Text>
-                                    <View style={[styles.txtContenidoTabla,{textAlign:'center'}]}>
-                                        <TouchableOpacity onPress={()=>{funcion1(item.id)}}>
-                                            <Text>EL</Text>
-                                        </TouchableOpacity>
+                                    <View style={[styles.txtContenidoTabla,{textAlign:'center', flexDirection:'row', justifyContent:'space-evenly'}]}>
                                         <TouchableOpacity onPress={()=>{funcion2(item.id, item.descripcion, item.monto)}}>
-                                            <Text>ED</Text>
+                                            < AntDesign name='pencil' size={20} color={colores.color3}/>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={()=>{funcion1(item.id)}}>
+                                            < AntDesign name='delete' size={20} color={colores.color11}/>
                                         </TouchableOpacity>
                                     </View>
                                 </View>

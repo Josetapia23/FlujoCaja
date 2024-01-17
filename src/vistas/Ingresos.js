@@ -21,6 +21,7 @@ const Ingresos = () => {
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
+  const [visible4, setVisible4] = useState(false);
   const [nombreCateg, setNombreCat] = useState('');
   const [errorNombre, setErrorNombre] = useState('');
   const [listaConceptos , setListaConceptos] = useState([]);
@@ -32,6 +33,11 @@ const Ingresos = () => {
   const [tipo, setTipo] = useState(1);
   const [cargando, setCargando] = useState(false);
   const [datosEmpresa , setDatosEmpresa] = useState({});
+
+
+  const [movIng, setMovIng] = useState(null);
+  const [editMov, setEditMov] = useState(false);
+  const [deleteMov, setDeleteMov] = useState(false);
   //const [idUser, setIdUser] = useState(0);
 
   const idUser = userInfo.id;
@@ -416,8 +422,78 @@ const activarModal3 = (id, nombre) => {
   setVisible3(true);
   setIdConcepto(id);
   setNombreCat(nombre);
-
 }
+
+const editarMov = (id, nuevoMonto, nuevaDescripcion) => {
+  setCargando(true);
+  console.log(id, nuevoMonto, nuevaDescripcion);
+};
+
+const eliminarMov=(id)=>{
+  setCargando(true); // Comienza la carga
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          'https://www.plataforma50.com/pruebas/gestionP/deleteMovimiento.php',
+          {
+            id
+          },
+        )
+        .then(res => {
+          if (res.data.result === 'success') {
+            console.log('Movimiento eliminado')
+          setCargando(false); // Comienza la carga
+
+          } else if (res.data.result === 'error') {
+            // Error en la consulta
+            console.log('Error al eliminar:', res.data.message);
+            reject('Error en el registro: ' + res.data.message);
+          setCargando(false); // Comienza la carga
+
+          } else {
+            console.log('Respuesta inesperada del servidor:', res.data);
+            reject('Error inesperado del servidor');
+          setCargando(false); // Comienza la carga
+
+          }
+        })
+        .catch(error => {
+          console.error('Error de axios:', error.message);
+          reject('Error con axios: ' + error.message);
+          setCargando(false); // Comienza la carga
+
+        });
+    });
+}
+
+useEffect(()=>{
+  if(movIng){
+    if(editMov){
+      setVisible4(true);
+    }
+    if(deleteMov){
+        Alert.alert(
+          'Confirmar Eliminación',
+          '¿Estás seguro de que quieres eliminar esta movimiento?',
+          [
+            {
+              text: 'Cancelar',
+              style: 'cancel',
+            },
+            {
+              text: 'Eliminar',
+              onPress: () => eliminarMov(movIng.id),
+              style: 'destructive',
+            },
+          ],
+          { cancelable: false }
+        );
+    }
+    setEditMov(false);
+    setDeleteMov(false); 
+    setMovIng(null);
+  }
+},[movIng, editMov, deleteMov])
 
 const navegacion = useNavigation();
   return (
@@ -583,6 +659,8 @@ const navegacion = useNavigation();
             </View>
           </Modal>
 
+
+
           <Modal 
           visible={visible3}>
             <View style={styles.modal}>
@@ -610,12 +688,96 @@ const navegacion = useNavigation();
                     <Tabla2
                       datos={listaMovimientos1}
                       Total={montoTotal3}
+                      onEliminar={(movimiento) => {
+                        // Puedes hacer lo que necesites con los datos de edición
+                        setMovIng(movimiento);
+                        setDeleteMov(true);
+                        //console.log('id a eliminar:', movIng);
+                      }}
+                      onEditar={(movimiento) => {
+                        // Puedes hacer lo que necesites con los datos de edición
+                        setMovIng(movimiento);
+                        setEditMov(true);
+                        //console.log('Datos a editar:', movIng);
+                      }}
                     />
                   ):
                   (
                     <Text style={{fontFamily:'Roboto-Medium', textAlign:'center'}}>"En esta categoria no hay movimientos registrados aún"</Text>
                   )
                 }
+                </>
+              )
+            }
+              </View>
+            </View>
+          </Modal>
+
+          <Modal 
+          visible={visible4}>
+            <View style={styles.modal}>
+              <View style={styles.modalView}>
+              {
+            cargando ? (
+              <View style={{marginTop:150}}>
+              <SplashScreens />
+            </View> 
+            ):(
+                <>
+                <TouchableOpacity style={styles.closeButton}
+                onPress={()=>{
+                  setVisible4(false);
+                  reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
+                }}
+                >
+                     <Material name='close-thick' size={35} color={colores.color9}/>
+
+                </TouchableOpacity>
+                <Text style={styles.txtTitulo}>{`Actualizar movimiento de ${nombreCateg}`}</Text>
+                
+                <View 
+                    style={{paddingBottom:30}}
+                    >
+                    <Text style={styles.txt}>Actualizar monto:<Text style={{color:'red'}}>*</Text></Text>
+                    <Imput2
+                    imagen={require('../../assets/iconos/dolar.png')}
+                              name="monto2"
+                              placeholder=" Nuevo el monto"
+                              control={control}
+                              rules={{
+                                  required: 'Monto de ingreso requerido',
+                              }}
+                              keyboardType='numeric'
+                          />
+                    <Text style={[styles.txt,{marginTop:20}]}>Descripcion sobre el ingreso:<Text style={{color:'red'}}>*</Text></Text>
+                    <Imput2
+                    imagen={require('../../assets/iconos/lista.png')}
+                              name="descripcion2"
+                              placeholder=" Describir utilidad del monto ingresado"
+                              control={control}
+                              rules={{
+                                  required: 'descripcion requerida',
+                              }}
+                              keyboardType='text'
+                          />
+                    <Text style={{color:'red'}}>{errorNombre}</Text>
+                </View>
+                <Botones 
+                name='Actualizar'
+                margin={50}
+                funcion={()=>{
+                  const nuevoMonto = getValues('monto2');
+                  const nuevaDescripcion = getValues('descripcion2');
+                  editarMov(movIng.id, nuevoMonto, nuevaDescripcion)
+                  .then(() => {
+                    setVisible4(false);
+                    reset({ monto2: '' , descripcion2:''});
+                  })
+                  .catch(error => {
+                    // Manejar el error si es necesario
+                  });
+                }}
+                />
                 </>
               )
             }
