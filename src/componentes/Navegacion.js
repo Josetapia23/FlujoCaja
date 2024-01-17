@@ -89,7 +89,7 @@ function TabGroup() {
                         iconName = 'account-tie';
                     }
                     // Retorna el componente de ícono
-                    return <AntDesign name={iconName} size={35} color={iconColor} />;
+                    return <AntDesign name={iconName} size={20} color={iconColor} />;
                 },
             })}
             tabBarOptions={{

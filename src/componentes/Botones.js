@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     txtInferior: {
         padding: 10,
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: 17,
         color: '#fff',
         padding: 10,
         fontFamily: 'Roboto-Medium'

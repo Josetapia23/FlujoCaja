@@ -367,33 +367,41 @@ const add = () =>{
 
 const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, id}) => {
   return (
+    <>
     <View style={styles.cardView}>
       <View style={{justifyContent:'center', alignItems:'center'}}>
         <TouchableOpacity onPress={()=>{
           onPressConcepto(id, nombre)
         }}>
-            <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:14, color:colores.color8}}>{nombre}</Text>
+            <Text style={{textTransform:'capitalize', fontFamily:'Roboto-Bold', fontSize:13, color:colores.color5}}>{nombre}</Text>
         </TouchableOpacity>
       </View>
-      <View style={{flexDirection:'row'}}>
-        <TouchableOpacity  onPress={()=>{
+      <View style={{flexDirection:'row', justifyContent:'space-evenly', width:'20%'}}>
+        {/* <TouchableOpacity  onPress={()=>{
             onPressConcepto(id, nombre)
           }}>
-              <Material name='plus-thick' size={25} color={colores.color4} />
+              <Material name='plus-circle-outline' size={25} color={colores.color5} />
         </TouchableOpacity>
         <TouchableOpacity style={{marginHorizontal:5}} onPress={()=>{
             onPressSearch(id, nombre)
           }}>
-              <Material name='eye-outline' size={25} color={colores.color3} />
+              <Material name='eye-circle-outline' size={25} color={colores.color5} />
+          </TouchableOpacity> */}
+          <TouchableOpacity 
+         onPress={()=>{
+            onPressEliminar(id)
+          }}>
+              <Material name='pencil-circle-outline' size={25} color={colores.color5} />
           </TouchableOpacity>
         <TouchableOpacity 
          onPress={()=>{
             onPressEliminar(id)
           }}>
-              <Material name='delete' size={25} color={colores.color11} />
+              <Material name='delete-circle-outline' size={25} color={colores.color5} />
           </TouchableOpacity>
       </View>
     </View>
+    </>
   )
 }
 
@@ -502,7 +510,7 @@ const navegacion = useNavigation();
             <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Despliegue')}>
                 <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
-            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center'}}>{`Lista De Ingresos`}</Text>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center'}}>{`Gestion De Ingresos`}</Text>
         </View>
       <View>
         <View style={styles.BarraSuperior}>
@@ -516,7 +524,7 @@ const navegacion = useNavigation();
           <ImgPress2 funcion={add}>
               <Material name='plus-thick' size={35} color={colores.color8}/>
           </ImgPress2>
-              <Text style={{color:'black', fontSize:10}}>Añadir categoria</Text>
+              <Text style={{color:'black', fontSize:10}}>Nueva categoria</Text>
             </View>
         </View>
 
@@ -530,6 +538,12 @@ const navegacion = useNavigation();
               <Text style={[styles.txtInformativo, {marginTop:100}]}>No tienes categorías de ingresos registradas </Text>
             ) : (
               <View style={{ marginTop: 40, marginBottom: 10 }}>
+               
+                <View style={{backgroundColor:colores.color5, height:55, marginHorizontal:10, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+                  <Text style={{color:colores.color8, fontSize:16, fontFamily:'Roboto-Bold', textTransform:'capitalize'}}>Lista de categorias sobre ingresos</Text>
+                  
+                </View>
+                
                 <ScrollView style={{ height: '84%' }}>
                   <FlatList
                     nestedScrollEnabled
@@ -805,7 +819,7 @@ const styles = StyleSheet.create({
 atras:{
   position:'absolute',
   left:15,
-  top:20
+  top:35
 },
   BarraSuperior:{
     paddingTop:20,
@@ -850,7 +864,7 @@ atras:{
 txtTitulo:{
   paddingVertical:20,
   fontFamily:'Roboto-Bold',
-  fontSize:30,
+  fontSize:20,
   color:colores.color5,
   textAlign:'center'
 },
@@ -862,28 +876,29 @@ txt:{
 },
 listaConceptos:{
   //marginTop:10,
-  padding:10,
-  height:420
+  marginHorizontal:10
 },
 cardView:{
-  backgroundColor:colores.color5,
-  borderRadius:20,
-  marginVertical:8,
+  borderBottomWidth:2, 
+  borderBottomColor:colors.color7,
+  //marginVertical:8,
   paddingVertical:15,
   paddingHorizontal:25,
   flex:1,
-  shadowOpacity: 0.30,
-  shadowRadius: 10,
-  elevation: 4,
+  backgroundColor:colores.color8,
+  //flex:1,
+  // shadowOpacity: 0.30,
+  // shadowRadius: 10,
+  // elevation: 2,
   flexDirection:'row',
   justifyContent:'space-between'
-  },
-  txtInformativo:{
+},
+txtInformativo:{
     paddingTop:20,
     color:colores.color3,
     textAlign:'center', 
     fontFamily:'Roboto-Medium', 
     fontSize:18,
     paddingHorizontal:30
-  }
+}
 })

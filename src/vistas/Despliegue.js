@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     atras:{
         position:'absolute',
         left:15,
-        top:20
+        top:35
     },
     view:{
         alignItems:'center',

@@ -358,7 +358,7 @@ const add = () =>{
 const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, id}) => {
   return (
     <View style={styles.cardView}>
-         <View style={{justifyContent:'center', alignItems:'center'}}>
+         <View style={{justifyContent:'center', alignItems:'center', backgroundColor:colores.color5, width:'60%', borderRadius:10, paddingVertical:10}}>
         <TouchableOpacity onPress={()=>{
           onPressConcepto(id, nombre)
         }}>
@@ -369,14 +369,14 @@ const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, 
         <TouchableOpacity onPress={()=>{
             onPressSearch(id, nombre)
           }}>
-              <Material name='magnify' size={30} color={colores.color3} />
+              <Material name='eye-settings-outline' size={25} color={colores.color5} />
           </TouchableOpacity>
-        <TouchableOpacity style={{marginHorizontal:5}}
+        {/* <TouchableOpacity style={{marginHorizontal:5}}
          onPress={()=>{
             onPressEliminar(id)
           }}>
               <Material name='delete' size={30} color={colores.color11} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
       </View>
     </View>
   )
@@ -417,7 +417,7 @@ const navegacion = useNavigation();
             <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Despliegue')}>
                 <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
-            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color6, textAlign:'center'}}>{`Lista De Gastos`}</Text>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color6, textAlign:'center'}}>{`Gestion De Gastos`}</Text>
         </View>
       <View>
         <View style={styles.BarraSuperior}>
@@ -630,7 +630,7 @@ const styles = StyleSheet.create({
 atras:{
   position:'absolute',
   left:15,
-  top:20
+  top:35
 },
   BarraSuperior:{
     paddingTop:20,
@@ -690,18 +690,20 @@ listaConceptos:{
   height:420
 },
 cardView:{
-  backgroundColor:colores.color5,
-  borderRadius:20,
+  //backgroundColor:colores.color5,
+  borderRadius:10,
   marginVertical:8,
-  paddingVertical:15,
   paddingHorizontal:25,
   flex:1,
-  shadowOpacity: 0.30,
-  shadowRadius: 10,
+  paddingVertical:10,
+  //shadowOpacity: 0.30,
+  //shadowRadius: 10,
   elevation: 4,
   flexDirection:'row',
-  justifyContent:'space-between'
-  }, txtInformativo:{
+  justifyContent:'space-between',
+  alignItems:'center'
+  },
+   txtInformativo:{
     paddingTop:20,
     color:colores.color3,
     textAlign:'center', 
