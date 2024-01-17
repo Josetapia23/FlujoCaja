@@ -358,18 +358,19 @@ const add = () =>{
 const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, id}) => {
   return (
     <View style={styles.cardView}>
-         <View style={{justifyContent:'center', alignItems:'center', backgroundColor:colores.color5, width:'60%', borderRadius:10, paddingVertical:10}}>
-        <TouchableOpacity onPress={()=>{
-          onPressConcepto(id, nombre)
-        }}>
+          <TouchableOpacity style={{width:'80%',}} 
+          onPress={()=>{
+            onPressConcepto(id, nombre)
+          }}>
+         <View style={{justifyContent:'center', alignItems:'center', backgroundColor:colores.color5,  borderRadius:10, paddingVertical:10}}>
             <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:14, color:colores.color8}}>{nombre}</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={{flexDirection:'row'}}>
+        </View>
+          </TouchableOpacity>
+      <View style={{justifyContent:'center', alignItems:'center', width:'10%', backgroundColor:colores.color9, borderRadius:100, paddingVertical:5}}>
         <TouchableOpacity onPress={()=>{
             onPressSearch(id, nombre)
           }}>
-              <Material name='eye-settings-outline' size={25} color={colores.color5} />
+              <Material name='cog-transfer-outline' size={25} color={colores.color6} />
           </TouchableOpacity>
         {/* <TouchableOpacity style={{marginHorizontal:5}}
          onPress={()=>{
