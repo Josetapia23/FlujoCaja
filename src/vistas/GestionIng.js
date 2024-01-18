@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Modal, TouchableOpacity, ScrollView, SafeAreaView, Alert } from 'react-native'; // Añade FlatList a los imports
 import Tablas from '../componentes/Tablas';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { colores, colors } from '../componentes/Colors';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImgPress2 from '../componentes/ImgPress2';
@@ -17,7 +17,7 @@ import Tabla2 from '../componentes/Tabla2';
 
 
 
-const Ingresos = () => {
+const GestionIng = () => {
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
@@ -38,9 +38,6 @@ const Ingresos = () => {
   const [movIng, setMovIng] = useState(null);
   const [editMov, setEditMov] = useState(false);
   const [deleteMov, setDeleteMov] = useState(false);
-  const [monto, setMonto] = useState('');
-  const [descripcion, setDescripcion] = useState('');
-  const [idMov, setIdMov] = useState('');
   //const [idUser, setIdUser] = useState(0);
 
   const idUser = userInfo.id;
@@ -64,19 +61,12 @@ const Ingresos = () => {
   
 
 
-  useFocusEffect( //Este se utiliza para que renderice las funciones de inmediato en las vistas que hacen parte de los bootom tabs
-        React.useCallback(()=>{
-          getDatosSesion();
-          getConceptos();
-        }, [])
-    )
+  useEffect(()=>{
+    //setIdUser(userInfo.id)
+    getDatosSesion();  //Aqui se ejecuta la funcion de inmediato sin mirar las demas
+    getConceptos();
 
-  // useEffect(()=>{
-  //   //setIdUser(userInfo.id)
-  //   getDatosSesion();  //Aqui se ejecuta la funcion de inmediato sin mirar las demas
-  //   getConceptos();
-
-  // },[])
+  },[])
 
 
   const getConceptos = () => {
@@ -379,26 +369,36 @@ const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, 
   return (
     <>
     <View style={styles.cardView}>
-        <TouchableOpacity style={{width:'80%',}} 
-          onPress={()=>{
+      <View style={{justifyContent:'center', alignItems:'center'}}>
+        <TouchableOpacity onPress={()=>{
+          onPressConcepto(id, nombre)
+        }}>
+            <Text style={{textTransform:'capitalize', fontFamily:'Roboto-Bold', fontSize:13, color:colores.color5}}>{nombre}</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{flexDirection:'row', justifyContent:'space-evenly', width:'20%'}}>
+        {/* <TouchableOpacity  onPress={()=>{
             onPressConcepto(id, nombre)
           }}>
-         <View style={{justifyContent:'center', alignItems:'center', backgroundColor:colores.color5,  borderRadius:10, paddingVertical:10}}>
-            <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:13, color:colores.color8}}>{nombre}</Text>
-        </View>
+              <Material name='plus-circle-outline' size={25} color={colores.color5} />
         </TouchableOpacity>
-      <View style={{justifyContent:'center', alignItems:'center', width:'10%', backgroundColor:colores.color9, borderRadius:100, paddingVertical:5}}>
-        <TouchableOpacity onPress={()=>{
+        <TouchableOpacity style={{marginHorizontal:5}} onPress={()=>{
             onPressSearch(id, nombre)
           }}>
-              <Material name='cog-transfer-outline' size={25} color={colores.color6} />
-          </TouchableOpacity>
-        {/* <TouchableOpacity style={{marginHorizontal:5}}
+              <Material name='eye-circle-outline' size={25} color={colores.color5} />
+          </TouchableOpacity> */}
+          <TouchableOpacity 
          onPress={()=>{
             onPressEliminar(id)
           }}>
-              <Material name='delete' size={30} color={colores.color11} />
-          </TouchableOpacity> */}
+              <Material name='pencil-circle-outline' size={25} color={colores.color5} />
+          </TouchableOpacity>
+        <TouchableOpacity 
+         onPress={()=>{
+            onPressEliminar(id)
+          }}>
+              <Material name='delete-circle-outline' size={25} color={colores.color5} />
+          </TouchableOpacity>
       </View>
     </View>
     </>
@@ -432,48 +432,9 @@ const activarModal3 = (id, nombre) => {
   setNombreCat(nombre);
 }
 
-const editarMov = () => {
+const editarMov = (id, nuevoMonto, nuevaDescripcion) => {
   setCargando(true);
-  return new Promise((resolve, reject) => {
-    axios
-      .post(
-        'https://www.plataforma50.com/pruebas/gestionP/editMovimiento.php',
-        {
-          idMov: idMov,
-          montoMov: monto,
-          descripcionMov: descripcion
-
-        },
-      )
-      .then(res => {
-        if (res.data.result === 'success') {
-          console.log('Movimiento actualizado')
-          listarMovimientos(idConcepto);
-          setCargando(false); // Comienza la carga
-          setVisible4(false);
-
-        } else if (res.data.result === 'error') {
-          // Error en la consulta
-          console.log('Error al actualizar:', res.data.message);
-          reject('Error en el registro: ' + res.data.message);
-          listarMovimientos(idConcepto);
-          setCargando(false); // Comienza la carga
-          setVisible4(false);
-        } else {
-          console.log('Respuesta inesperada del servidor:', res.data);
-          reject('Error inesperado del servidor');
-          listarMovimientos(idConcepto);
-          setCargando(false); // Comienza la carga
-          setVisible4(false);
-        }
-      })
-      .catch(error => {
-        console.error('Error de axios:', error.message);
-        reject('Error con axios: ' + error.message);
-        setCargando(false); // Comienza la carga
-
-      });
-  });
+  console.log(id, nuevoMonto, nuevaDescripcion);
 };
 
 const eliminarMov=(id)=>{
@@ -489,13 +450,13 @@ const eliminarMov=(id)=>{
         .then(res => {
           if (res.data.result === 'success') {
             console.log('Movimiento eliminado')
-            listarMovimientos(idConcepto);
-            setCargando(false); // Comienza la carga
+          setCargando(false); // Comienza la carga
+
           } else if (res.data.result === 'error') {
             // Error en la consulta
             console.log('Error al eliminar:', res.data.message);
             reject('Error en el registro: ' + res.data.message);
-            setCargando(false); // Comienza la carga
+          setCargando(false); // Comienza la carga
 
           } else {
             console.log('Respuesta inesperada del servidor:', res.data);
@@ -515,16 +476,8 @@ const eliminarMov=(id)=>{
 
 useEffect(()=>{
   if(movIng){
-    console.log(movIng);
     if(editMov){
-      //const montoNumerico = parseFloat(movIng.monto);
-      console.log(movIng.monto.replace(/,/g, ''));
-      setMonto(movIng.monto.replace(/,/g, ''));
-      setDescripcion(movIng.descripcion);
-      setIdMov(movIng.id);
       setVisible4(true);
-      //console.log(monto, descripcion);
-
     }
     if(deleteMov){
         Alert.alert(
@@ -554,33 +507,12 @@ const navegacion = useNavigation();
   return (
     <SafeAreaView>
       <View style={styles.containerSuperior}>
-            <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Despliegue')}>
+            <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Ingresos')}>
                 <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
-            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center'}}>{`Lista De Ingresos`}</Text>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center'}}>{`Gestion De Ingresos`}</Text>
         </View>
       <View>
-        <View style={styles.BarraSuperior}>
-          <View style={{alignItems:'center'}}>
-            <ImgPress2 funcion={()=>{navegacion.navigate('Historiales')}}>
-              <Material name='database-search' size={35} color={colores.color8}/>
-            </ImgPress2>
-            <Text style={{color:'black', fontSize:10}}>Historial de ingresos</Text>
-          </View>
-          <View style={{alignItems:'center'}}>
-            <ImgPress2 funcion={()=>{navegacion.navigate('GesIng')}}>
-              <Material name='book-cog' size={35} color={colores.color8}/>
-            </ImgPress2>
-            <Text style={{color:'black', fontSize:10}}>Gestionar categorias</Text>
-          </View>
-            <View style={{alignItems:'center'}}>
-            <ImgPress2 funcion={add}>
-                <Material name='plus-thick' size={35} color={colores.color8}/>
-            </ImgPress2>
-                <Text style={{color:'black', fontSize:10}}>Nueva categoria</Text>
-            </View>
-        </View>
-
         {
           cargando ? (
             <View style={{marginTop:150}}>
@@ -591,6 +523,10 @@ const navegacion = useNavigation();
               <Text style={[styles.txtInformativo, {marginTop:100}]}>No tienes categorías de ingresos registradas </Text>
             ) : (
               <View style={{ marginTop: 40, marginBottom: 10 }}>
+               
+                <View style={{backgroundColor:colores.color5, height:55, marginHorizontal:10, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+                  <Text style={{color:colores.color8, fontSize:16, fontFamily:'Roboto-Bold', textTransform:'capitalize'}}>Lista de categorias sobre ingresos</Text>
+                </View>
                 
                 <ScrollView style={{ height: '84%' }}>
                   <FlatList
@@ -742,7 +678,7 @@ const navegacion = useNavigation();
                 >
                 <Material name='close-thick' size={35} color={colores.color9}/>
                 </TouchableOpacity>
-                <Text style={styles.txtTitulo}>{`Gestionar movimientos \n de '${nombreCateg}'`}</Text>
+                <Text style={styles.txtTitulo}>{`Categoria ${nombreCateg}`}</Text>
                 
                 {
                   listaMovimientos1.length>0?
@@ -795,77 +731,50 @@ const navegacion = useNavigation();
                      <Material name='close-thick' size={35} color={colores.color9}/>
 
                 </TouchableOpacity>
-                <Text style={styles.txtTitulo}>{`Actualizar movimiento \n de '${nombreCateg}'`}</Text>
+                <Text style={styles.txtTitulo}>{`Actualizar movimiento de ${nombreCateg}`}</Text>
                 
                 <View 
-                    style={{paddingBottom:10}}
+                    style={{paddingBottom:30}}
                     >
                     <Text style={styles.txt}>Actualizar monto:<Text style={{color:'red'}}>*</Text></Text>
-                    <Imputs
+                    <Imput2
                     imagen={require('../../assets/iconos/dolar.png')}
-                    name="monto2"
-                    placeholder="Digite el monto a editar"
-                    datos={monto}
-                    setDatos={setMonto}
-                    keyboardType="numeric"
-                    control={control}
-                    rules={{
-                        required: 'Monto de ingreso requerido',
-                        // pattern:
-                        // {
-                        //     value: EDAD_REGEX,
-                        //     message: "Edad ó Caracter No Permitido"
-                        // },
-                        min: {
-                            value: 15,
-                            message: "Debe ser mayor de 15 años"
-                        }
-                    }}
-                    //margin={30}
-                    editable={true}
-                />
+                              name="monto2"
+                              placeholder=" Nuevo el monto"
+                              control={control}
+                              rules={{
+                                  required: 'Monto de ingreso requerido',
+                              }}
+                              keyboardType='numeric'
+                          />
                     <Text style={[styles.txt,{marginTop:20}]}>Descripcion sobre el ingreso:<Text style={{color:'red'}}>*</Text></Text>
-                    <Imputs
+                    <Imput2
                     imagen={require('../../assets/iconos/lista.png')}
-                    name="descripcion2"
-                    placeholder="Digite su nueva descripcion"
-                    datos={descripcion}
-                    setDatos={setDescripcion}
-                    //keyboardType="numeric"
-                    control={control}
-                    rules={{
-                        required: 'La Descripcion es obligatoria',
-                        // pattern:
-                        // {
-                        //     value: EDAD_REGEX,
-                        //     message: "Edad ó Caracter No Permitido"
-                        // },
-                        min: {
-                            value: 15,
-                            message: "Debe ser mayor de 15 años"
-                        }
-                    }}
-                    //margin={30}
-                    editable={true}
-                />
-                <Text style={{color:'red'}}>{errorNombre}</Text>
+                              name="descripcion2"
+                              placeholder=" Describir utilidad del monto ingresado"
+                              control={control}
+                              rules={{
+                                  required: 'descripcion requerida',
+                              }}
+                              keyboardType='text'
+                          />
+                    <Text style={{color:'red'}}>{errorNombre}</Text>
                 </View>
                 <Botones 
                 name='Actualizar'
                 margin={50}
-                funcion={
-                  // const nuevoMonto = getValues('monto2');
-                  // const nuevaDescripcion = getValues('descripcion2');
-                  handleSubmit(editarMov)
-                  // .then(
-                  //   () => {
-                  //   setVisible4(false);
-                  //   reset({ monto2: '' , descripcion2:''});
-                  // })
-                  // .catch(error => {
-                  //   // Manejar el error si es necesario
-                  // });
-                }
+                funcion={()=>{
+                  const nuevoMonto = getValues('monto2');
+                  const nuevaDescripcion = getValues('descripcion2');
+                  editarMov(movIng.id, nuevoMonto, nuevaDescripcion)
+                  .then(() => {
+                    setVisible4(false);
+                    reset({ monto2: '' , descripcion2:''});
+                  })
+                  .catch(error => {
+                    // Manejar el error si es necesario
+                  });
+                }}
                 />
                 </>
               )
@@ -877,7 +786,7 @@ const navegacion = useNavigation();
   );
 }
 
-export default Ingresos;
+export default GestionIng;
 
 const styles = StyleSheet.create({
   conatiner:{
@@ -954,18 +863,19 @@ listaConceptos:{
   marginHorizontal:10
 },
 cardView:{
- //backgroundColor:colores.color5,
- borderRadius:10,
- marginVertical:8,
- paddingHorizontal:25,
- flex:1,
- paddingVertical:10,
- //shadowOpacity: 0.30,
- //shadowRadius: 10,
- elevation: 4,
- flexDirection:'row',
- justifyContent:'space-between',
- alignItems:'center'
+  borderBottomWidth:2, 
+  borderBottomColor:colors.color7,
+  //marginVertical:8,
+  paddingVertical:15,
+  paddingHorizontal:25,
+  flex:1,
+  backgroundColor:colores.color8,
+  //flex:1,
+  // shadowOpacity: 0.30,
+  // shadowRadius: 10,
+  // elevation: 2,
+  flexDirection:'row',
+  justifyContent:'space-between'
 },
 txtInformativo:{
     paddingTop:20,

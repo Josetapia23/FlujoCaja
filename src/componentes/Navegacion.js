@@ -22,6 +22,8 @@ import OnboardingScreen from '../vistas/OnboardingScreen';
 import Logout from '../vistas/Logout';
 import Company from '../vistas/Company';
 import Perfil from '../vistas/Perfil';
+import GestionIng from '../vistas/GestionIng';
+import GestionGast from '../vistas/GestionGast';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,6 +60,8 @@ useEffect(()=>(
                             <Stack.Screen name="Historiales2" component={Historiales2} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Company" component={Company} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="GesIng" component={GestionIng} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="GesGast" component={GestionGast} options={{ headerShown: false,}}/>
                           </> 
                       )
         }
@@ -81,11 +85,14 @@ function TabGroup() {
 
                     if (route.name === 'Inicio') {
                         iconName = 'home-outline';
-                    }else if(route.name === 'Graficos'){
+                    }
+                    if(route.name === 'Graficos'){
                       iconName = 'calculator-variant-outline';
-                    }else if(route.name === 'Despliegue'){
+                    }
+                    if(route.name === 'Despliegue'){
                         iconName = 'currency-usd';
-                    }else if(route.name === 'Logout'){
+                    }
+                    if(route.name === 'Logout'){
                         iconName = 'account-tie';
                     }
                     // Retorna el componente de ícono
@@ -100,7 +107,7 @@ function TabGroup() {
             }}
         >
             <Tab.Screen name="Inicio" component={Home} options={{ headerShown: false }} />
-            <Tab.Screen name="Despliegue" component={Despliegue} options={{ headerShown: false }} />
+            <Tab.Screen name="Despliegue" component={Despliegue} options={{ headerShown: false, tabBarVisible: false }} />
             <Tab.Screen name="Graficos" component={Graficos} options={{ headerShown: false }} />
             <Tab.Screen name="Logout" component={Logout} options={{ headerShown: false }} />
         </Tab.Navigator>

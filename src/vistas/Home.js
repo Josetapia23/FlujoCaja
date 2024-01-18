@@ -38,6 +38,11 @@ const Home = () => {
   const balanceMensual = balanceMensual2.toLocaleString();
   
 
+  useFocusEffect( //Este se utiliza para que renderice las funciones de inmediato en las vistas que hacen parte de los bootom tabs
+        React.useCallback(()=>{
+          montos();
+        }, [])
+    )
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -224,8 +229,8 @@ const xx = useNavigation();
                     <Text style={[styles.txtMontos, {marginTop:10}]}>{`En este mes no tienes gastos registrados`}</Text>
                   )
                 } */}
-                <Botones name='Consultar'
-                    funcion={()=>{montos()}} margin={100} padding={4}></Botones>
+                {/* <Botones name='Consultar'
+                    funcion={()=>{montos()}} margin={100} padding={4}></Botones> */}
                 
               </View>
             </ScrollView>

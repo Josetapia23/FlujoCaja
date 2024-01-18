@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Modal, TouchableOpacity, ScrollView, SafeAreaView, Alert } from 'react-native'; // Añade FlatList a los imports
 import Tablas from '../componentes/Tablas';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { colores, colors } from '../componentes/Colors';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImgPress2 from '../componentes/ImgPress2';
@@ -23,11 +23,12 @@ const Gastos = () => {
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [visible3, setVisible3] = useState(false);
+  const [visible4, setVisible4] = useState(false);
   const [errorNombre, setErrorNombre] = useState('');
   const [listaConceptos , setListaConceptos] = useState([]);
   const { isLoading, userInfo, registerEmpresa, companyInfo} = useContext(AuthContext);
   const [idConcepto, setIdConcepto] = useState('');
-  const [descripcion, setDescripcion] = useState('Descripcion');
+  //const [descripcion, setDescripcion] = useState('Descripcion');
   const [listaMovimientos1, setListaMovimientos1] = useState([]); //Lista de movimientos completa por categoria
   const [montoTotal3, setMontoTotal3] = useState('');
   const [tipo, setTipo] = useState(2);
@@ -35,6 +36,14 @@ const Gastos = () => {
   const [cargando, setCargando] = useState(false);
   const [datosEmpresa , setDatosEmpresa] = useState({});
   //const [idUser, setIdUser] = useState(0);
+
+  const [movIng, setMovIng] = useState(null);
+  const [editMov, setEditMov] = useState(false);
+  const [deleteMov, setDeleteMov] = useState(false);
+  const [monto, setMonto] = useState('');
+  const [descripcion, setDescripcion] = useState('');
+  const [idMov, setIdMov] = useState('');
+
 
   const idUser = userInfo.id;
 
@@ -55,13 +64,20 @@ const Gastos = () => {
     }
   };
 
+  useFocusEffect( //Este se utiliza para que renderice las funciones de inmediato en las vistas que hacen parte de los bootom tabs
+        React.useCallback(()=>{
+          getDatosSesion();
+          getConceptos();
+        }, [])
+    )
 
-  useEffect(()=>{
-    //setIdUser(userInfo.id)
-    getDatosSesion();  //Aqui se ejecuta la funcion de inmediato sin mirar las demas
-    getConceptos();
 
-  },[])
+  // useEffect(()=>{
+  //   //setIdUser(userInfo.id)
+  //   getDatosSesion();  //Aqui se ejecuta la funcion de inmediato sin mirar las demas
+  //   getConceptos();
+
+  // },[])
 
 
   const getConceptos = () => {
@@ -363,7 +379,7 @@ const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, 
             onPressConcepto(id, nombre)
           }}>
          <View style={{justifyContent:'center', alignItems:'center', backgroundColor:colores.color5,  borderRadius:10, paddingVertical:10}}>
-            <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:14, color:colores.color8}}>{nombre}</Text>
+            <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:13, color:colores.color8}}>{nombre}</Text>
         </View>
           </TouchableOpacity>
       <View style={{justifyContent:'center', alignItems:'center', width:'10%', backgroundColor:colores.color9, borderRadius:100, paddingVertical:5}}>
@@ -408,8 +424,126 @@ const activarModal3 = (id, nombre) => {
   setVisible3(true);
   setIdConcepto(id);
   setNombreCat(nombre);
-
 }
+
+const editarMov = () => {
+  setCargando(true);
+  return new Promise((resolve, reject) => {
+    axios
+      .post(
+        'https://www.plataforma50.com/pruebas/gestionP/editMovimiento.php',
+        {
+          idMov: idMov,
+          montoMov: monto,
+          descripcionMov: descripcion
+
+        },
+      )
+      .then(res => {
+        if (res.data.result === 'success') {
+          console.log('Movimiento actualizado')
+          listarMovimientos(idConcepto);
+          setCargando(false); // Comienza la carga
+          setVisible4(false);
+
+        } else if (res.data.result === 'error') {
+          // Error en la consulta
+          console.log('Error al actualizar:', res.data.message);
+          reject('Error en el registro: ' + res.data.message);
+          listarMovimientos(idConcepto);
+          setCargando(false); // Comienza la carga
+          setVisible4(false);
+        } else {
+          console.log('Respuesta inesperada del servidor:', res.data);
+          reject('Error inesperado del servidor');
+          listarMovimientos(idConcepto);
+          setCargando(false); // Comienza la carga
+          setVisible4(false);
+        }
+      })
+      .catch(error => {
+        console.error('Error de axios:', error.message);
+        reject('Error con axios: ' + error.message);
+        setCargando(false); // Comienza la carga
+
+      });
+  });
+};
+
+const eliminarMov=(id)=>{
+  setCargando(true); // Comienza la carga
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          'https://www.plataforma50.com/pruebas/gestionP/deleteMovimiento.php',
+          {
+            id
+          },
+        )
+        .then(res => {
+          if (res.data.result === 'success') {
+            console.log('Movimiento eliminado')
+            listarMovimientos(idConcepto);
+            setCargando(false); // Comienza la carga
+          } else if (res.data.result === 'error') {
+            // Error en la consulta
+            console.log('Error al eliminar:', res.data.message);
+            reject('Error en el registro: ' + res.data.message);
+            setCargando(false); // Comienza la carga
+
+          } else {
+            console.log('Respuesta inesperada del servidor:', res.data);
+            reject('Error inesperado del servidor');
+          setCargando(false); // Comienza la carga
+
+          }
+        })
+        .catch(error => {
+          console.error('Error de axios:', error.message);
+          reject('Error con axios: ' + error.message);
+          setCargando(false); // Comienza la carga
+
+        });
+    });
+}
+
+useEffect(()=>{
+  if(movIng){
+    console.log(movIng);
+    if(editMov){
+      //const montoNumerico = parseFloat(movIng.monto);
+      console.log(movIng.monto.replace(/,/g, ''));
+      setMonto(movIng.monto.replace(/,/g, ''));
+      setDescripcion(movIng.descripcion);
+      setIdMov(movIng.id);
+      setVisible4(true);
+      //console.log(monto, descripcion);
+
+    }
+    if(deleteMov){
+        Alert.alert(
+          'Confirmar Eliminación',
+          '¿Estás seguro de que quieres eliminar esta movimiento?',
+          [
+            {
+              text: 'Cancelar',
+              style: 'cancel',
+            },
+            {
+              text: 'Eliminar',
+              onPress: () => eliminarMov(movIng.id),
+              style: 'destructive',
+            },
+          ],
+          { cancelable: false }
+        );
+    }
+    setEditMov(false);
+    setDeleteMov(false); 
+    setMovIng(null);
+  }
+},[movIng, editMov, deleteMov])
+
 
 const navegacion = useNavigation();
   return (
@@ -418,7 +552,7 @@ const navegacion = useNavigation();
             <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Despliegue')}>
                 <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
-            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color6, textAlign:'center'}}>{`Gestion De Gastos`}</Text>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color6, textAlign:'center'}}>{`Lista De Gastos`}</Text>
         </View>
       <View>
         <View style={styles.BarraSuperior}>
@@ -427,6 +561,12 @@ const navegacion = useNavigation();
               <Material name='database-search' size={35} color={colores.color8}/>
             </ImgPress2>
             <Text style={{color:'black', fontSize:10}}>Historial de gastos</Text>
+          </View>
+          <View style={{alignItems:'center'}}>
+            <ImgPress2 funcion={()=>{navegacion.navigate('GesGast')}}>
+              <Material name='book-cog' size={35} color={colores.color8}/>
+            </ImgPress2>
+            <Text style={{color:'black', fontSize:10}}>Gestionar categorias</Text>
           </View>
           <View style={{alignItems:'center'}}>
               <ImgPress2 funcion={add}>
@@ -598,12 +738,111 @@ const navegacion = useNavigation();
                     <Tabla2 columnas={2}
                       datos={listaMovimientos1}
                       Total={montoTotal3}
+                      onEliminar={(movimiento) => {
+                        // Puedes hacer lo que necesites con los datos de edición
+                        setMovIng(movimiento);
+                        setDeleteMov(true);
+                        //console.log('id a eliminar:', movIng);
+                      }}
+                      onEditar={(movimiento) => {
+                        // Puedes hacer lo que necesites con los datos de edición
+                        setMovIng(movimiento);
+                        setEditMov(true);
+                        //console.log('Datos a editar:', movIng);
+                      }}
                     />
                   ):
                   (
                     <Text style={{fontFamily:'Roboto-Medium', textAlign:'center'}}>"En esta categoria no hay movimientos registrados aún"</Text>
                   )
                 }
+                </>
+              )
+            }
+              </View>
+            </View>
+          </Modal>
+
+          <Modal 
+          visible={visible4}>
+            <View style={styles.modal}>
+              <View style={styles.modalView}>
+              {
+            cargando ? (
+              <View style={{marginTop:150}}>
+              <SplashScreens />
+            </View> 
+            ):(
+                <>
+                <TouchableOpacity style={styles.closeButton}
+                onPress={()=>{
+                  setVisible4(false);
+                  reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
+                }}
+                >
+                     <Material name='close-thick' size={35} color={colores.color9}/>
+
+                </TouchableOpacity>
+                <Text style={styles.txtTitulo}>{`Actualizar movimiento \n de '${nombreCateg}'`}</Text>
+                
+                <View 
+                    style={{paddingBottom:10}}
+                    >
+                    <Text style={styles.txt}>Actualizar monto:<Text style={{color:'red'}}>*</Text></Text>
+                    <Imputs
+                    imagen={require('../../assets/iconos/dolar.png')}
+                    name="monto2"
+                    placeholder="Digite el monto a editar"
+                    datos={monto}
+                    setDatos={setMonto}
+                    keyboardType="numeric"
+                    control={control}
+                    rules={{
+                        required: 'Monto de ingreso requerido',
+                        // pattern:
+                        // {
+                        //     value: EDAD_REGEX,
+                        //     message: "Edad ó Caracter No Permitido"
+                        // },
+                        min: {
+                            value: 15,
+                            message: "Debe ser mayor de 15 años"
+                        }
+                    }}
+                    //margin={30}
+                    editable={true}
+                />
+                    <Text style={[styles.txt,{marginTop:20}]}>Descripcion sobre el ingreso:<Text style={{color:'red'}}>*</Text></Text>
+                    <Imputs
+                    imagen={require('../../assets/iconos/lista.png')}
+                    name="descripcion2"
+                    placeholder="Digite su nueva descripcion"
+                    datos={descripcion}
+                    setDatos={setDescripcion}
+                    //keyboardType="numeric"
+                    control={control}
+                    rules={{
+                        required: 'La Descripcion es obligatoria',
+                        // pattern:
+                        // {
+                        //     value: EDAD_REGEX,
+                        //     message: "Edad ó Caracter No Permitido"
+                        // },
+                        min: {
+                            value: 15,
+                            message: "Debe ser mayor de 15 años"
+                        }
+                    }}
+                    //margin={30}
+                    editable={true}
+                />
+                <Text style={{color:'red'}}>{errorNombre}</Text>
+                </View>
+                <Botones 
+                name='Actualizar'
+                margin={80}
+                funcion={ handleSubmit(editarMov)}
+                />
                 </>
               )
             }

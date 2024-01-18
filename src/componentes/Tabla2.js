@@ -8,10 +8,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Tabla2 = ({datos, columnas, Total, onEliminar, onEditar}) => {
 
     const funcion1 = (id) => {
-        const movimiento = {
-            id: id
-          };
-        //const movimiento = datos.find((item) => item.id === id);
+        // const movimiento = {
+        //     id: id
+        //   };
+        const movimiento = datos.find((item) => item.id === id);
         // Almacena los datos en el estado local o en variables temporales según tus necesidades
         // Puedes usar el prop onEliminar para pasar los datos al componente padre (Ingresos)
         onEliminar(movimiento);
