@@ -241,7 +241,7 @@ const Historiales = () => {
             <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Ingresos')}>
                 <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
-            <Text style={{fontFamily:'Roboto-Medium', fontSize:25, color:colores.color7, textAlign:'center'}}>{`Historial de Ingresos\nTotal`}</Text>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center'}}>{`Historial de Ingresos\nTotal`}</Text>
         </View>
         <ScrollView>
                     {
@@ -279,7 +279,7 @@ const Historiales = () => {
                                 (
                                   listaMovimientos2.length>0?(
                                     <View style={styles.containerTable}>
-                                      <Text style={styles.txtSubtitulos}>{`Estos son los movimientos del mers actual`}</Text>
+                                      <Text style={styles.txtSubtitulos}>{`Estos son los movimientos del mes actual`}</Text>
                                       <Tabla2 
                                     datos={listaMovimientos2} //Tabla que muestra movimientos del mes actual
                                     columnas={3}

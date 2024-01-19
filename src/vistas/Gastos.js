@@ -523,7 +523,7 @@ useEffect(()=>{
     if(deleteMov){
         Alert.alert(
           'Confirmar Eliminación',
-          '¿Estás seguro de que quieres eliminar esta movimiento?',
+          '¿Estás seguro de que quieres eliminar este movimiento?',
           [
             {
               text: 'Cancelar',
@@ -618,12 +618,12 @@ const navegacion = useNavigation();
                 >
                 <Material name='close-thick' size={35} color={colores.color9}/>
                 </TouchableOpacity>
-                <Text style={styles.txtTitulo}>Nueva categoria de Gastos</Text>
+                <Text style={styles.txtTitulo}>Nueva categoria de {'\n'}Gastos</Text>
                 
                 <View 
                     style={{paddingBottom:30}}
                     >
-                    <Text style={styles.txt}>Tipo de gasto:<Text style={{color:'red'}}>*</Text></Text>
+                    <Text style={styles.txt}>Nombre categoria:<Text style={{color:'red'}}>*</Text></Text>
                     <Imput2
                     imagen={require('../../assets/iconos/lista.png')}
                               name="nombre"
@@ -671,7 +671,7 @@ const navegacion = useNavigation();
                 >
                 <Material name='close-thick' size={35} color={colores.color9}/>
                 </TouchableOpacity>
-                <Text style={styles.txtTitulo}>{`Nuevo monto de ${nombreCateg}`}</Text>
+                <Text style={styles.txtTitulo}>{`Nuevo monto de \n ${nombreCateg}`}</Text>
 
                 <View 
                     style={{paddingBottom:30}}
@@ -915,7 +915,7 @@ txtTitulo:{
   paddingVertical:20,
   fontFamily:'Roboto-Bold',
   fontSize:30,
-  color:colors.color7,
+  color:colores.color5,
   textAlign:'center'
 },
 txt:{

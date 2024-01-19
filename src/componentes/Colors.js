@@ -2,7 +2,7 @@ export const colores = {
     color1: '#69C2E3',
     color2: '#2C63E6',
     color3: '#E6C52C',
-    color4: '#39A900',
+    color4: '#155b34',
     color5: '#003240',
     color6: '#f1f1f1',
     color7: '#e3dddd',
@@ -23,5 +23,10 @@ export const colors = {
     color8: '#b0cdd3',
     color9: '#0b1019',
     color10: '#0b1019',
+    color10: '#7fcca0',
+    color11: '#155b34',
+    color12: '#39A900',
+
+    
 
 }

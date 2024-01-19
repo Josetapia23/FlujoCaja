@@ -115,11 +115,13 @@ const Tabla2 = ({datos, columnas, Total, onEliminar, onEditar}) => {
                                     <Text style={[styles.txtContenidoTabla2,{textAlign:'justify', paddingHorizontal:2}]}>{item.descripcion}</Text>
                                     <Text style={[styles.txtContenidoTabla2,{textAlign:'center'}]}>${item.monto}</Text>
                                     <View style={[styles.txtContenidoTabla,{textAlign:'center', flexDirection:'row', justifyContent:'space-evenly'}]}>
-                                        <TouchableOpacity onPress={()=>{funcion2(item.id, item.descripcion, item.monto)}}>
-                                            < AntDesign name='pencil' size={20} color={colores.color3}/>
+                                        <TouchableOpacity style={{backgroundColor:colors.color10, borderRadius:20, padding:3}}
+                                         onPress={()=>{funcion2(item.id, item.descripcion, item.monto)}}>
+                                            < AntDesign name='pencil' size={15} color={colores.color8}/>
                                         </TouchableOpacity>
-                                        <TouchableOpacity onPress={()=>{funcion1(item.id)}}>
-                                            < AntDesign name='delete' size={20} color={colores.color11}/>
+                                        <TouchableOpacity style={{backgroundColor:colors.color11, borderRadius:20, padding:3}}
+                                         onPress={()=>{funcion1(item.id)}}>
+                                            < AntDesign name='delete' size={15} color={colores.color8}/>
                                         </TouchableOpacity>
                                     </View>
                                 </View>

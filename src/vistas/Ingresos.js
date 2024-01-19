@@ -529,7 +529,7 @@ useEffect(()=>{
     if(deleteMov){
         Alert.alert(
           'Confirmar Eliminación',
-          '¿Estás seguro de que quieres eliminar esta movimiento?',
+          '¿Estás seguro de que quieres eliminar este movimiento?',
           [
             {
               text: 'Cancelar',
@@ -591,7 +591,7 @@ const navegacion = useNavigation();
               <Text style={[styles.txtInformativo, {marginTop:100}]}>No tienes categorías de ingresos registradas </Text>
             ) : (
               <View style={{ marginTop: 40, marginBottom: 10 }}>
-                
+                {/* <Text style={styles.txtSubtitulos}>Categorias</Text> */}
                 <ScrollView style={{ height: '84%' }}>
                   <FlatList
                     nestedScrollEnabled
@@ -629,12 +629,12 @@ const navegacion = useNavigation();
                      <Material name='close-thick' size={35} color={colores.color9}/>
 
                   </TouchableOpacity>
-                  <Text style={styles.txtTitulo}>Nueva categoria de ingresos</Text>
+                  <Text style={styles.txtTitulo}>Nueva categoria de {'\n'}ingresos</Text>
                   
                   <View 
                       style={{paddingBottom:30}}
                       >
-                      <Text style={styles.txt}>Tipo de ingreso:<Text style={{color:'red'}}>*</Text></Text>
+                      <Text style={styles.txt}>Nombre categoria:<Text style={{color:'red'}}>*</Text></Text>
                       <Imput2
                       imagen={require('../../assets/iconos/lista.png')}
                                 name="nombre"
@@ -681,7 +681,7 @@ const navegacion = useNavigation();
                      <Material name='close-thick' size={35} color={colores.color9}/>
 
                 </TouchableOpacity>
-                <Text style={styles.txtTitulo}>{`Nuevo monto de ${nombreCateg}`}</Text>
+                <Text style={styles.txtTitulo}>{`Nuevo monto de \n${nombreCateg}`}</Text>
                 
                 <View 
                     style={{paddingBottom:30}}
@@ -974,5 +974,12 @@ txtInformativo:{
     fontFamily:'Roboto-Medium', 
     fontSize:18,
     paddingHorizontal:30
-}
+},
+txtSubtitulos:{
+  color:colores.color5,
+  fontSize:16, 
+  textAlign:'center',
+  fontFamily:'Roboto-Medium',
+  marginHorizontal:30
+},
 })

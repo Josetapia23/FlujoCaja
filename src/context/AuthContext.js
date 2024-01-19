@@ -71,6 +71,26 @@ export const AuthProvider = ({children}) => {
     });
   };
 
+  const updateUserInfo = async () => {
+    try {
+      const response = await axios.post(
+        'https://www.plataforma50.com/pruebas/gestionP/getUserInfo.php',
+        {
+          idUser: userInfo.id,
+        }
+      );
+  
+      let newUserInfo = response.data.userInfo;
+      setUserInfo(newUserInfo);
+      AsyncStorage.setItem('userInfo', JSON.stringify(newUserInfo));
+      console.log('Datos de usuario actualizados:', newUserInfo);
+      obtenerEmpresa();
+    } catch (error) {
+      console.error('Error al obtener la información del usuario:', error.message);
+    }
+  };
+  
+
   const login = (email, contrasena) => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
@@ -336,7 +356,8 @@ export const AuthProvider = ({children}) => {
         login,
         logout,
         registerEmpresa,
-        montos
+        montos,
+        updateUserInfo
       }}>
       {children}
     </AuthContext.Provider>

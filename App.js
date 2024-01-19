@@ -3,10 +3,10 @@ import React, { useEffect } from 'react'
 import Navegacion from './src/componentes/Navegacion'
 import { AuthProvider } from './src/context/AuthContext'
 import SplashScreen from 'react-native-splash-screen';
-import { colores } from './src/componentes/Colors';
+import { colores, colors } from './src/componentes/Colors';
 
 
-StatusBar.setBackgroundColor(colores.color4); // Color de la barra de estado
+StatusBar.setBackgroundColor(colors.color10); // Color de la barra de estado
 
 const App = () => {
 

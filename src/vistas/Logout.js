@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import Imputs from '../componentes/Imputs';
 import Botones from '../componentes/Botones';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native';
 import AntDesign from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Alert } from 'react-native';
@@ -23,7 +23,7 @@ const NIT_REGEX = /^[0-9]{1,10}-[0-9]{1}$/;
 const DIRECCION_REGEX = /^[0-9A-Za-z\s#áéíóúÁÉÍÓÚñÑ.,-/]+$/;
 
 const Logout = () => {
-  const { isLoading, userInfo, registerEmpresa, companyInfo, logout, txtErrorNit} = useContext(AuthContext);
+  const { isLoading, userInfo, registerEmpresa, updateUserInfo, companyInfo, logout, txtErrorNit} = useContext(AuthContext);
   const [countries, setCountries] = useState([]);
   const [cities, setCities] = useState([]);
   const [idDepartamento, setIdDepartamen] = useState(8);
@@ -40,6 +40,12 @@ const Logout = () => {
   const [userName, setUserName] = useState(userInfo.nombre);
   const [emailUser, setEmailUser] = useState(userInfo.email)
 
+
+  // useFocusEffect( //Este se utiliza para que renderice las funciones de inmediato en las vistas que hacen parte de los bootom tabs
+  //       React.useCallback(()=>{
+  //         updateUserInfo();
+  //       }, [])
+  //   )
 
   const salir = () => {
     Alert.alert(
