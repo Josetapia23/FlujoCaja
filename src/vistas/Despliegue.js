@@ -18,12 +18,14 @@ const perdida = require('../../assets/iconos/perdida.png');
 const Despliegue = () => {
     const [cargando, setCargando] = useState(false);
     const [listaMovimientos, setListaMovimientos] = useState([]);
-    const {userInfo, companyInfo} = useContext(AuthContext);
+    const {userInfo, companyInfo, obtenerEmpresa} = useContext(AuthContext);
     const idUser = userInfo.id;
     const datosEmpresa = companyInfo.datos;
+    const companyActive = companyInfo.pasar;
 
     useFocusEffect( //Este se utiliza para que renderice las funciones de inmediato en las vistas que hacen parte de los bootom tabs
         React.useCallback(()=>{
+            console.log(companyActive);
             listarMovimientos();
         }, [])
     )
@@ -55,63 +57,68 @@ const Despliegue = () => {
   return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.containerSuperior}>
-                    <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Inicio')}>
-                        <Material name='arrow-left' size={25} color={colores.color7}/>
-                    </TouchableOpacity>
                     <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center', }}>{`Historiales`}</Text>
                 </View>
-                
-                <View style={styles.view}>
-                    <View style={{alignItems:'center'}}>
-                        <ImgPress img={ingresos} funcion={() => navegacion.navigate('Ingresos')}/>
-                        <Text style={{color:colores.color5, fontFamily:'Roboto-Medium'}}>Ingresos</Text>
-                    </View>
-                    <View style={{alignItems:'center'}}>
-                        <ImgPress img={perdida} funcion={() => navegacion.navigate('Gastos')}/>
-                        <Text style={{color:colores.color5, fontFamily:'Roboto-Medium'}}>Gastos</Text>
-                    </View>
-                </View>
-                <View>
-                    <ScrollView>
-                    {
-                        cargando == true ? (
-                            <SplashScreens/>
-                        ) :(
-                            listaMovimientos.length>0?
-                            (
-                                listaMovimientos.length<10 ? (
-                                <View>
-                                    <Text style={{
-                                        textAlign:'center', 
-                                        color:colores.color5, 
-                                        fontFamily:'Roboto-Medium',
-                                        fontSize:18
-                                        }}>{`Ultimos ${listaMovimientos.length} movimientos`}</Text>
-                                    <Tablas datos={listaMovimientos}
-                                    categoria={'Categorias'}
-                                    ambos={'1'} />
+                {
+                    companyActive == 'si' ?
+                    (
+                        <>
+                            <View style={styles.view}>
+                                <View style={{alignItems:'center'}}>
+                                    <ImgPress img={ingresos} funcion={() => navegacion.navigate('Ingresos')}/>
+                                    <Text style={{color:colores.color5, fontFamily:'Roboto-Medium'}}>Ingresos</Text>
                                 </View>
-                                ):(
-                                <View>
-                                    <Text style={{
-                                        textAlign:'center', 
-                                        color:colores.color5, 
-                                        fontFamily:'Roboto-Medium',
-                                        fontSize:18
-                                        }}>Ultimos 10 movimientos</Text>
-                                    <Tablas datos={listaMovimientos}
-                                    categoria={'Categorias'}
-                                    ambos={'1'} />
+                                <View style={{alignItems:'center'}}>
+                                    <ImgPress img={perdida} funcion={() => navegacion.navigate('Gastos')}/>
+                                    <Text style={{color:colores.color5, fontFamily:'Roboto-Medium'}}>Gastos</Text>
                                 </View>
+                            </View>
+                            <View>
+                            <ScrollView style={{marginVertical:10, height:270}}>
+                            {
+                                cargando == true ? (
+                                    <SplashScreens/>
+                                ) :(
+                                    listaMovimientos.length>0?
+                                    (
+                                        listaMovimientos.length<10 ? (
+                                        <View>
+                                            <Text style={{
+                                                textAlign:'center', 
+                                                color:colores.color5, 
+                                                fontFamily:'Roboto-Medium',
+                                                fontSize:18
+                                                }}>{`Ultimos ${listaMovimientos.length} movimientos`}</Text>
+                                            <Tablas datos={listaMovimientos}
+                                            categoria={'Categorias'}
+                                            ambos={'1'} />
+                                        </View>
+                                        ):(
+                                        <View style={{paddingBottom:30}}>
+                                            <Text style={{
+                                                textAlign:'center', 
+                                                color:colores.color5, 
+                                                fontFamily:'Roboto-Medium',
+                                                fontSize:18
+                                                }}>Ultimos 10 movimientos</Text>
+                                            <Tablas datos={listaMovimientos}
+                                            categoria={'Categorias'}
+                                            ambos={'1'} />
+                                        </View>
+                                        )
+                                    ):(
+                                        <Text style={{textAlign:'center', color:colores.color5, fontSize:16, marginTop:100}}>"No hay Movimientos registrados"</Text>
+                                    )
                                 )
-                            ):(
-                                <Text style={{textAlign:'center', color:colores.color5, fontSize:16, marginTop:100}}>"No hay Movimientos registrados"</Text>
-                            )
-                        )
-                    }
-                    </ScrollView>
-                
-                </View>
+                            }
+                            </ScrollView>
+                            </View>
+                        </>
+                    ):(
+                    <>
+                    <Text>Esta vista es cuando no hay empresa</Text>
+                    </>)
+                }
             </SafeAreaView>
   )
 }

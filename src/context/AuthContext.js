@@ -139,7 +139,6 @@ export const AuthProvider = ({children}) => {
       );
       const emprendimientoData = respuesta.data;
       AsyncStorage.setItem('companyinfo', JSON.stringify(emprendimientoData));
-
       console.log('Información adicional:', emprendimientoData);
       if (emprendimientoData.success) {
         setTokenEmpresa(1);
@@ -152,7 +151,6 @@ export const AuthProvider = ({children}) => {
           pasar: 'no',
         });
       }
-
       setIsLoading(false);
     } catch (error) {
       console.error(
@@ -285,6 +283,7 @@ export const AuthProvider = ({children}) => {
 
       setTokenUsuario(0);
       setTokenEmpresa(0);
+      setTxtErrorNit('');
       setUserInfo({});
       setCompanyInfo({});
       setMontosGenerales({});
@@ -357,7 +356,8 @@ export const AuthProvider = ({children}) => {
         logout,
         registerEmpresa,
         montos,
-        updateUserInfo
+        updateUserInfo,
+        obtenerEmpresa
       }}>
       {children}
     </AuthContext.Provider>

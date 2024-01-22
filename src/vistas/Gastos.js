@@ -382,7 +382,7 @@ const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, 
             <Text style={{textTransform:'uppercase', fontFamily:'Roboto-Bold', fontSize:13, color:colores.color8}}>{nombre}</Text>
         </View>
           </TouchableOpacity>
-      <View style={{justifyContent:'center', alignItems:'center', width:'10%', backgroundColor:colores.color9, borderRadius:100, paddingVertical:5}}>
+      <View style={{justifyContent:'center', alignItems:'center', width:'10%', backgroundColor:colors.color10, borderRadius:100, paddingVertical:5}}>
         <TouchableOpacity onPress={()=>{
             onPressSearch(id, nombre)
           }}>
@@ -549,7 +549,7 @@ const navegacion = useNavigation();
   return (
     <SafeAreaView>
       <View style={styles.containerSuperior}>
-            <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Despliegue')}>
+            <TouchableOpacity style={styles.atras} onPress={()=>navegacion.goBack()}>
                 <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
             <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color6, textAlign:'center'}}>{`Lista De Gastos`}</Text>

@@ -425,7 +425,7 @@ const navegacion = useNavigation();
   return (
     <SafeAreaView>
       <View style={styles.containerSuperior}>
-            <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Gastos')}>
+            <TouchableOpacity style={styles.atras} onPress={()=>navegacion.goBack()}>
                 <Material name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
             <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color6, textAlign:'center'}}>{`Gestion De Gastos`}</Text>

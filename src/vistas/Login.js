@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     txtRegistarse: {
         fontSize: 30,
         textAlign: 'center',
-        color: colores.color4,
+        color: colores.color5,
         marginBottom: 25,
         marginHorizontal: 25,
         fontFamily:'Roboto-Bold'

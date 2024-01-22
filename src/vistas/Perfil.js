@@ -85,10 +85,10 @@ const Perfil = () => {
   return (
     <SafeAreaView style={styles.container}>
         <View style={styles.containerSuperior}>
-            <TouchableOpacity style={styles.atras} onPress={()=>navegacion.navigate('Logout')}>
+            <TouchableOpacity style={styles.atras} onPress={()=>navegacion.goBack()}>
                 <AntDesign name='arrow-left' size={25} color={colores.color7}/>
             </TouchableOpacity>
-            <Text style={{fontFamily:'Roboto-Medium', fontSize:25, color:colores.color7, textAlign:'center', }}>{`Datos personales`}</Text>
+            <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center', }}>{`Datos personales`}</Text>
         </View>
             {
                 cargando ? (

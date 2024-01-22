@@ -126,7 +126,7 @@ const xx = useNavigation();
                         (<Text style={{color:'red', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>)
                       }
                       <Text
-                      style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
+                      style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color6, marginHorizontal:30}}>
                         {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
                         </Text>
                     </View>
@@ -178,13 +178,20 @@ const xx = useNavigation();
                   ingresoDiarioNumerico > 0?
                   (
                     <>
-                    <Text style={styles.txtMontos}>
+                    <Text style={[styles.txtMontos2,]}>
                       El monto total de ingresos de hoy son de 
-                    <Text style={{color:'green'}}> ${ingresoDiario}</Text></Text>
-                  {arrayIngresosNumeros.length > 0 ? (<Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayIngresosNumeros} v='i'/>):(<></>)}
+                      <Text style={{color:'green'}}> ${ingresoDiario}</Text>
+                    </Text>
+                  {arrayIngresosNumeros.length > 0 ? (
+                  <Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayIngresosNumeros} v='i'/>
+                    ):(
+                    <></>
+                    )
+                  }
                     </>
                   ):(
-                    <Text style={styles.txtMontos}>{`El dia de hoy no ha registrado ingresos`}</Text>
+                    
+                    <Text style={[styles.txtMontos2, {marginTop:20}]}>{`El dia de hoy no ha registrado ingresos`}</Text>
                   )
                 }
                 <View style={{borderBottomColor:colors.color8, width:'100%', borderWidth:1, opacity:0.1, top:0}}></View>
@@ -193,13 +200,19 @@ const xx = useNavigation();
                   (
                     
                     <>
-                    <Text style={[styles.txtMontos, {marginTop:10}]}>
+                    <Text style={[styles.txtMontos2, {marginTop:10}]}>
                       {`El monto total de gastos hoy '${fechaFormateada}' son:`} 
-                    <Text style={{color:'red'}}> ${gastoDiario}</Text></Text>
-                    {arrayGastosNumeros.length > 0 ? (<Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayGastosNumeros} v='g'/>):(<></>)}
+                      <Text style={{color:'red'}}> ${gastoDiario}</Text>
+                    </Text>
+                    {arrayGastosNumeros.length > 0 ? (
+                    <Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayGastosNumeros} v='g'/>
+                      ):(
+                      <></>
+                      )
+                    }
                     </>
                     ):(
-                    <Text style={[styles.txtMontos, {marginTop:10}]}>{`El dia de hoy no ha registrado gastos`}</Text>
+                    <Text style={[styles.txtMontos2, {marginTop:20}]}>{`El dia de hoy no ha registrado gastos`}</Text>
                   )
                 }
                 
@@ -258,7 +271,15 @@ const styles = StyleSheet.create({
   },
   txtMontos:{
     fontFamily:'Roboto-Medium',
-    fontSize:20,
+    fontSize:16,
+    marginHorizontal:30,
+    textAlign:'center',
+    color:colores.color8,
+    paddingVertical:5
+  },
+  txtMontos2:{
+    fontFamily:'Roboto-Medium',
+    fontSize:16,
     marginHorizontal:30,
     textAlign:'center',
     color:colores.color9,

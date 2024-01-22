@@ -24,6 +24,8 @@ import Company from '../vistas/Company';
 import Perfil from '../vistas/Perfil';
 import GestionIng from '../vistas/GestionIng';
 import GestionGast from '../vistas/GestionGast';
+import SplashScreen2 from '../vistas/SplashScreen2';
+import SplashScreen3 from '../vistas/SplashScreen3';
 
 const Stack = createNativeStackNavigator();
 
@@ -45,13 +47,17 @@ useEffect(()=>(
           tokenUsuario !== 1 ? (
                           <>
                               {/* <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} options={{ headerShown: false,}}/> */}
+                              {/* <Stack.Screen  name='SplashScreen2' component={SplashScreen2} options={{ headerShown: false,}}/> */}
                               <Stack.Screen name="Login" component={Login} options={{ headerShown: false,}}/>
                               <Stack.Screen name="Registro" component={Registro} options={{ headerShown: false,}}/>
                           </>
                       ) : (
                         <>
-                            <Stack.Screen name="Logout" component={TabGroup} options={{ headerShown: false,}}/>
-                            <Stack.Screen name="Home" component={Home} options={{ headerShown: false,}}/>
+                            {/* <Stack.Screen name="SplashScreen3" component={SplashScreen3} options={{ headerShown: false,}}/> */}
+                            <Stack.Screen name="Inicio" component={TabGroup} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Logout" component={Logout} options={{ headerShown: false,}}/>
+                            {/* <Stack.Screen name="Logout" component={TabGroup} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Home" component={Home} options={{ headerShown: false,}}/> */}
                             <Stack.Screen name="Graficos" component={Graficos} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Despliegue" component={Despliegue} options={{ headerShown: false,}}/>
                             <Stack.Screen name="Ingresos" component={Ingresos} options={{ headerShown: false,}}/>
@@ -76,7 +82,7 @@ const Tab = createBottomTabNavigator(); //Instanciamos la clase createBottomTabN
 function TabGroup() {
     return (
         <Tab.Navigator
-            initialRouteName="Logout"
+            initialRouteName="Inicio"
             screenOptions={({ route }) => ({
                 tabBarShowLabel: false,
                 tabBarIcon: ({ focused, color, size }) => {

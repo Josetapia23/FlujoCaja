@@ -139,7 +139,7 @@ const registrarEmpresa = () => {
   registerEmpresa(nombreEmpresa, nit, direccion, telefonoEmpresarial, emailEmpresarial, idUser, idDepartamento, idMunicipio, registroEmpr)
       .then(() => {
           // Registro exitoso, navega a la pantalla deseada
-          navegacion.navigate('Empresa'); // Reemplaza 'PantallaDespuesDelRegistro' con el nombre de la pantalla a la que deseas navegar después del registro exitoso.
+          navegacion.navigate('Inicio'); // Reemplaza 'PantallaDespuesDelRegistro' con el nombre de la pantalla a la que deseas navegar después del registro exitoso.
       })
       .catch(error => {
           // Manejar el error si es necesario
@@ -149,11 +149,11 @@ const registrarEmpresa = () => {
 //console.log(pasar, datosEmpresa, idUser);
 const navegacion = useNavigation();
   return (
-    <View>
+    <SafeAreaView>
       <Spinner visible={isLoading} />
       {pasar == 'si' ?  
       (
-        <SafeAreaView style={styles.containForm}>
+        < >
             <View style={{ marginBottom:70, backgroundColor:colores.color5, paddingVertical:30, height:100}}>
               <View style={{flexDirection:'row', alignItems:'center', paddingLeft:5, paddingBottom:10}}> 
                 <Image source={require('../../assets/iconos/usuario.png')} style={{width:50, height:50, borderRadius:50, marginHorizontal:20 ,backgroundColor:colores.color5 ,tintColor:colores.color8}} />
@@ -163,46 +163,39 @@ const navegacion = useNavigation();
                 </View>
               </View>
             </View>
-          <ScrollView>
-            <View style={{marginBottom:40,}}>
-
-            <TouchableOpacity onPress={()=>{navegacion.navigate('Perfil')}}>
-              <View style={styles.containerOptions}> 
-                  <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Perfil</Text>
-                  < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
+          <ScrollView style={{ height:450}}>
+              <TouchableOpacity onPress={()=>{navegacion.navigate('Perfil')}}>
+                <View style={styles.containerOptions}> 
+                    <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Perfil</Text>
+                    < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={()=>{navegacion.navigate('Company')}}>
+                <View style={styles.containerOptions}> 
+                    <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Empresa</Text>
+                    < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <View style={styles.containerOptions}> 
+                    <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Privacidad</Text>
+                    < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <View style={styles.containerOptions}> 
+                    <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Terminos y condiciones</Text>
+                    < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
+                </View>
+              </TouchableOpacity>
+              <View style={{marginTop:'20%', paddingBottom:40}}>
+                <Botones2 name='Cerrar Sersion'
+                    funcion={salir} margin={'25%'} padding={6}>
+                  < AntDesign name='exit-to-app' size={30} color={colores.color8}/>
+                </Botones2>
               </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{navegacion.navigate('Company')}}>
-              <View style={styles.containerOptions}> 
-                  <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Empresa</Text>
-                  < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.containerOptions}> 
-                  <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Privacidad</Text>
-                  < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.containerOptions}> 
-                  <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Terminos y condiciones</Text>
-                  < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
-              </View>
-            </TouchableOpacity>
-            
-            
-
-
-            <View style={{marginTop:'40%'}}>
-              <Botones2 name='Cerrar Sersion'
-                  funcion={salir} margin={'25%'} padding={6}>
-                < AntDesign name='logout-variant' size={30} color={colores.color8}/>
-              </Botones2>
-            </View>
-            </View>
-          </ScrollView>
-      </SafeAreaView>
+            </ScrollView>
+      </>
       ) : (
         <>
           <View>
@@ -261,7 +254,7 @@ const navegacion = useNavigation();
                         }
                       </View>
                       <View 
-                        style={{paddingBottom:10, paddingHorizontal:30}}                      
+                        style={{paddingBottom:10,}}                      
                         >
                         <Text style={styles.txt}>Direccion:<Text style={{color:'red'}}>*</Text></Text>
                       <Imputs
@@ -367,7 +360,7 @@ const navegacion = useNavigation();
                             />
                       <Botones2 name='Cerrar Sersion'
                           funcion={salir} margin={60} padding={6}>
-                        < AntDesign name='logout-variant' size={35} color={colores.color8}/>
+                        < AntDesign name='exit-to-app' size={35} color={colores.color8}/>
                       </Botones2>
                   </ScrollView>
                 </View>
@@ -376,7 +369,7 @@ const navegacion = useNavigation();
           </View>
         </>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -384,7 +377,7 @@ export default Logout;
 
 const styles = StyleSheet.create({
   containForm: {
-    
+    flex:1
   },
   modal: {
     flex:1,
