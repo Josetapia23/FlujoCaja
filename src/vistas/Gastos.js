@@ -944,11 +944,12 @@ cardView:{
   alignItems:'center'
   },
    txtInformativo:{
-    paddingTop:20,
-    color:colores.color3,
+    paddingTop:18,
+    color:colores.color5,
     textAlign:'center', 
     fontFamily:'Roboto-Medium', 
-    fontSize:28,
-    paddingHorizontal:30
+    fontSize:18,
+    paddingHorizontal:30,
+    paddingTop:40
   }
 })

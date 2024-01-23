@@ -1,35 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Modal, TouchableOpacity, ScrollView, SafeAreaView, Alert } from 'react-native'; // Añade FlatList a los imports
-import Tablas from '../componentes/Tablas';
 import { useNavigation } from '@react-navigation/native';
 import { colores, colors } from '../componentes/Colors';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import ImgPress2 from '../componentes/ImgPress2';
 import { useForm } from 'react-hook-form';
 import Imputs from '../componentes/Imputs';
 import Botones from '../componentes/Botones';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
-import Imput2 from '../componentes/Imput2';
 import SplashScreens from '../vistas/SplashScreens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Tabla2 from '../componentes/Tabla2';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
 
 
 const GestionGast = () => {
   const [visible, setVisible] = useState(false);
-  const [visible2, setVisible2] = useState(false);
-  const [visible3, setVisible3] = useState(false);
   const [errorNombre, setErrorNombre] = useState('');
   const [listaConceptos , setListaConceptos] = useState([]);
-  const { isLoading, userInfo, registerEmpresa, companyInfo} = useContext(AuthContext);
+  const {  userInfo, companyInfo} = useContext(AuthContext);
   const [idConcepto, setIdConcepto] = useState('');
-  const [descripcion, setDescripcion] = useState('Descripcion');
-  const [listaMovimientos1, setListaMovimientos1] = useState([]); //Lista de movimientos completa por categoria
-  const [montoTotal3, setMontoTotal3] = useState('');
   const [tipo, setTipo] = useState(2);
   const [nombreCateg, setNombreCat] = useState('');
   const [cargando, setCargando] = useState(false);
@@ -101,107 +91,107 @@ const GestionGast = () => {
     });
   };
 
-  const addGasto = () => {
-    setCargando(true);
-    return new Promise((resolve, reject) => {
-      axios
-        .post(
-          'https://www.plataforma50.com/pruebas/gestionP/addCategoria.php',
-          {
-            nombreIngreso: getValues('nombre'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
-            idTipo: 2,
-            idUser: idUser,
-          },
-        )
-        .then(res => {
-          if (res.data.result === 'success') {
-            // Registro exitoso
-            setVisible(!visible);
-            //setNombreIngreso(''); // Añade esta línea
-            setErrorNombre('');
-            console.log('Registro exitoso');
-            reset({ nombre: '' }); // Esto reseteará el campo 'nombre' del formulario
-            resolve('Registro exitoso');
-            setCargando(false);
+  // const addGasto = () => {
+  //   setCargando(true);
+  //   return new Promise((resolve, reject) => {
+  //     axios
+  //       .post(
+  //         'https://www.plataforma50.com/pruebas/gestionP/addCategoria.php',
+  //         {
+  //           nombreIngreso: getValues('nombre'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
+  //           idTipo: 2,
+  //           idUser: idUser,
+  //         },
+  //       )
+  //       .then(res => {
+  //         if (res.data.result === 'success') {
+  //           // Registro exitoso
+  //           setVisible(!visible);
+  //           //setNombreIngreso(''); // Añade esta línea
+  //           setErrorNombre('');
+  //           console.log('Registro exitoso');
+  //           reset({ nombre: '' }); // Esto reseteará el campo 'nombre' del formulario
+  //           resolve('Registro exitoso');
+  //           setCargando(false);
 
-          } else if (res.data.result === 'error') {
-            // Error en el registro
-            setErrorNombre('');
-            console.log('Error en el registro:', res.data.message);
-            reject('Error en el registro: ' + res.data.message);
-            setCargando(false);
+  //         } else if (res.data.result === 'error') {
+  //           // Error en el registro
+  //           setErrorNombre('');
+  //           console.log('Error en el registro:', res.data.message);
+  //           reject('Error en el registro: ' + res.data.message);
+  //           setCargando(false);
 
-          } else if (res.data.result === 'error1') {
-            // Nombre ya existe
-            setErrorNombre(res.data.message);
-            console.log('Este nombre ya existe:', res.data.message);
-            reject('Este nombre ya existe: ' + res.data.message);
-            setCargando(false);
+  //         } else if (res.data.result === 'error1') {
+  //           // Nombre ya existe
+  //           setErrorNombre(res.data.message);
+  //           console.log('Este nombre ya existe:', res.data.message);
+  //           reject('Este nombre ya existe: ' + res.data.message);
+  //           setCargando(false);
 
-          } else {
-            // Otro caso no manejado
-            setErrorNombre('');
-            console.log('Respuesta inesperada del servidor:', res.data);
-            reject('Error inesperado del servidor');
-            setCargando(false);
+  //         } else {
+  //           // Otro caso no manejado
+  //           setErrorNombre('');
+  //           console.log('Respuesta inesperada del servidor:', res.data);
+  //           reject('Error inesperado del servidor');
+  //           setCargando(false);
 
-          }
-        })
-        .catch(error => {
-          console.error('Error al registrar usuario con axios:', error.message);
-          reject('Error al registrar usuario con axios: ' + error.message);
-        });
-    });
-  };
+  //         }
+  //       })
+  //       .catch(error => {
+  //         console.error('Error al registrar usuario con axios:', error.message);
+  //         reject('Error al registrar usuario con axios: ' + error.message);
+  //       });
+  //   });
+  // };
 
-  const addMonto = () => {
-    setCargando(true);
-    return new Promise((resolve, reject) => {
-      axios
-        .post(
-          'https://www.plataforma50.com/pruebas/gestionP/addMovimiento.php',
-          {
-            monto: getValues('monto'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
-            descripcion: getValues('descripcion'),
-            idTipo: 2,
-            idUser: idUser,
-            idConcepto:idConcepto,
-            idEmprendimiento: datosEmpresa.id
-          },
-        )
-        .then(res => {
-          if (res.data.result === 'success') {
-            setVisible2(false);
-            setErrorNombre('');
-            console.log('Monto registrado exitosamente');
-            reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
-            resolve('Registro exitoso');
-            setCargando(false);
+  // const addMonto = () => {
+  //   setCargando(true);
+  //   return new Promise((resolve, reject) => {
+  //     axios
+  //       .post(
+  //         'https://www.plataforma50.com/pruebas/gestionP/addMovimiento.php',
+  //         {
+  //           monto: getValues('monto'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
+  //           descripcion: getValues('descripcion'),
+  //           idTipo: 2,
+  //           idUser: idUser,
+  //           idConcepto:idConcepto,
+  //           idEmprendimiento: datosEmpresa.id
+  //         },
+  //       )
+  //       .then(res => {
+  //         if (res.data.result === 'success') {
+  //           setVisible2(false);
+  //           setErrorNombre('');
+  //           console.log('Monto registrado exitosamente');
+  //           reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
+  //           resolve('Registro exitoso');
+  //           setCargando(false);
 
-          } else if (res.data.result === 'error') {
-            setErrorNombre(res.data.message);
-            setErrorNombre('');
-            console.log('Error en el registro:', res.data.message);
-            reject('Error en el registro: ' + res.data.message);
-            setCargando(false);
+  //         } else if (res.data.result === 'error') {
+  //           setErrorNombre(res.data.message);
+  //           setErrorNombre('');
+  //           console.log('Error en el registro:', res.data.message);
+  //           reject('Error en el registro: ' + res.data.message);
+  //           setCargando(false);
 
-          }else {
-            // Otro caso no manejado
-            setErrorNombre('');
-            console.log('Respuesta inesperada del servidor:', res.data);
-            reject('Error inesperado del servidor');
-            setCargando(false);
+  //         }else {
+  //           // Otro caso no manejado
+  //           setErrorNombre('');
+  //           console.log('Respuesta inesperada del servidor:', res.data);
+  //           reject('Error inesperado del servidor');
+  //           setCargando(false);
 
-          }
-        })
-        .catch(error => {
-          console.error('Error al registrar usuario con axios:', error.message);
-          reject('Error al registrar usuario con axios: ' + error.message);
-          setCargando(false);
+  //         }
+  //       })
+  //       .catch(error => {
+  //         console.error('Error al registrar usuario con axios:', error.message);
+  //         reject('Error al registrar usuario con axios: ' + error.message);
+  //         setCargando(false);
 
-        });
-    });
-  };
+  //       });
+  //   });
+  // };
 
 
   const eliminarConcepto = (id) => {
@@ -243,87 +233,155 @@ const GestionGast = () => {
     });
   }
 
-  const listarMovimientos = (id) => {
+  const editCategory = () => { 
     setCargando(true);
-  return new Promise((resolve, reject) => {
-  axios
-    .post(
-      'https://www.plataforma50.com/pruebas/gestionP/lis_mov_ingresos3.php',
-      {
-        idUser: idUser,
-        idTipo: tipo,
-        idConcepto : id
-      },
-    )
-    .then(res => {
-      if (res.data.result === 'success') {
-        // Registro exitoso
-        setListaMovimientos1(res.data.listaMovimientos4);
-        setMontoTotal3(res.data.monTotal2);
-        setCargando(false);
-        console.log(setListaMovimientos1);
-      } else if (res.data.result === 'error') {
-        // Error en la consulta
-        console.log('Error en la consulta de listar movimientos Ingresos1:', res.data.message);
-        reject('Error en el registro: ' + res.data.message);
-        setCargando(false);
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          'https://www.plataforma50.com/pruebas/gestionP/editConcepto.php',
+          {
+            newName: nombreCateg,
+            idCategory: idConcepto,
+          },
+        )
+        .then(res => {
+          if (res.data.result === 'success') {
+            setVisible(!visible);
+            setErrorNombre('');
+            getConceptos();
+            console.log('Categoria Actualizada');
+            setCargando(false);
 
-      } else {
-        console.log('Respuesta inesperada del servidor:', res.data);
-        reject('Error inesperado del servidor');
-        setCargando(false);
+          } else if (res.data.result === 'error') {
+            // Error en el registro
+            setErrorNombre('');
+            console.log('Error en el registro:', res.data.message);
+            reject('Error en el registro: ' + res.data.message);
+            setCargando(false);
+          } else if (res.data.result === 'error1') {
+            // Nombre ya existe
+            setErrorNombre(res.data.message);
+            console.log('Este nombre ya existe:', res.data.message);
+            reject('Este nombre ya existe: ' + res.data.message);
+            setCargando(false);
 
-      }
-    })
-    .catch(error => {
-      console.error('Error de axios para listar movimientos Ingresos2:', error.message);
-      reject('Error con axios: ' + error.message);
-        setCargando(false);
+          } else {
+            // Otro caso no manejado
+            setErrorNombre('');
+            console.log('Respuesta inesperada del servidor:', res.data);
+            reject('Error inesperado del servidor');
+            setCargando(false);
 
+          }
+        })
+        .catch(error => {
+          console.error('Error al registrar usuario con axios:', error.message);
+          reject('Error al registrar usuario con axios: ' + error.message);
+            setCargando(false);
+
+        });
     });
-});
+  };
+
+//   const listarMovimientos = (id) => {
+//     setCargando(true);
+//   return new Promise((resolve, reject) => {
+//   axios
+//     .post(
+//       'https://www.plataforma50.com/pruebas/gestionP/lis_mov_ingresos3.php',
+//       {
+//         idUser: idUser,
+//         idTipo: tipo,
+//         idConcepto : id
+//       },
+//     )
+//     .then(res => {
+//       if (res.data.result === 'success') {
+//         // Registro exitoso
+//         setListaMovimientos1(res.data.listaMovimientos4);
+//         setMontoTotal3(res.data.monTotal2);
+//         setCargando(false);
+//         console.log(setListaMovimientos1);
+//       } else if (res.data.result === 'error') {
+//         // Error en la consulta
+//         console.log('Error en la consulta de listar movimientos Ingresos1:', res.data.message);
+//         reject('Error en el registro: ' + res.data.message);
+//         setCargando(false);
+
+//       } else {
+//         console.log('Respuesta inesperada del servidor:', res.data);
+//         reject('Error inesperado del servidor');
+//         setCargando(false);
+
+//       }
+//     })
+//     .catch(error => {
+//       console.error('Error de axios para listar movimientos Ingresos2:', error.message);
+//       reject('Error con axios: ' + error.message);
+//         setCargando(false);
+
+//     });
+// });
+// }
+
+
+const AlertaEliminar = (id, nombre) =>{
+  Alert.alert(
+    'Eliminar Categoria',
+    `¿Estás seguro de que quieres eliminar ${nombre} de las categorias de ingresos?`,
+    [
+      {
+        text: 'Cancelar',
+        style: 'cancel',
+      },
+      {
+        text: 'Confirmar',
+        style: 'destructive',
+        onPress: () => {
+          Alert.alert(
+            'Confirmar Eliminación',
+            `¿Una vez eliminada esta categoria se eliminaran todos su movimientos, estas seguro?`,
+            [
+              {
+                text: 'Cancelar',
+                style: 'cancel',
+              },
+              {
+                text: 'Eliminar',
+                onPress: () => eliminarConcepto(id),
+                style: 'destructive',
+              },
+            ],
+            { cancelable: false }
+          );
+        }
+      },
+    ],
+    { cancelable: false }
+  );
 }
 
-
-  const AlertaEliminar = (id) =>{
-    Alert.alert(
-      'Confirmar Eliminación',
-      '¿Estás seguro de que quieres eliminar esta categoria?',
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel',
-        },
-        {
-          text: 'Eliminar',
-          onPress: () => eliminarConcepto(id),
-          style: 'destructive',
-        },
-      ],
-      { cancelable: false }
-    );
-  }
-  const AlertaMonto = () =>{
-    const values = getValues();
-    const montoOne = values.monto ? Number(values.monto.replace(/,/g, '')) : 0;
-    Alert.alert(
-      'Confirmar Monto',
-      `El monto es de $${montoOne.toLocaleString()}
-      descripcion: ${getValues('descripcion')}`,
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel',
-        },
-        {
-          text: 'Ingresar',
-          onPress: () => addMonto(),
-          style: 'destructive',
-        },
-      ],
-      { cancelable: false }
-    );
-  }
+  // const AlertaMonto = () =>{
+  //   const values = getValues();
+  //   const montoOne = values.monto ? Number(values.monto.replace(/,/g, '')) : 0;
+  //   Alert.alert(
+  //     'Confirmar Monto',
+  //     `El monto es de $${montoOne.toLocaleString()}
+  //     descripcion: ${getValues('descripcion')}`,
+  //     [
+  //       {
+  //         text: 'Cancelar',
+  //         style: 'cancel',
+  //       },
+  //       {
+  //         text: 'Ingresar',
+  //         onPress: () => addMonto(),
+  //         style: 'destructive',
+  //       },
+  //     ],
+  //     { cancelable: false }
+  //   );
+  // }
   
   const {
     control,
@@ -342,51 +400,41 @@ const guardar = async () => {
   console.log('se presiono guardar')
 }
 
-const guardarMonto = async () => {
-  await addMonto();
-  reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
-  console.log('se presiono guardarMonto')
-}
+// const guardarMonto = async () => {
+//   await addMonto();
+//   reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
+//   console.log('se presiono guardarMonto')
+// }
 
-const add = () =>{
-  setVisible((prevVisible) => !prevVisible)
-  setErrorNombre('');
-  //setNombreIngreso(''); // Reiniciar el estado del input
+// const add = () =>{
+//   setVisible((prevVisible) => !prevVisible)
+//   setErrorNombre('');
+//   //setNombreIngreso(''); // Reiniciar el estado del input
 
-}
+// }
 
-const ItemConcepto = ({nombre, onPressEliminar, onPressSearch, onPressConcepto, id}) => {
+const ItemConcepto = ({nombre, onPressEliminar, onPressEdit, onPressConcepto, id}) => {
   return (
     <View style={styles.cardView}>
-          <View style={{justifyContent:'center', alignItems:'center'}}>
-        <TouchableOpacity onPress={()=>{
+      <View style={{justifyContent:'center', alignItems:'center'}}>
+        {/* <TouchableOpacity onPress={()=>{
           onPressConcepto(id, nombre)
-        }}>
+        }}> */}
             <Text style={{textTransform:'capitalize', fontFamily:'Roboto-Bold', fontSize:13, color:colores.color5}}>{nombre}</Text>
-        </TouchableOpacity>
+        {/* </TouchableOpacity> */}
       </View>
       <View style={{flexDirection:'row', justifyContent:'space-evenly', width:'20%'}}>
-        {/* <TouchableOpacity  onPress={()=>{
-            onPressConcepto(id, nombre)
-          }}>
-              <Material name='plus-circle-outline' size={25} color={colores.color5} />
-        </TouchableOpacity>
-        <TouchableOpacity style={{marginHorizontal:5}} onPress={()=>{
-            onPressSearch(id, nombre)
-          }}>
-              <Material name='eye-circle-outline' size={25} color={colores.color5} />
-          </TouchableOpacity> */}
-          <TouchableOpacity 
+          <TouchableOpacity style={{backgroundColor:colors.color10, borderRadius:20, padding:3}}
          onPress={()=>{
-            onPressEliminar(id)
+            onPressEdit(id, nombre)
           }}>
-              <Material name='pencil-circle-outline' size={25} color={colores.color5} />
+              <Material name='pencil-circle-outline' size={20} color={colores.color8} />
           </TouchableOpacity>
-        <TouchableOpacity 
+        <TouchableOpacity style={{backgroundColor:colors.color11, borderRadius:20, padding:3, marginLeft:5}}
          onPress={()=>{
-            onPressEliminar(id)
+            onPressEliminar(id, nombre)
           }}>
-              <Material name='delete-circle-outline' size={25} color={colores.color5} />
+              <Material name='delete-circle-outline' size={20} color={colores.color8} />
           </TouchableOpacity>
       </View>
     </View>
@@ -399,27 +447,25 @@ const renderItem = ({item}) =>{
     nombre = {item.nombreConcepto}
     id = {item.id}
     onPressEliminar={AlertaEliminar}
-    onPressConcepto={activarModal2}
-    onPressSearch={activarModal3}
+    onPressEdit={activarModal2}
     />
   )
 }
 
 const activarModal2 = (id, nombre) => {
-  console.log("El id de concepto es: ",id);
-  setVisible2(true);
-  setNombreCat(nombre);
-  setIdConcepto(id);
-}
-
-const activarModal3 = (id, nombre) => {
-  console.log("El id es:",id,);
-  listarMovimientos(id);
-  setVisible3(true);
+  console.log("El id de ",nombre," es:",id,);
+  setVisible(true);
   setIdConcepto(id);
   setNombreCat(nombre);
-
 }
+
+// const activarModal3 = (id, nombre) => {
+//   console.log("El id es:",id,);
+//   listarMovimientos(id);
+//   setVisible3(true);
+//   setIdConcepto(id);
+//   setNombreCat(nombre);
+// }
 
 const navegacion = useNavigation();
   return (
@@ -469,49 +515,51 @@ const navegacion = useNavigation();
               <SplashScreens />
             </View> 
             ):(
-              <>
-              <TouchableOpacity style={styles.closeButton}
-                onPress={()=>{
-                  setVisible(!visible);
-                  reset({ nombre: '' }); // Esto reseteará el campo 'nombre' del formulario
-                }}
-                >
-                <Material name='close-thick' size={35} color={colores.color9}/>
-                </TouchableOpacity>
-                <Text style={styles.txtTitulo}>Nueva categoria de Gastos</Text>
-                
-                <View 
+                <>
+                  <TouchableOpacity style={styles.closeButton}
+                    onPress={()=>{
+                      setVisible(!visible);
+                      reset({ nombre: '' }); // Esto reseteará el campo 'nombre' del formulario
+                    }}>
+                     <Material name='close-thick' size={35} color={colores.color9}/>
+                  </TouchableOpacity>
+                  <Text style={styles.txtTitulo}>Actualizar categoria {'\n'}de ingresos</Text>
+                  <View 
                     style={{paddingBottom:30}}
-                    >
-                    <Text style={styles.txt}>Tipo de gasto:<Text style={{color:'red'}}>*</Text></Text>
-                    <Imput2
-                    imagen={require('../../assets/iconos/lista.png')}
-                              name="nombre"
-                              placeholder=" Nombre del tipo de gasto"
-                              control={control}
-                              rules={{
-                                  required: 'Nombre de gasto requerido',
-                                  minLength: { value: 5, message: "Debe contener 5 caracteres minimo" },
-                                  maxLength: { value: 18, message: "Debe contener 18 caracteres maximo" }
-                              }}
-                          />
+                  >
+                    <Text style={styles.txt}>Nombre categoria:<Text style={{color:'red'}}>*</Text></Text>
+                    <Imputs
+                      imagen={require('../../assets/iconos/lista.png')}
+                      name="nombre"
+                      placeholder="Nombre del tipo de ingreso"
+                      datos={nombreCateg}
+                        setDatos={setNombreCat}
+                      //keyboardType="numeric"
+                      control={control}
+                      rules={{
+                        required: 'Nombre de ingreso requerido',
+                        minLength: { value: 5, message: "Debe contener 5 caracteres minimo" },
+                        maxLength: { value: 18, message: "Debe contener 18 caracteres maximo" }
+                      }}
+                      //margin={30}
+                      editable={true}
+                    />
                     <Text style={{color:'red'}}>{errorNombre}</Text>
-                </View>
-                <Botones 
-                name='Guardar'
-                funcion={handleSubmit(guardar)}
-                margin={80}/>
+                  </View>
+                  <Botones 
+                    name='Actualizar'
+                    funcion={handleSubmit(editCategory)}
+                    margin={50}
+                  />
                 </>
-            )
-        
-        }
-                
+              )
+            }
               </View>
             </View>
       </Modal>
 
 
-      <Modal 
+      {/* <Modal 
           visible={visible2}>
             <View style={styles.modal}>
               <View style={styles.modalView}>
@@ -569,9 +617,8 @@ const navegacion = useNavigation();
               }
               </View>
             </View>
-          </Modal>
-
-          <Modal 
+      </Modal>
+      <Modal 
           visible={visible3}>
             <View style={styles.modal}>
               <View style={styles.modalView}>
@@ -609,7 +656,8 @@ const navegacion = useNavigation();
             }
               </View>
             </View>
-          </Modal>
+      </Modal> */}
+
     </SafeAreaView>
   );
 }
@@ -691,26 +739,26 @@ listaConceptos:{
   height:420
 },
 cardView:{
-    borderBottomWidth:2, 
-    borderBottomColor:colors.color7,
-    //marginVertical:8,
-    paddingVertical:15,
-    paddingHorizontal:25,
-    flex:1,
-    backgroundColor:colores.color8,
-    //flex:1,
-    // shadowOpacity: 0.30,
-    // shadowRadius: 10,
-    // elevation: 2,
-    flexDirection:'row',
-    justifyContent:'space-between'
-  },
-   txtInformativo:{
-    paddingTop:20,
-    color:colores.color3,
+  borderBottomWidth:2, 
+  borderBottomColor:colors.color7,
+  //marginVertical:8,
+  paddingVertical:15,
+  paddingHorizontal:25,
+  flex:1,
+  backgroundColor:colores.color8,
+  //flex:1,
+  // shadowOpacity: 0.30,
+  // shadowRadius: 10,
+  // elevation: 2,
+  flexDirection:'row',
+  justifyContent:'space-between'
+},
+txtInformativo:{
+    paddingTop:40,
+    color:colores.color5,
     textAlign:'center', 
     fontFamily:'Roboto-Medium', 
-    fontSize:28,
+    fontSize:18,
     paddingHorizontal:30
-  }
+}
 })

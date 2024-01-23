@@ -1,39 +1,28 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Modal, TouchableOpacity, ScrollView, SafeAreaView, Alert } from 'react-native'; // Añade FlatList a los imports
-import Tablas from '../componentes/Tablas';
 import { useNavigation } from '@react-navigation/native';
 import { colores, colors } from '../componentes/Colors';
 import Material from 'react-native-vector-icons/MaterialCommunityIcons';
-import ImgPress2 from '../componentes/ImgPress2';
 import { useForm } from 'react-hook-form';
 import Imputs from '../componentes/Imputs';
 import Botones from '../componentes/Botones';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
-import Imput2 from '../componentes/Imput2';
 import SplashScreens from '../vistas/SplashScreens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Tabla2 from '../componentes/Tabla2';
 
 
 
 const GestionIng = () => {
-  const { isLoading, userInfo, registerEmpresa, companyInfo} = useContext(AuthContext);
+  const {  userInfo,  companyInfo} = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
-  const [visible2, setVisible2] = useState(false);
-  const [visible3, setVisible3] = useState(false);
-  const [visible4, setVisible4] = useState(false);
   const [nombreCateg, setNombreCat] = useState('');
   const [errorNombre, setErrorNombre] = useState('');
   const [listaConceptos , setListaConceptos] = useState([]);
   const [idConcepto, setIdConcepto] = useState('');
-  const [listaMovimientos1, setListaMovimientos1] = useState([]); //Lista de movimientos completa por categoria
-  const [montoTotal3, setMontoTotal3] = useState('');
   const [tipo, setTipo] = useState(1);
   const [cargando, setCargando] = useState(false);
   const [datosEmpresa , setDatosEmpresa] = useState({});
-
-
   const [movIng, setMovIng] = useState(null);
   const [editMov, setEditMov] = useState(false);
   const [deleteMov, setDeleteMov] = useState(false);
@@ -114,9 +103,8 @@ const GestionIng = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/editCategoria.php',
+          'https://www.plataforma50.com/pruebas/gestionP/editConcepto.php',
           {
-            
             newName: nombreCateg,
             idCategory: idConcepto,
           },
@@ -126,7 +114,7 @@ const GestionIng = () => {
             setVisible(!visible);
             setErrorNombre('');
             getConceptos();
-            console.log('Categoria Actualziada');
+            console.log('Categoria Actualizada');
             setCargando(false);
 
           } else if (res.data.result === 'error') {
@@ -249,46 +237,46 @@ const GestionIng = () => {
     });
   }
 
-  const listarMovimientos = (id) => {
-    setCargando(true);
-  return new Promise((resolve, reject) => {
-  axios
-    .post(
-      'https://www.plataforma50.com/pruebas/gestionP/lis_mov_ingresos3.php',
-      {
-        idUser: idUser,
-        idTipo: tipo,
-        idConcepto : id
-      },
-    )
-    .then(res => {
-      if (res.data.result === 'success') {
-        // Registro exitoso
-        setListaMovimientos1(res.data.listaMovimientos4);
-        setMontoTotal3(res.data.monTotal2);
-        setCargando(false);
-        console.log(setListaMovimientos1);
-      } else if (res.data.result === 'error') {
-        // Error en la consulta
-        console.log('Error en la consulta de listar movimientos Ingresos1:', res.data.message);
-        reject('Error en el registro: ' + res.data.message);
-        setCargando(false);
+//   const listarMovimientos = (id) => {
+//     setCargando(true);
+//   return new Promise((resolve, reject) => {
+//   axios
+//     .post(
+//       'https://www.plataforma50.com/pruebas/gestionP/lis_mov_ingresos3.php',
+//       {
+//         idUser: idUser,
+//         idTipo: tipo,
+//         idConcepto : id
+//       },
+//     )
+//     .then(res => {
+//       if (res.data.result === 'success') {
+//         // Registro exitoso
+//         setListaMovimientos1(res.data.listaMovimientos4);
+//         setMontoTotal3(res.data.monTotal2);
+//         setCargando(false);
+//         console.log(setListaMovimientos1);
+//       } else if (res.data.result === 'error') {
+//         // Error en la consulta
+//         console.log('Error en la consulta de listar movimientos Ingresos1:', res.data.message);
+//         reject('Error en el registro: ' + res.data.message);
+//         setCargando(false);
 
-      } else {
-        console.log('Respuesta inesperada del servidor:', res.data);
-        reject('Error inesperado del servidor');
-        setCargando(false);
+//       } else {
+//         console.log('Respuesta inesperada del servidor:', res.data);
+//         reject('Error inesperado del servidor');
+//         setCargando(false);
 
-      }
-    })
-    .catch(error => {
-      console.error('Error de axios para listar movimientos Ingresos2:', error.message);
-      reject('Error con axios: ' + error.message);
-        setCargando(false);
+//       }
+//     })
+//     .catch(error => {
+//       console.error('Error de axios para listar movimientos Ingresos2:', error.message);
+//       reject('Error con axios: ' + error.message);
+//         setCargando(false);
 
-    });
-});
-}
+//     });
+// });
+// }
 
   const AlertaEliminar = (id, nombre) =>{
     Alert.alert(
@@ -590,7 +578,7 @@ const navegacion = useNavigation();
                   </View>
                   <Botones 
                     name='Actualizar'
-                    funcion={handleSubmit(guardar)}
+                    funcion={handleSubmit(editCategory)}
                     margin={50}
                   />
                 </>
@@ -710,7 +698,7 @@ const navegacion = useNavigation();
               </View>
             </View>
           </Modal> */}
-          <Modal 
+          {/* <Modal 
           visible={visible4}>
             <View style={styles.modal}>
               <View style={styles.modalView}>
@@ -780,7 +768,7 @@ const navegacion = useNavigation();
             }
               </View>
             </View>
-          </Modal>
+          </Modal> */}
     </SafeAreaView>
   );
 }
@@ -877,8 +865,8 @@ cardView:{
   justifyContent:'space-between'
 },
 txtInformativo:{
-    paddingTop:20,
-    color:colores.color3,
+    paddingTop:40,
+    color:colores.color5,
     textAlign:'center', 
     fontFamily:'Roboto-Medium', 
     fontSize:18,

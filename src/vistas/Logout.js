@@ -354,10 +354,15 @@ const navegacion = useNavigation();
                       </View>
                       
                       <Botones 
-                            name='Registrar'
-                            funcion={handleSubmit(registrarEmpresa)}
-                            margin={60}
-                            />
+                        name='Registrar'
+                        funcion={handleSubmit(registrarEmpresa)}
+                        margin={60}
+                      />
+                      {/* <Botones 
+                        name='Regresar'
+                        funcion={()=> navegacion.goBack()}
+                        margin={60}
+                      /> */}
                       <Botones2 name='Cerrar Sersion'
                           funcion={salir} margin={60} padding={6}>
                         < AntDesign name='exit-to-app' size={35} color={colores.color8}/>

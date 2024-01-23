@@ -14,7 +14,7 @@ import Material from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 const Home = () => {
-  const { isLoading, logout, userInfo, montosGenerales, arrayIngresos, arrayGastos, tokenEmpresa, montos } = useContext(AuthContext);
+  const { isLoading, logout, userInfo, montosGenerales, arrayIngresos, arrayGastos, companyInfo, obtenerEmpresa, montos } = useContext(AuthContext);
   const [arrayIngresos2, setArrayIngresos2] = useState([]);
   const [arrayGastos2, setArrayGastos2] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -24,6 +24,9 @@ const Home = () => {
   const gastoDiario = montosGenerales.gastoDiario;//Cantidad de gastos en el dia actual
   const gastoMensual = montosGenerales.gastoMensual; //Cantidad de gastos en el mes actual
   const nombreUsuario = userInfo.nombre;
+
+  const companyActive = companyInfo.pasar;
+
 
   const arrayIngresosNumeros = arrayIngresos2?.map(val => Number(val.replace(/,/g, ''))) || [0,0,0,0,0,0];
   const arrayGastosNumeros = arrayGastos2?.map(val => Number(val.replace(/,/g, ''))) || [0,0,0,0,0,0];
@@ -40,7 +43,8 @@ const Home = () => {
 
   useFocusEffect( //Este se utiliza para que renderice las funciones de inmediato en las vistas que hacen parte de los bootom tabs
         React.useCallback(()=>{
-          montos();
+          obtenerEmpresa();
+          if(companyActive == 'si') montos();
         }, [])
     )
 
@@ -115,106 +119,123 @@ const xx = useNavigation();
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }>
             <View style={styles.containerBody}>
-            {
-                  ingresoMensualNumerico > 0 && gastoMensualNumerico > 0?(
-                    <View style={{backgroundColor:colores.color5, alignItems:'center', paddingVertical:5, borderRadius:3, marginBottom:10}}>
-                    <Text style={[styles.txtMontos, {marginTop:10}]}>
-                      El balance total del mes actual es el siguiente:</Text>
-                      {
-                        balanceMensual2 > 0 ?
-                        (<Text style={{color:'green', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>):
-                        (<Text style={{color:'red', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>)
-                      }
-                      <Text
-                      style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color6, marginHorizontal:30}}>
-                        {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
-                        </Text>
-                    </View>
-                  ):(
-                    ingresoMensualNumerico > 0?
-                    (
+
+            { companyActive == 'si'?
+              (
+                <>
+                {
+                    ingresoMensualNumerico > 0 && gastoMensualNumerico > 0?(
                       <View style={{backgroundColor:colores.color5, alignItems:'center', paddingVertical:5, borderRadius:3, marginBottom:10}}>
                       <Text style={[styles.txtMontos, {marginTop:10}]}>
-                      El balance total del mes actual es el siguiente:</Text>
-                      <Text style={{color:'green', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
-                      <Text
-                        style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
-                        {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
-                      </Text>
+                        El balance total del mes actual es el siguiente:</Text>
+                        {
+                          balanceMensual2 > 0 ?
+                          (<Text style={{color:'green', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>):
+                          (<Text style={{color:'red', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>)
+                        }
+                        <Text
+                        style={{ fontSize:13, fontFamily:'Roboto-Regular', color:colores.color6, marginHorizontal:30, paddingVertical:7}}>
+                          {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
+                          </Text>
                       </View>
                     ):(
-                      gastoMensualNumerico > 0?(
+                      ingresoMensualNumerico > 0?
+                      (
                         <View style={{backgroundColor:colores.color5, alignItems:'center', paddingVertical:5, borderRadius:3, marginBottom:10}}>
                         <Text style={[styles.txtMontos, {marginTop:10}]}>
                         El balance total del mes actual es el siguiente:</Text>
-                        <Text style={{color:'red', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
+                        <Text style={{color:'green', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
                         <Text
-                          style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
+                          style={{ fontSize:13, fontFamily:'Roboto-Regular', color:colores.color6, marginHorizontal:30, paddingVertical:7}}>
                           {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
                         </Text>
                         </View>
                       ):(
-                        ingresoMensualNumerico >= 0 && gastoMensualNumerico >= 0?(
+                        gastoMensualNumerico > 0?(
                           <View style={{backgroundColor:colores.color5, alignItems:'center', paddingVertical:5, borderRadius:3, marginBottom:10}}>
-                            <Text style={[styles.txtMontos, {marginTop:10}]}>
-                            El balance total del mes actual es el siguiente:</Text>
-                            <Text style={{color:colores.color9, fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
-                            <Text
-                              style={{ fontSize:15, fontFamily:'Roboto-Regular', color:colores.color9, marginHorizontal:30}}>
-                              {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
-                            </Text>
+                          <Text style={[styles.txtMontos, {marginTop:10}]}>
+                          El balance total del mes actual es el siguiente:</Text>
+                          <Text style={{color:'red', fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
+                          <Text
+                            style={{ fontSize:13, fontFamily:'Roboto-Regular', color:colores.color6, marginHorizontal:30, paddingVertical:7}}>
+                            {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
+                          </Text>
                           </View>
                         ):(
-                          <>
-                          </>
+                          ingresoMensualNumerico >= 0 && gastoMensualNumerico >= 0?(
+                            <View style={{backgroundColor:colores.color5, alignItems:'center', paddingVertical:5, borderRadius:3, marginBottom:10}}>
+                              <Text style={[styles.txtMontos, {marginTop:10}]}>
+                              El balance total del mes actual es el siguiente:</Text>
+                              <Text style={{color:colores.color9, fontSize:25, fontFamily:'Roboto-Medium'}}>'${balanceMensual}'</Text>
+                              <Text
+                                style={{ fontSize:13, fontFamily:'Roboto-Regular', color:colores.color6, marginHorizontal:30, paddingVertical:7}}>
+                                {`Teniendo en cuenta que sus ingresos en este mes son de: $${ingresoMensual} y sus gastos $${gastoMensual}`}
+                              </Text>
+                            </View>
+                          ):(
+                            <>
+                            </>
+                          )
                         )
                       )
                     )
-                  )
-                }
-                
-
-                {
-                  ingresoDiarioNumerico > 0?
-                  (
-                    <>
-                    <Text style={[styles.txtMontos2,]}>
-                      El monto total de ingresos de hoy son de 
-                      <Text style={{color:'green'}}> ${ingresoDiario}</Text>
-                    </Text>
-                  {arrayIngresosNumeros.length > 0 ? (
-                  <Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayIngresosNumeros} v='i'/>
-                    ):(
-                    <></>
-                    )
                   }
-                    </>
-                  ):(
-                    
-                    <Text style={[styles.txtMontos2, {marginTop:20}]}>{`El dia de hoy no ha registrado ingresos`}</Text>
-                  )
-                }
-                <View style={{borderBottomColor:colors.color8, width:'100%', borderWidth:1, opacity:0.1, top:0}}></View>
-                {
-                  gastoDiarioNumerico > 0?
-                  (
-                    
-                    <>
-                    <Text style={[styles.txtMontos2, {marginTop:10}]}>
-                      {`El monto total de gastos hoy '${fechaFormateada}' son:`} 
-                      <Text style={{color:'red'}}> ${gastoDiario}</Text>
-                    </Text>
-                    {arrayGastosNumeros.length > 0 ? (
-                    <Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayGastosNumeros} v='g'/>
+                  {/*  */}
+                  {
+                    ingresoDiarioNumerico > 0?
+                    (
+                      <>
+                      <Text style={[styles.txtMontos2,]}>
+                        El monto total de ingresos de hoy son de 
+                        <Text style={{color:'green'}}> ${ingresoDiario}</Text>
+                      </Text>
+                    {arrayIngresosNumeros.length > 0 ? (
+                    <Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayIngresosNumeros} v='i'/>
                       ):(
                       <></>
                       )
                     }
-                    </>
+                      </>
                     ):(
-                    <Text style={[styles.txtMontos2, {marginTop:20}]}>{`El dia de hoy no ha registrado gastos`}</Text>
-                  )
-                }
+                      
+                      <Text style={[styles.txtMontos2, {marginTop:20}]}>{`El dia de hoy no ha registrado ingresos`}</Text>
+                    )
+                  }
+                  {/*  */}
+                  <View style={{borderBottomColor:colors.color8, width:'100%', borderWidth:1, opacity:0.1, top:0}}></View>
+                  {/*  */}
+                  {
+                    gastoDiarioNumerico > 0?
+                    (
+                      
+                      <>
+                      <Text style={[styles.txtMontos2, {marginTop:10}]}>
+                        {`El monto total de gastos hoy '${fechaFormateada}' son:`} 
+                        <Text style={{color:'red'}}> ${gastoDiario}</Text>
+                      </Text>
+                      {arrayGastosNumeros.length > 0 ? (
+                      <Graficos labels={['0-4H','4-8H','8-12H','12-16H','16-20H','20-24H']} datos={arrayGastosNumeros} v='g'/>
+                        ):(
+                        <></>
+                        )
+                      }
+                      </>
+                      ):(
+                      <Text style={[styles.txtMontos2, {marginTop:20}]}>{`El dia de hoy no ha registrado gastos`}</Text>
+                    )
+                  }
+                </>
+              ):
+              (
+                <View style={{alignItems:'center', justifyContent:'center'}}>
+                  <Botones 
+                    name='Registrar empresa'
+                    funcion={()=>{xx.navigate('Logout')}}/>
+                </View>
+              )
+            }
+
+            
                 
                 
 

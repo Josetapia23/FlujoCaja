@@ -399,13 +399,7 @@ const Historiales = () => {
                                 </View>
                                 )
                             ):(
-                                <Text style={{
-                                  textAlign:'center', 
-                                        color:colores.color3, 
-                                        fontFamily:'Roboto-Medium',
-                                        fontSize:15,
-                                        marginTop:100
-                                }}>No hay Movimientos de gastos registrados</Text>
+                                <Text style={[styles.txtSubtitulos, {marginTop:50}]}>No hay Movimientos de gastos registrados</Text>
                             )
                             }
                             </View>

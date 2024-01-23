@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colores.color6,
-    paddingTop: 20,
+    paddingTop: 10,
     alignItems: 'center',
 },
 imgLogo: {
@@ -218,7 +218,7 @@ txtInferior: {
     fontFamily: 'Roboto-Medium',
 },
 enlace: {
-    marginTop: 60,
+    marginTop: 20,
     marginHorizontal: 100,
     paddingBottom:30,
 },

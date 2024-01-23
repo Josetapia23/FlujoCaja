@@ -11,6 +11,7 @@ import axios from 'axios'
 import Tablas from '../componentes/Tablas'
 import { ScrollView } from 'react-native'
 import SplashScreens from './SplashScreens'
+import Botones from '../componentes/Botones'
 
 const ingresos= require('../../assets/iconos/ingresos.png');
 const perdida = require('../../assets/iconos/perdida.png');
@@ -74,7 +75,7 @@ const Despliegue = () => {
                                 </View>
                             </View>
                             <View>
-                            <ScrollView style={{marginVertical:10, height:270}}>
+                            <ScrollView style={{marginVertical:10, height:320}}>
                             {
                                 cargando == true ? (
                                     <SplashScreens/>
@@ -114,10 +115,14 @@ const Despliegue = () => {
                             </ScrollView>
                             </View>
                         </>
-                    ):(
-                    <>
-                    <Text>Esta vista es cuando no hay empresa</Text>
-                    </>)
+                    ):
+                    (
+                        <View style={{alignItems:'center', justifyContent:'center', paddingTop:40}}>
+                            <Botones 
+                                name='Registrar empresa'
+                                funcion={()=>{navegacion.navigate('Logout')}}/>
+                        </View>
+                      )
                 }
             </SafeAreaView>
   )

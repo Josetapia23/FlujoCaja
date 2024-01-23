@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import Imputs from '../componentes/Imputs';
 import { useForm } from 'react-hook-form';
 import Botones from '../componentes/Botones';
+import axios from 'axios';
+import SplashScreens from './SplashScreens';
 
 
 const EMAIL_REGEX = /^(([^<>()\[\]\.,;:\s@\”]+(\.[^<>()\[\]\.,;:\s@\”]+)*)|(\”.+\”))@(([^<>()[\]\.,;:\s@\”]+\.)+[^<>()[\]\.,;:\s@\”]{2,})$/;
@@ -16,7 +18,7 @@ const NIT_REGEX = /^[0-9]{1,10}-[0-9]{1}$/;
 const DIRECCION_REGEX = /^[0-9A-Za-z\s#áéíóúÁÉÍÓÚñÑ.,-/]+$/;
 
 const Company = () => {
-  const { isLoading, userInfo, registerEmpresa, companyInfo, logout, txtErrorNit} = useContext(AuthContext);
+  const {userInfo, companyInfo, obtenerEmpresa} = useContext(AuthContext);
   const datosEmpresa = companyInfo.datos;
   const [activeImput, setActiveImput] = useState(false);
   const [nombreEmpresa, setEmpresa] = useState(datosEmpresa.nombreEmprendimiento);
@@ -24,6 +26,55 @@ const Company = () => {
   const [direccion, setDireccion] = useState(datosEmpresa.direccion);
   const [telefonoEmpresarial, setTelefono] = useState(datosEmpresa.telefonoEmpresarial);
   const [emailEmpresarial, setEmail] = useState(datosEmpresa.emailEmpresarial);
+  const [cargando, setCargando] = useState(false);
+
+
+  const editCompany = () => { 
+    setCargando(true);
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          'https://www.plataforma50.com/pruebas/gestionP/EditEmpresa.php',
+          {
+            idEmpresa: datosEmpresa.id,
+            nombreEmpresa: nombreEmpresa,
+            direccion: direccion,
+            emailEmpresarial: emailEmpresarial,
+            telefonoEmpresarial : telefonoEmpresarial
+          },
+        )
+        .then(res => {
+          if (res.data.result === 'success') {
+            setActiveImput(false);
+            console.log('Datos de empresa Actualizados');
+            obtenerEmpresa()
+            setCargando(false);
+
+          } else if (res.data.result === 'error') {
+            // Error en el registro
+            setActiveImput(false);
+            console.log('Error en la actualizacion:', res.data.message);
+            reject('Error en el registro: ' + res.data.message);
+            setCargando(false);
+          } 
+          else {
+            // Otro caso no manejado
+            setActiveImput(false);
+            console.log('Respuesta inesperada del servidor:', res.data);
+            reject('Error inesperado del servidor');
+            setCargando(false);
+
+          }
+        })
+        .catch(error => {
+          console.error('Error al registrar usuario con axios:', error.message);
+          reject('Error al registrar usuario con axios: ' + error.message);
+            setCargando(false);
+
+        });
+    });
+  };
+
   
   
   const navegacion = useNavigation();
@@ -40,11 +91,33 @@ const Company = () => {
             </TouchableOpacity>
             <Text style={{fontFamily:'Roboto-Medium', fontSize:20, color:colores.color7, textAlign:'center', }}>{`Datos Empresariales`}</Text>
         </View>
-        <ScrollView style={{height:560}}>
+        {cargando ? (
+            <View style={{marginTop:150}}>
+              <SplashScreens />
+            </View>  
+          ) :
+          (
+            <>
+            <ScrollView style={{height:560}}>
           <View style={{marginVertical:20}}>
             <View 
               style={{paddingBottom:10}}
               >
+                <View 
+                  style={{paddingBottom:10}}                      
+                  >
+                  <Text style={styles.txt}>Nit:</Text>
+                  <Imputs
+                      imagen={require('../../assets/iconos/nit.png')}
+                      name="nit"
+                      placeholder=" # Nit"
+                      datos={nit}
+                      setDatos={setNit}
+                      control={control}
+                      margin={30}
+                      editable={false}
+                      />
+                </View>
               <Text style={styles.txt}>Nombre:<Text style={{color:'red'}}>*</Text></Text>
               <Imputs
                   imagen={require('../../assets/iconos/iconUsuario.png')}
@@ -60,27 +133,6 @@ const Company = () => {
                   }}
                   margin={30}
                   editable={activeImput}
-                  />
-            </View>
-            <View 
-              style={{paddingBottom:10}}                      
-              >
-              <Text style={styles.txt}>Nit:<Text style={{color:'red'}}>*</Text></Text>
-              <Imputs
-                  imagen={require('../../assets/iconos/nit.png')}
-                  name="nit"
-                  placeholder=" # Nit"
-                  datos={nit}
-                  setDatos={setNit}
-                  control={control}
-                  rules={{
-                  pattern:{value: NIT_REGEX,  message: "El formato de nit es 12..34-1, solo numeros ,un solo '-' y el numero que termina."},
-                  minLength: { value: 10, message: "Debe contener 10 caracteres minimo" },
-                  maxLength:{value: 12,  message: 'El nit no puede tener más de 12 caracteres' },
-                      required: 'Nit Requerido',
-                  }}
-                  margin={30}
-                  editable={false}
                   />
             </View>
             <View 
@@ -166,7 +218,7 @@ const Company = () => {
                             margin={130}/>
                           <Botones
                               name='Actualizar'
-                              funcion={handleSubmit()}
+                              funcion={handleSubmit(editCompany)}
                               margin={130}/>
                       </View>
                   ):(
@@ -179,6 +231,10 @@ const Company = () => {
                   )
               }
         </ScrollView>
+            </>
+          )
+        }
+        
 
     </SafeAreaView>
   )

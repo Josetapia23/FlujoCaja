@@ -11,7 +11,12 @@ StatusBar.setBackgroundColor(colors.color10); // Color de la barra de estado
 const App = () => {
 
   useEffect(()=>{
-    if(Platform.OS === 'android') SplashScreen.hide();
+    if(Platform.OS === 'android') {
+      setTimeout(() => {
+        SplashScreen.hide();
+      }, 3000);
+      
+    }
   },[])
 
   return (
