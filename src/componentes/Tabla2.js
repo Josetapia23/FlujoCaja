@@ -5,7 +5,7 @@ import AntDesign from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-const Tabla2 = ({datos, columnas, Total, onEliminar, onEditar}) => {
+const Tabla2 = ({datos, columnas, Total, onEliminar, onEditar, generarPDF, compartirPDF}) => {
 
     const funcion1 = (id) => {
         // const movimiento = {
@@ -139,6 +139,15 @@ const Tabla2 = ({datos, columnas, Total, onEliminar, onEditar}) => {
             }
             
         </View>
+        <View style={{flexDirection:'row', justifyContent:'space-evenly'}}>
+            <TouchableOpacity onPress={generarPDF}>
+                <Text>Descargar PDF</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={compartirPDF}>
+                <Text>Compartir PDF</Text>
+            </TouchableOpacity>
+        </View>
+
     </View>
   )
 }

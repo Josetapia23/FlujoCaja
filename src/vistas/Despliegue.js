@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native'
 import ImgPress from '../componentes/ImgPress'
@@ -12,6 +12,10 @@ import Tablas from '../componentes/Tablas'
 import { ScrollView } from 'react-native'
 import SplashScreens from './SplashScreens'
 import Botones from '../componentes/Botones'
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
+import { request, PERMISSIONS } from 'react-native-permissions';
 
 const ingresos= require('../../assets/iconos/ingresos.png');
 const perdida = require('../../assets/iconos/perdida.png');
@@ -53,6 +57,102 @@ const Despliegue = () => {
         }
       };
       
+     const generarContenidoTabla = () => {
+        const contenidoHTML = listaMovimientos.map(item => {
+            return `
+            <tr>
+                <td style="border: 1px solid #000; text-align: center;">${item.monto}</td>
+                <td style="border: 1px solid #000; text-align: center;">${item.nombreConcepto} ${item.nombreTipo ? `- ${item.nombreTipo}` : ''}</td>
+                <td style="border: 1px solid #000; text-align: center;">${item.fecha}</td>
+            </tr>
+            `;
+        });
+
+    return `
+        <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+        <thead>
+            <tr>
+            <th style="border: 1px solid #000; text-align: center;">Monto</th>
+            <th style="border: 1px solid #000; text-align: center;">Categoría</th>
+            <th style="border: 1px solid #000; text-align: center;">Fecha-Hora</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${contenidoHTML.join('')}
+        </tbody>
+        </table>
+    `;
+    };
+
+    const compartirPDF = async () => {
+        try {
+          const contenidoTabla = generarContenidoTabla();
+    
+          const results = await RNHTMLtoPDF.convert({
+            html: 
+            `<html>
+                <body>
+                    <h1>Mi Tabla</h1>
+                    <p style="color: #000;">Esta es una nueva tabla</p>
+                    ${contenidoTabla}
+                </body>
+            </html>`,
+            fileName: 'tabla_pdf',
+            directory: RNFS.DocumentDirectoryPath,
+          });
+    
+          console.log(results.filePath);
+    
+          const options = {
+            title: 'Compartir PDF',
+            message: 'Aquí está tu PDF',
+            url: `file://${results.filePath}`,
+            failOnCancel: false,
+            saveToFiles: true,  // Agrega esta opción para permitir la descarga directa
+            type: 'application/pdf',
+          };
+    
+          await Share.open(options);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+    const generarPDF = async () => {
+        try {
+          // Solicitar permiso WRITE_EXTERNAL_STORAGE
+          const writePermission = await request(PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE);
+      
+          if (writePermission === 'granted') {
+            const contenidoTabla = generarContenidoTabla();
+      
+            const results = await RNHTMLtoPDF.convert({
+              html: `<html><body><h1>Mi Tabla</h1>${contenidoTabla}</body></html>`,
+              fileName: 'tabla_pdf',
+              directory: RNFS.DocumentDirectoryPath,
+            });
+      
+            console.log(results.filePath);
+      
+            // Copiar el archivo a la carpeta Descargas
+            const destinationPath = `${RNFS.DownloadDirectoryPath}/ultimos10Movimientos.pdf`;
+            await RNFS.copyFile(results.filePath, destinationPath);
+      
+            // Mostrar un mensaje de éxito
+            Alert.alert('PDF Generado', 'El PDF se ha guardado en la carpeta Descargas.');
+      
+            // Abrir el visor de PDF
+            //setPdfPath(destinationPath);  // Utiliza un estado para la ruta del PDF
+          
+            // Mostrar la ruta del PDF en la consola
+            console.log('Ruta del PDF:', destinationPath);
+        } else {
+            Alert.alert('Permisos insuficientes', 'La aplicación no tiene permiso para escribir en el almacenamiento externo.');
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
     const navegacion = useNavigation()
   return (
@@ -93,6 +193,14 @@ const Despliegue = () => {
                                             <Tablas datos={listaMovimientos}
                                             categoria={'Categorias'}
                                             ambos={'1'} />
+                                            <View style={{flexDirection:'row', justifyContent:'space-evenly'}}>
+                                                <TouchableOpacity onPress={generarPDF}>
+                                                    <Text>Descargar PDF</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={compartirPDF}>
+                                                    <Text>Compartir PDF</Text>
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
                                         ):(
                                         <View style={{paddingBottom:30}}>
@@ -105,6 +213,14 @@ const Despliegue = () => {
                                             <Tablas datos={listaMovimientos}
                                             categoria={'Categorias'}
                                             ambos={'1'} />
+                                            <View style={{flexDirection:'row', justifyContent:'space-evenly'}}>
+                                                <TouchableOpacity onPress={generarPDF}>
+                                                    <Text>Descargar PDF</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={compartirPDF}>
+                                                    <Text>Compartir PDF</Text>
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
                                         )
                                     ):(
