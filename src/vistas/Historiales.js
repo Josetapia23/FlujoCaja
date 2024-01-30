@@ -21,6 +21,7 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import { request, PERMISSIONS } from 'react-native-permissions';
+import Botones2 from '../componentes/Botones2';
 
 
 
@@ -330,6 +331,98 @@ const generarContenidoPorFecha = () => {
   `;
 };
 
+const compartirPDF = async () => {
+  try {
+    if(selectedValue == 'mes'){
+      const contenidoTabla = generarContenidoTablaMes();
+      const results = await RNHTMLtoPDF.convert({
+        html: 
+        `<html>
+            <body>
+                <h1>Mi Tabla</h1>
+                <p style="color: #000;">Esta es una nueva tabla</p>
+                ${contenidoTabla}
+            </body>
+        </html>`,
+        fileName: 'ingresos_mes_actual',
+        directory: RNFS.DocumentDirectoryPath,
+      });
+  
+      //console.log(results.filePath);
+  
+      const options = {
+        title: 'Compartir PDF',
+        message: 'Aquí está tu PDF',
+        url: `file://${results.filePath}`,
+        failOnCancel: false,
+        saveToFiles: true,  // Agrega esta opción para permitir la descarga directa
+        type: 'application/pdf',
+      };
+  
+      await Share.open(options);
+    }
+    else if(selectedValue == 'fecha'){
+      const contenidoTabla = generarContenidoPorFecha();
+      const results = await RNHTMLtoPDF.convert({
+        html: 
+        `<html>
+            <body>
+                <h1>Mi Tabla</h1>
+                <p style="color: #000;">Esta es una nueva tabla</p>
+                ${contenidoTabla}
+            </body>
+        </html>`,
+        fileName: 'ingresos_por_fecha',
+        directory: RNFS.DocumentDirectoryPath,
+      });
+  
+      //console.log(results.filePath);
+  
+      const options = {
+        title: 'Compartir PDF',
+        message: 'Aquí está tu PDF',
+        url: `file://${results.filePath}`,
+        failOnCancel: false,
+        saveToFiles: true,  // Agrega esta opción para permitir la descarga directa
+        type: 'application/pdf',
+      };
+  
+      await Share.open(options);
+
+    }
+    else{
+      const contenidoTabla = generarContenidoTabla1();
+      const results = await RNHTMLtoPDF.convert({
+        html: 
+        `<html>
+            <body>
+                <h1>Mi Tabla</h1>
+                <p style="color: #000;">Esta es una nueva tabla</p>
+                ${contenidoTabla}
+            </body>
+        </html>`,
+        fileName: 'ultimos_10_ingresos',
+        directory: RNFS.DocumentDirectoryPath,
+      });
+  
+      //console.log(results.filePath);
+  
+      const options = {
+        title: 'Compartir PDF',
+        message: 'Aquí está tu PDF',
+        url: `file://${results.filePath}`,
+        failOnCancel: false,
+        saveToFiles: true,  // Agrega esta opción para permitir la descarga directa
+        type: 'application/pdf',
+      };
+  
+      await Share.open(options);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const generarPDF = async () => {
   try {
     // Solicitar permiso WRITE_EXTERNAL_STORAGE
@@ -398,6 +491,8 @@ const generarPDF = async () => {
   }
 };
 
+
+
     const navegacion = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -448,7 +543,7 @@ const generarPDF = async () => {
                                     datos={listaMovimientos2} //Tabla que muestra movimientos del mes actual
                                     columnas={3}
                                     Total={montoTotal}
-                                    generarPDF={generarPDF}/>
+                                    compartirPDF={compartirPDF}/>
                                     </View>
                                   ):(
                                     <Text style={{fontFamily:'Roboto-Medium', textAlign:'center', color:colores.color5}}>"Este mes aun no tiene movimientos registrados"</Text>                                  )
@@ -490,7 +585,7 @@ const generarPDF = async () => {
                                         datos={listaMovimientos3} //Tabla que muestra movimientos del mes actual
                                         columnas={4}
                                         Total={montoTotal2}
-                                        generarPDF={generarPDF}/>
+                                        compartirPDF={compartirPDF}/>
                                       </View>
                                       </>
                                     ):
@@ -555,7 +650,7 @@ const generarPDF = async () => {
                                     <Tablas datos={listaMovimientos}
                                     categoria={'Categorias'} />
                                     <TouchableOpacity style={{backgroundColor:colores.color5, marginHorizontal:90}}
-                                     onPress={generarPDF}>
+                                     onPress={compartirPDF}>
                                       <Text style={{color:colores.color6}}>Generar y Descargar PDF</Text>
                                   </TouchableOpacity>
                                 </View>
@@ -564,10 +659,10 @@ const generarPDF = async () => {
                                     <Text style={styles.txtSubtitulos}>Ultimos 10 movimientos de ingresos en general</Text>
                                     <Tablas datos={listaMovimientos}
                                     categoria={'Categorias'} />
-                                    <TouchableOpacity style={{backgroundColor:colores.color5, marginHorizontal:90}}
-                                     onPress={generarPDF}>
-                                      <Text style={{color:colores.color6}}>Generar y Descargar PDF</Text>
-                                  </TouchableOpacity>
+                                    <Botones2 name='Compartir'
+                                      funcion={compartirPDF} margin={130} padding={6}>
+                                      < Material name='share-variant' size={25} color={colores.color8}/>
+                                  </Botones2>
                                 </View>
                                 )
                             ):(

@@ -16,6 +16,7 @@ import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
 import { request, PERMISSIONS } from 'react-native-permissions';
+import Botones2 from '../componentes/Botones2'
 
 const ingresos= require('../../assets/iconos/ingresos.png');
 const perdida = require('../../assets/iconos/perdida.png');
@@ -213,14 +214,20 @@ const Despliegue = () => {
                                             <Tablas datos={listaMovimientos}
                                             categoria={'Categorias'}
                                             ambos={'1'} />
-                                            <View style={{flexDirection:'row', justifyContent:'space-evenly'}}>
+                                            <Botones2 name='Compartir'
+                                                funcion={compartirPDF} margin={130} padding={6}>
+                                                < Material name='share-variant' size={25} color={colores.color8}/>
+                                            </Botones2>
+                                            {/* <View style={{flexDirection:'row', justifyContent:'space-evenly'}}>
+                                                <TouchableOpacity 
+                                                style={{alignItems:'center', backgroundColor:colors.color11, marginHorizontal:100}}
+                                                onPress={compartirPDF}>
+                                                    <Material name='cog-transfer-outline' size={25} color={colores.color6} />
+                                                </TouchableOpacity>
                                                 <TouchableOpacity onPress={generarPDF}>
                                                     <Text>Descargar PDF</Text>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity onPress={compartirPDF}>
-                                                    <Text>Compartir PDF</Text>
-                                                </TouchableOpacity>
-                                            </View>
+                                                </TouchableOpacity> */}
+                                            {/* </View> */}
                                         </View>
                                         )
                                     ):(

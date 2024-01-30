@@ -17,6 +17,12 @@ import DatePicker from 'react-native-modern-datepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Botones from '../componentes/Botones';
 
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
+import { request, PERMISSIONS } from 'react-native-permissions';
+import Botones2 from '../componentes/Botones2';
+
 
 
 
@@ -234,6 +240,190 @@ const Historiales = () => {
       setDate2(fecha)
   }
 
+
+
+
+  const generarContenidoTabla1 = () => {
+    const contenidoHTML = listaMovimientos.map(item => {
+        return `
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;">${item.monto}</td>
+            <td style="border: 1px solid #000; text-align: center;">${item.nombreConcepto} ${item.nombreTipo ? `- ${item.nombreTipo}` : ''}</td>
+            <td style="border: 1px solid #000; text-align: center;">${item.fecha}</td>
+        </tr>
+        `;
+    });
+
+return `
+    <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+    <thead>
+        <tr>
+        <th style="border: 1px solid #000; text-align: center;">Monto</th>
+        <th style="border: 1px solid #000; text-align: center;">Categoría</th>
+        <th style="border: 1px solid #000; text-align: center;">Fecha-Hora</th>
+        </tr>
+    </thead>
+    <tbody>
+        ${contenidoHTML.join('')}
+    </tbody>
+    </table>
+`;
+};
+
+const generarContenidoTablaMes = () => {
+  const contenidoHTML = listaMovimientos2.map(item => {
+    return `
+      <tr>
+        <td style="border: 1px solid #000; text-align: center;">${item.descripcion}</td>
+        <td style="border: 1px solid #000; text-align: center;">${item.nombreConcepto} ${
+          item.nombreTipo ? `- ${item.nombreTipo}` : ''
+        }</td>
+        <td style="border: 1px solid #000; text-align: center;">${item.monto}</td>
+      </tr>
+    `;
+  });
+
+  return `
+    <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+      <thead>
+        <tr>
+          <th style="border: 1px solid #000; text-align: center;">Descripcion</th>
+          <th style="border: 1px solid #000; text-align: center;">Categoría</th>
+          <th style="border: 1px solid #000; text-align: center;">Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${contenidoHTML.join('')}
+      </tbody>
+    </table>
+    <p>Total: ${montoTotal}</p>
+  `;
+};
+
+const generarContenidoPorFecha = () => {
+  const contenidoHTML = listaMovimientos3.map(item => {
+    return `
+      <tr>
+        <td style="border: 1px solid #000; text-align: center;">${item.fecha}</td>
+        <td style="border: 1px solid #000; text-align: center;">${item.descripcion}</td>
+        <td style="border: 1px solid #000; text-align: center;">${item.nombreConcepto} ${
+          item.nombreTipo ? `- ${item.nombreTipo}` : ''
+        }</td>
+        <td style="border: 1px solid #000; text-align: center;">${item.monto}</td>
+      </tr>
+    `;
+  });
+
+  return `
+    <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+      <thead>
+        <tr>
+          <th style="border: 1px solid #000; text-align: center;">Fecha</th>
+          <th style="border: 1px solid #000; text-align: center;">Descripcion</th>
+          <th style="border: 1px solid #000; text-align: center;">Categoría</th>
+          <th style="border: 1px solid #000; text-align: center;">Monto</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${contenidoHTML.join('')}
+      </tbody>
+    </table>
+    <p>Total: ${montoTotal2}</p>
+  `;
+};
+
+const compartirPDF = async () => {
+  try {
+    if(selectedValue == 'mes'){
+      const contenidoTabla = generarContenidoTablaMes();
+      const results = await RNHTMLtoPDF.convert({
+        html: 
+        `<html>
+            <body>
+                <h1>Mi Tabla</h1>
+                <p style="color: #000;">Esta es una nueva tabla</p>
+                ${contenidoTabla}
+            </body>
+        </html>`,
+        fileName: 'gastos_mes_actual',
+        directory: RNFS.DocumentDirectoryPath,
+      });
+  
+      //console.log(results.filePath);
+  
+      const options = {
+        title: 'Compartir PDF',
+        message: 'Aquí está tu PDF',
+        url: `file://${results.filePath}`,
+        failOnCancel: false,
+        saveToFiles: true,  // Agrega esta opción para permitir la descarga directa
+        type: 'application/pdf',
+      };
+  
+      await Share.open(options);
+    }
+    else if(selectedValue == 'fecha'){
+      const contenidoTabla = generarContenidoPorFecha();
+      const results = await RNHTMLtoPDF.convert({
+        html: 
+        `<html>
+            <body>
+                <h1>Mi Tabla</h1>
+                <p style="color: #000;">Esta es una nueva tabla</p>
+                ${contenidoTabla}
+            </body>
+        </html>`,
+        fileName: 'gastos_por_fecha',
+        directory: RNFS.DocumentDirectoryPath,
+      });
+  
+      //console.log(results.filePath);
+  
+      const options = {
+        title: 'Compartir PDF',
+        message: 'Aquí está tu PDF',
+        url: `file://${results.filePath}`,
+        failOnCancel: false,
+        saveToFiles: true,  // Agrega esta opción para permitir la descarga directa
+        type: 'application/pdf',
+      };
+  
+      await Share.open(options);
+
+    }
+    else{
+      const contenidoTabla = generarContenidoTabla1();
+      const results = await RNHTMLtoPDF.convert({
+        html: 
+        `<html>
+            <body>
+                <h1>Mi Tabla</h1>
+                <p style="color: #000;">Esta es una nueva tabla</p>
+                ${contenidoTabla}
+            </body>
+        </html>`,
+        fileName: 'ultimos_10_gastos',
+        directory: RNFS.DocumentDirectoryPath,
+      });
+  
+      //console.log(results.filePath);
+  
+      const options = {
+        title: 'Compartir PDF',
+        message: 'Aquí está tu PDF',
+        url: `file://${results.filePath}`,
+        failOnCancel: false,
+        saveToFiles: true,  // Agrega esta opción para permitir la descarga directa
+        type: 'application/pdf',
+      };
+  
+      await Share.open(options);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
     const navegacion = useNavigation();
   return (
     <SafeAreaView style={styles.container}>
@@ -281,10 +471,10 @@ const Historiales = () => {
                                     <View style={styles.containerTable}>
                                       <Text style={styles.txtSubtitulos}>{`Estos son los movimientos del mers actual`}</Text>
                                       <Tabla2 
-                                      datos={listaMovimientos2} //Tabla que muestra movimientos del mes actual
-                                      columnas={3}
-                                      Total={montoTotal}
-                                      />
+                                    datos={listaMovimientos2} //Tabla que muestra movimientos del mes actual
+                                    columnas={3}
+                                    Total={montoTotal}
+                                    compartirPDF={compartirPDF}/>
                                     </View>
                                   ):(
                                     <Text style={{fontFamily:'Roboto-Medium', textAlign:'center'}}>"Este mes aun no tiene movimientos de gatos registrados"</Text>                                  )
@@ -323,10 +513,10 @@ const Historiales = () => {
                                     <View style={styles.containerTable}>
                                         <Text style={styles.txtSubtitulos}>{`Entre ${date} y ${date2} estos son los movimientos de gastos`}</Text>
                                         <Tabla2 
-                                          datos={listaMovimientos3} //Tabla que muestra movimientos del mes actual
-                                          columnas={4}
-                                          Total={montoTotal2}
-                                        />
+                                        datos={listaMovimientos3} //Tabla que muestra movimientos del mes actual
+                                        columnas={4}
+                                        Total={montoTotal2}
+                                        compartirPDF={compartirPDF}/>
                                     </View>
                                       </>
                                     ):
@@ -390,12 +580,20 @@ const Historiales = () => {
                                     <Text style={styles.txtSubtitulos}>{`Ultimos ${listaMovimientos.length} movimientos`}</Text>
                                     <Tablas datos={listaMovimientos}
                                     categoria={'Categorias'} />
+                                    <TouchableOpacity style={{backgroundColor:colores.color5, marginHorizontal:90}}
+                                     onPress={compartirPDF}>
+                                      <Text style={{color:colores.color6}}>Generar y Descargar PDF</Text>
+                                  </TouchableOpacity>
                                 </View>
                                 ):(
                                 <View style={{paddingTop:5}}>
                                     <Text style={styles.txtSubtitulos}>Ultimos 10 movimientos de gastos en general</Text>
                                     <Tablas datos={listaMovimientos}
                                     categoria={'Categorias'} />
+                                    <TouchableOpacity style={{backgroundColor:colores.color5, marginHorizontal:90}}
+                                     onPress={compartirPDF}>
+                                      <Text style={{color:colores.color6}}>Generar y Descargar PDF</Text>
+                                  </TouchableOpacity>
                                 </View>
                                 )
                             ):(

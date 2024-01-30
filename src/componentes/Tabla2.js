@@ -40,6 +40,17 @@ const Tabla2 = ({datos, columnas, Total, onEliminar, onEditar, generarPDF, compa
 
   return (
     <View>
+        <View style={{alignItems:'flex-end', marginHorizontal:20}}>
+            <TouchableOpacity
+                style={{backgroundColor:colors.color11,
+                alignItems:'center', 
+                paddingVertical:7,
+                borderRadius:50,
+                padding:5}} 
+                onPress={compartirPDF}>
+                < AntDesign name='share-variant' size={20} color={colores.color8}/>
+            </TouchableOpacity>
+        </View>
       <View style={styles.container}>
             <Text style={styles.header}>Historial</Text>
             {
@@ -139,14 +150,6 @@ const Tabla2 = ({datos, columnas, Total, onEliminar, onEditar, generarPDF, compa
             }
             
         </View>
-        <View style={{flexDirection:'row', justifyContent:'space-evenly'}}>
-            <TouchableOpacity onPress={generarPDF}>
-                <Text>Descargar PDF</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={compartirPDF}>
-                <Text>Compartir PDF</Text>
-            </TouchableOpacity>
-        </View>
 
     </View>
   )
@@ -156,7 +159,7 @@ export default Tabla2
 
 const styles = StyleSheet.create({
     container:{
-        marginVertical:20,
+        marginVertical:10,
         backgroundColor:colores.color8,
         marginHorizontal:10,
         borderRadius:5,
