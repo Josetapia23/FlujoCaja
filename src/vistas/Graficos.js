@@ -316,7 +316,7 @@ modal: {
     width: '90%',
     paddingVertical: 30,
     paddingHorizontal:25,
-    shadowColor: colores.color3,
+    shadowColor: colores.color5,
     shadowOffset: {
         width: 0,
         height: 2

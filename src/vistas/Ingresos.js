@@ -925,7 +925,7 @@ atras:{
     width: '90%',
     paddingVertical: 30,
     paddingHorizontal:15,
-    shadowColor: colores.color3,
+    shadowColor: colores.color5,
     shadowOffset: {
         width: 0,
         height: 2

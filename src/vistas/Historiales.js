@@ -514,7 +514,7 @@ const generarPDF = async () => {
                             <View style={styles.filaFiltro}>
                                 <Text style={{width:'50%', paddingLeft:30, color:colores.color9}}>Seleccionar filtro:</Text>
                                 <Picker
-                                style={{width:'50%'}}
+                                style={{width:'50%', backgroundColor:colores.color5, borderRadius:30, color:colores.color8}}
                                   selectedValue={selectedValue}
                                   onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
                                 >
@@ -649,10 +649,10 @@ const generarPDF = async () => {
                                     <Text style={styles.txtSubtitulos}>{`Ultimos ${listaMovimientos.length} movimientos`}</Text>
                                     <Tablas datos={listaMovimientos}
                                     categoria={'Categorias'} />
-                                    <TouchableOpacity style={{backgroundColor:colores.color5, marginHorizontal:90}}
-                                     onPress={compartirPDF}>
-                                      <Text style={{color:colores.color6}}>Generar y Descargar PDF</Text>
-                                  </TouchableOpacity>
+                                    <Botones2 name='Compartir'
+                                        funcion={compartirPDF} margin={130} padding={6}>
+                                        < Material name='share-variant' size={25} color={colores.color8}/>
+                                    </Botones2>
                                 </View>
                                 ):(
                                 <View style={{paddingTop:5}}>
@@ -668,7 +668,7 @@ const generarPDF = async () => {
                             ):(
                                 <Text style={{
                                   textAlign:'center', 
-                                        color:colores.color3, 
+                                        color:colores.color5, 
                                         fontFamily:'Roboto-Medium',
                                         fontSize:15,
                                         marginTop:100
