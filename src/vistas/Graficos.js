@@ -1,5 +1,5 @@
 import { Alert, Modal, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { colores, colors } from '../componentes/Colors'
 import Tablas from '../componentes/Tablas';
 import Imput2 from '../componentes/Imput2';
@@ -9,6 +9,7 @@ import SplashScreens from './SplashScreens';
 import { ScrollView } from 'react-native';
 import Imputs from '../componentes/Imputs';
 import { useFocusEffect } from '@react-navigation/native';
+import { AuthContext } from '../context/AuthContext';
 
 
 const numeros_regex = /^[0-9]{1,1000}$/;
@@ -22,6 +23,8 @@ const Graficos = () => {
     getValues, // Añade esto
     formState: { errors },
 } = useForm();
+
+const {userInfo} = useContext(AuthContext);
 const [cantidad1, setCantidad1] = useState(0);
 const [cantidad, setCantidad] = useState(0);
 const [uXmes, setUXMes] = useState(0);
@@ -38,6 +41,8 @@ const [gfm, setGfm] = useState("");
 const [mtms, setMtms] = useState("");
 const [pvp, setPvp] = useState("");
 const [ppxp, setPpxp] = useState("");
+const [observacion, setObservacion] = useState('');
+const idUser = userInfo.id;
 
 const Calcular = () => {
   setCargando(true);
@@ -80,13 +85,13 @@ const resetInputs = () => {
   setMonto4('');
 };
 
-useFocusEffect(
-  React.useCallback(() => {
-    resetInputs();
-    setCantidad1(0);
-    setCantidad(0);
-  }, [])
-);
+// useFocusEffect(
+//   React.useCallback(() => {
+//     resetInputs();
+//     setCantidad1(0);
+//     setCantidad(0);
+//   }, [])
+// );
 
   useEffect(() => {
   // Verificar si setCantidad1 es un número antes de redondear
@@ -118,6 +123,10 @@ const onConfirm = () => {
   setMonto22(montoTwo);
   setMonto33(montoThree);
   setMonto44(montoFour);
+  setObservacion(`En el mes debes vender
+   un total de ${cantidad} unidades 
+   es decir alrededor de ${uXmes} por dia para obtener
+   la meta de $${monto22.toLocaleString()} y cubir los gastos fijos del mes`);
   //   
   
 
@@ -136,13 +145,56 @@ const onConfirm = () => {
         text: 'Ingresar',
         onPress: () => {
           Calcular();
-          resetInputs();
+          //resetInputs();
         },
         style: 'destructive',
       },
     ],
     { cancelable: false }
   );
+
+
+  const addMontos = () => {
+    setCargando(true);
+    return new Promise((resolve, reject) => {
+      axios
+        .post(
+          'http://10.1.80.103/flujoCaja/addRentabilidad.php',
+          {
+            gastoMensual: monto1, //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
+            gananciaMensual: monto2,
+            ventaPorUnidad: monto3,
+            costoPorUnidad:monto4,
+            observacion: observacion,
+            idUser: idUser,
+          },
+        )
+        .then(res => {
+          if (res.data.result === 'success2') {
+            setVisible2(false);
+            setErrorNombre('');
+            console.log('Monto registrado exitosamente');
+            reset({ monto: '' }); // Esto reseteará el campo 'nombre' del formulario
+            resolve('Registro exitoso');
+            setCargando(false);
+          }else {
+            // Otro caso no manejado
+            setErrorNombre('');
+            console.log('Respuesta inesperada del servidor:', res.data);
+            reject('Error inesperado del servidor');
+            setCargando(false);
+
+          }
+        })
+        .catch(error => {
+          console.error('Error al registrar usuario con axios:', error.message);
+          reject('Error al registrar usuario con axios: ' + error.message);
+            setCargando(false);
+
+        });
+    });
+  };
+
 };
   
   return (

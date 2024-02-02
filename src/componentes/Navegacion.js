@@ -26,6 +26,8 @@ import GestionIng from '../vistas/GestionIng';
 import GestionGast from '../vistas/GestionGast';
 import SplashScreen2 from '../vistas/SplashScreen2';
 import SplashScreen3 from '../vistas/SplashScreen3';
+import Privacidad from '../vistas/Privacidad';
+import TermYCondiciones from '../vistas/TermYCondiciones';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,6 +70,8 @@ useEffect(()=>(
                             <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false,}}/>
                             <Stack.Screen name="GesIng" component={GestionIng} options={{ headerShown: false,}}/>
                             <Stack.Screen name="GesGast" component={GestionGast} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Privacidad" component={Privacidad} options={{ headerShown: false,}}/>
+                            <Stack.Screen name="Tyc" component={TermYCondiciones} options={{ headerShown: false,}}/>
                           </> 
                       )
         }

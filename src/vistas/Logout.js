@@ -176,13 +176,13 @@ const navegacion = useNavigation();
                     < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>{navegacion.navigate('Privacidad')}}>
                 <View style={styles.containerOptions}> 
                     <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Privacidad</Text>
                     < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>{navegacion.navigate('Tyc')}}>
                 <View style={styles.containerOptions}> 
                     <Text style={{color:colores.color5, paddingVertical:5, fontSize:15, fontWeight:'700', marginLeft:10}}>Terminos y condiciones</Text>
                     < AntDesign name='chevron-right-circle-outline' size={20} color={colores.color5} style={{marginRight:5}}/>
@@ -190,7 +190,7 @@ const navegacion = useNavigation();
               </TouchableOpacity>
               <View style={{marginTop:'20%', paddingBottom:40}}>
                 <Botones2 name='Cerrar Sersion'
-                    funcion={salir} margin={'25%'} padding={6}>
+                    funcion={salir} margin={'27%'} padding={6}>
                   < AntDesign name='exit-to-app' size={30} color={colores.color8}/>
                 </Botones2>
               </View>
