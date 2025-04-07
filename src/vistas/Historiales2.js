@@ -25,6 +25,9 @@ import Botones2 from '../componentes/Botones2';
 
 
 
+let fechaHoy = new Date();
+let opciones = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+let fechaFormateada = fechaHoy.toLocaleString('en-US', opciones);
 
 const Historiales = () => {
     const [open, setOpen] = useState(false);
@@ -85,7 +88,7 @@ const Historiales = () => {
       return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/lis_mov_ingresos.php',
+          'https://proyectoswork.com/manejocaja/lis_mov_ingresos.php',
           {
             idUser: idUser,
             idTipo: tipo,
@@ -132,7 +135,7 @@ const Historiales = () => {
     return new Promise((resolve, reject) => {
     axios
       .post(
-        'https://www.plataforma50.com/pruebas/gestionP/lis_mov_ingresos3.php',
+        'https://proyectoswork.com/manejocaja/lis_mov_ingresos3.php',
         {
           idUser: idUser,
           idTipo: tipo,
@@ -190,7 +193,7 @@ const Historiales = () => {
   return new Promise((resolve, reject) => {
   axios
     .post(
-      'https://www.plataforma50.com/pruebas/gestionP/lis_mov_ingresos3.php',
+      'https://proyectoswork.com/manejocaja/lis_mov_ingresos3.php',
       {
         idUser: idUser,
         idTipo: tipo,
@@ -340,8 +343,31 @@ const compartirPDF = async () => {
         html: 
         `<html>
             <body>
-                <h1>Mi Tabla</h1>
-                <p style="color: #000;">Esta es una nueva tabla</p>
+              <div style="text-align: start;">
+                <h3>Historial De Gastos</h3>
+                <p>Fecha: ${fechaFormateada}</p>
+                <p>Empresa: ${datosEmpresa.nombreEmprendimiento}</p>
+                <p>NIT: ${datosEmpresa.nit}</p>
+                <p>Direccion: ${datosEmpresa.direccion}</p>
+                <p>Nombre: ${userInfo.nombre}</p>
+              </div>
+                <br>
+                <p Este resumen detallado de gastos proporciona una visión completa de tus gastos de negocio. 
+                Cada entrada en la tabla representa un gasto individual, mostrando la fecha en que se realizó, 
+                una descripción del gasto, la categoría a la que pertenece (como viajes, suministros de oficina, publicidad, etc.), 
+                y el monto total gastado.
+                <br>
+                <br>
+                Este registro preciso de gastos te ayudará a entender mejor los costos operativos de 
+                tu negocio, permitiéndote planificar de manera más efectiva para el futuro. Además, 
+                mantener un registro detallado de estos gastos puede ser beneficioso para maximizar 
+                las deducciones fiscales.
+                <br>
+                <br>
+                Recuerda, un buen seguimiento de los gastos es esencial para el éxito de 
+                cualquier emprendedor. Mantén este registro actualizado y utilízalo para tomar 
+                decisiones informadas sobre tu negocio.</p>
+                <br>
                 ${contenidoTabla}
             </body>
         </html>`,
@@ -368,8 +394,31 @@ const compartirPDF = async () => {
         html: 
         `<html>
             <body>
-                <h1>Mi Tabla</h1>
-                <p style="color: #000;">Esta es una nueva tabla</p>
+              <div style="text-align: start;">
+              <h3>Historial De Gastos</h3>
+              <p>Fecha: ${fechaFormateada}</p>
+              <p>Empresa: ${datosEmpresa.nombreEmprendimiento}</p>
+              <p>NIT: ${datosEmpresa.nit}</p>
+              <p>Direccion: ${datosEmpresa.direccion}</p>
+              <p>Nombre: ${userInfo.nombre}</p>
+            </div>
+              <br>
+              <p Este resumen detallado de gastos proporciona una visión completa de tus gastos de negocio. 
+              Cada entrada en la tabla representa un gasto individual, mostrando la fecha en que se realizó, 
+              una descripción del gasto, la categoría a la que pertenece (como viajes, suministros de oficina, publicidad, etc.), 
+              y el monto total gastado.
+              <br>
+              <br>
+              Este registro preciso de gastos te ayudará a entender mejor los costos operativos de 
+              tu negocio, permitiéndote planificar de manera más efectiva para el futuro. Además, 
+              mantener un registro detallado de estos gastos puede ser beneficioso para maximizar 
+              las deducciones fiscales.
+              <br>
+              <br>
+              Recuerda, un buen seguimiento de los gastos es esencial para el éxito de 
+              cualquier emprendedor. Mantén este registro actualizado y utilízalo para tomar 
+              decisiones informadas sobre tu negocio.</p>
+              <br>
                 ${contenidoTabla}
             </body>
         </html>`,
@@ -391,14 +440,38 @@ const compartirPDF = async () => {
       await Share.open(options);
 
     }
+    
     else{
       const contenidoTabla = generarContenidoTabla1();
       const results = await RNHTMLtoPDF.convert({
         html: 
         `<html>
             <body>
-                <h1>Mi Tabla</h1>
-                <p style="color: #000;">Esta es una nueva tabla</p>
+              <div style="text-align: start;">
+                <h3>Historial De Gastos</h3>
+                <p>Fecha: ${fechaFormateada}</p>
+                <p>Empresa: ${datosEmpresa.nombreEmprendimiento}</p>
+                <p>NIT: ${datosEmpresa.nit}</p>
+                <p>Direccion: ${datosEmpresa.direccion}</p>
+                <p>Nombre: ${userInfo.nombre}</p>
+              </div>
+                <br>
+                <p Este resumen detallado de gastos proporciona una visión completa de tus gastos de negocio. 
+                Cada entrada en la tabla representa un gasto individual, mostrando la fecha en que se realizó, 
+                una descripción del gasto, la categoría a la que pertenece (como viajes, suministros de oficina, publicidad, etc.), 
+                y el monto total gastado.
+                <br>
+                <br>
+                Este registro preciso de gastos te ayudará a entender mejor los costos operativos de 
+                tu negocio, permitiéndote planificar de manera más efectiva para el futuro. Además, 
+                mantener un registro detallado de estos gastos puede ser beneficioso para maximizar 
+                las deducciones fiscales.
+                <br>
+                <br>
+                Recuerda, un buen seguimiento de los gastos es esencial para el éxito de 
+                cualquier emprendedor. Mantén este registro actualizado y utilízalo para tomar 
+                decisiones informadas sobre tu negocio.</p>
+                <br>
                 ${contenidoTabla}
             </body>
         </html>`,

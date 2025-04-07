@@ -60,7 +60,7 @@ const Login = () => {
             <View >
                   <View style={{flex:30, alignItems:'center'}}>
                    <Image
-                        source={require('../../assets/Logo2_2.png')}
+                        source={require('../../assets/  d  d.png')}
                         style={styles.imgLogo}
                     />  
                   </View>

@@ -9,6 +9,11 @@ import { useNavigation } from '@react-navigation/native';
 import Botones from '../componentes/Botones';
 import axios from 'axios';
 import SplashScreens from './SplashScreens';
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import Botones2 from '../componentes/Botones2'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+
 
 const EMAIL_REGEX = /^(([^<>()\[\]\.,;:\s@\”]+(\.[^<>()\[\]\.,;:\s@\”]+)*)|(\”.+\”))@(([^<>()[\]\.,;:\s@\”]+\.)+[^<>()[\]\.,;:\s@\”]{2,})$/;
 const NOMBRES_REGEX = /^[A-Za-zÁáÉéÍíÓóÚúÑñ\s']{1,40}$/; //letras y espacios;
@@ -28,7 +33,7 @@ const Perfil = () => {
         return new Promise((resolve, reject) => {
           axios
             .post(
-              'https://www.plataforma50.com/pruebas/gestionP/EditUser.php',
+              'https://proyectoswork.com/manejocaja/EditUser.php',
               {
                 idUser: userInfo.id,
                 nombreUser: userName,
@@ -169,22 +174,25 @@ const Perfil = () => {
                             !activeImput ? 
                             (
                                 <View>
-                                    <Botones
+                                    <Botones2 
                                         name='Editar'
-                                        funcion={()=>{setActiveImput(true)}}
-                                        margin={130}/>
+                                        funcion={()=>{setActiveImput(true)}} margin={130}>
+                                        <Material name='account-edit' margin={12} size={25} color={colores.color8}/>
+                                    </Botones2>
                                 </View>
                                 
                             ):(
                                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
-                                    <Botones
+                                    <Botones2 
                                         name='Cancelar'
-                                        funcion={()=>{setActiveImput(false)}}
-                                        margin={130}/>
-                                    <Botones
+                                        funcion={()=>{setActiveImput(false)}} margin={150}>
+                                        <Material name='cancel' margin={12} size={25} color={colores.color8}/>
+                                    </Botones2>
+                                    <Botones2 
                                         name='Actualizar'
-                                        funcion={handleSubmit(editUser)}
-                                        margin={130}/>
+                                        funcion={handleSubmit(editUser)} margin={150}>
+                                        <Material name='update' margin={12} size={25} color={colores.color8}/>
+                                    </Botones2>
                                 </View>
                             )
                         }

@@ -62,7 +62,7 @@ const GestionIng = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/getNombresIngresos.php',
+          'https://proyectoswork.com/manejocaja/getNombresIngresos.php',
           {
             id: idUser,
             tipo: tipo
@@ -103,7 +103,7 @@ const GestionIng = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/editConcepto.php',
+          'https://proyectoswork.com/manejocaja/editConcepto.php',
           {
             newName: nombreCateg,
             idCategory: idConcepto,
@@ -153,7 +153,7 @@ const GestionIng = () => {
   //   return new Promise((resolve, reject) => {
   //     axios
   //       .post(
-  //         'https://www.plataforma50.com/pruebas/gestionP/addMovimiento.php',
+  //         'https://proyectoswork.com/manejocaja/addMovimiento.php',
   //         {
   //           monto: getValues('monto'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
   //           descripcion: getValues('descripcion'),
@@ -203,7 +203,7 @@ const GestionIng = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/deleteConcepto.php',
+          'https://proyectoswork.com/manejocaja/deleteConcepto.php',
           {
             id
           },
@@ -242,7 +242,7 @@ const GestionIng = () => {
 //   return new Promise((resolve, reject) => {
 //   axios
 //     .post(
-//       'https://www.plataforma50.com/pruebas/gestionP/lis_mov_ingresos3.php',
+//       'https://proyectoswork.com/manejocaja/lis_mov_ingresos3.php',
 //       {
 //         idUser: idUser,
 //         idTipo: tipo,
@@ -432,7 +432,7 @@ const activarModal2 = (id, nombre) => {
 //     return new Promise((resolve, reject) => {
 //       axios
 //         .post(
-//           'https://www.plataforma50.com/pruebas/gestionP/deleteMovimiento.php',
+//           'https://proyectoswork.com/manejocaja/deleteMovimiento.php',
 //           {
 //             id
 //           },

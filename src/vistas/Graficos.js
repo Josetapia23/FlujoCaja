@@ -10,10 +10,12 @@ import { ScrollView } from 'react-native';
 import Imputs from '../componentes/Imputs';
 import { useFocusEffect } from '@react-navigation/native';
 import { AuthContext } from '../context/AuthContext';
-
+import Material from 'react-native-vector-icons/MaterialCommunityIcons';
+import Botones2 from '../componentes/Botones2';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import axios from 'axios';
 
 const numeros_regex = /^[0-9]{1,1000}$/;
-
 
 const Graficos = () => {
   const {
@@ -42,6 +44,8 @@ const [mtms, setMtms] = useState("");
 const [pvp, setPvp] = useState("");
 const [ppxp, setPpxp] = useState("");
 const [observacion, setObservacion] = useState('');
+const [visible2, setVisible2] = useState(false); // lineas añadidas por JA
+const [errorNombre, setErrorNombre] = useState('');// lineas añadidas por JA
 const idUser = userInfo.id;
 
 const Calcular = () => {
@@ -154,12 +158,14 @@ const onConfirm = () => {
   );
 
 
+
+  
   const addMontos = () => {
     setCargando(true);
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://10.1.80.103/flujoCaja/addRentabilidad.php',
+          'http://10.1.81.17/flujoCaja/addRentabilidad.php',
           {
             gastoMensual: monto1, //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
             gananciaMensual: monto2,
@@ -321,10 +327,11 @@ const onConfirm = () => {
 
                         </>)
                       }
-                <Botones 
-                name='Consultar'
-                funcion={handleSubmit(onConfirm)}
-                margin={100}/>
+                <Botones2 
+                  name='Consultar'
+                  funcion={handleSubmit(onConfirm)} margin={100}>
+                  <MaterialIcons name='search' margin={12} size={25} color={colores.color8}/>
+                </Botones2>
         </View>
         </>
         

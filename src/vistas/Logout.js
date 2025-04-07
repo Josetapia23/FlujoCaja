@@ -85,7 +85,7 @@ const Logout = () => {
 
   const cargarDepartamentos = () => {
     axios
-      .post('https://www.plataforma50.com/pruebas/gestionP/deparMunicipios.php', {
+      .post('https://proyectoswork.com/manejocaja/deparMunicipios.php', {
         idDepar: idDepartamento,
       })
       .then((res) => {

@@ -34,7 +34,7 @@ const Company = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/EditEmpresa.php',
+          'https://proyectoswork.com/manejocaja/EditEmpresa.php',
           {
             idEmpresa: datosEmpresa.id,
             nombreEmpresa: nombreEmpresa,

@@ -84,7 +84,7 @@ const Ingresos = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/getNombresIngresos.php',
+          'https://proyectoswork.com/manejocaja/getNombresIngresos.php',
           {
             id: idUser,
             tipo: tipo
@@ -125,7 +125,7 @@ const Ingresos = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/addCategoria.php',
+          'https://proyectoswork.com/manejocaja/addCategoria.php',
           {
             nombreIngreso: getValues('nombre'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
             idTipo: 1,
@@ -180,7 +180,7 @@ const Ingresos = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/addMovimiento.php',
+          'https://proyectoswork.com/manejocaja/addMovimiento.php',
           {
             monto: getValues('monto'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
             descripcion: getValues('descripcion'),
@@ -230,7 +230,7 @@ const Ingresos = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/deleteConcepto.php',
+          'https://proyectoswork.com/manejocaja/deleteConcepto.php',
           {
             id
           },
@@ -269,7 +269,7 @@ const Ingresos = () => {
   return new Promise((resolve, reject) => {
   axios
     .post(
-      'https://www.plataforma50.com/pruebas/gestionP/lis_mov_ingresos3.php',
+      'https://proyectoswork.com/manejocaja/lis_mov_ingresos3.php',
       {
         idUser: idUser,
         idTipo: tipo,
@@ -437,7 +437,7 @@ const editarMov = () => {
   return new Promise((resolve, reject) => {
     axios
       .post(
-        'https://www.plataforma50.com/pruebas/gestionP/editMovimiento.php',
+        'https://proyectoswork.com/manejocaja/editMovimiento.php',
         {
           idMov: idMov,
           montoMov: monto,
@@ -481,7 +481,7 @@ const eliminarMov=(id)=>{
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://www.plataforma50.com/pruebas/gestionP/deleteMovimiento.php',
+          'https://proyectoswork.com/manejocaja/deleteMovimiento.php',
           {
             id
           },

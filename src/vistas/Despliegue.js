@@ -29,6 +29,10 @@ const Despliegue = () => {
     const datosEmpresa = companyInfo.datos;
     const companyActive = companyInfo.pasar;
 
+    let fechaHoy = new Date();
+    let opciones = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+    let fechaFormateada = fechaHoy.toLocaleString('en-US', opciones);
+
     useFocusEffect( //Este se utiliza para que renderice las funciones de inmediato en las vistas que hacen parte de los bootom tabs
         React.useCallback(()=>{
             console.log(companyActive);
@@ -39,7 +43,7 @@ const Despliegue = () => {
       const listarMovimientos = async () => {
         setCargando(true);
         try {
-          const res = await axios.post('https://www.plataforma50.com/pruebas/gestionP/listaMovimientos.php', {
+          const res = await axios.post('https://proyectoswork.com/manejocaja/listaMovimientos.php', {
             idUser: idUser
           });
       
@@ -93,8 +97,32 @@ const Despliegue = () => {
             html: 
             `<html>
                 <body>
-                    <h1>Mi Tabla</h1>
-                    <p style="color: #000;">Esta es una nueva tabla</p>
+                    <div style="text-align: start;">
+                        <h3>Historial De Movimientos</h3>
+                        <p>Fecha: ${fechaFormateada}</p>
+                        <p>Empresa: ${datosEmpresa.nombreEmprendimiento}</p>
+                        <p>NIT: ${datosEmpresa.nit}</p>
+                        <p>Direccion: ${datosEmpresa.direccion}</p>
+                        <p>Nombre: ${userInfo.nombre}</p>
+                    </div>
+                    <br>
+                        <p>Este resumen detallado de los últimos 10 movimientos proporciona una visión completa
+                        de tus ingresos y gastos de negocio. Cada entrada en la tabla representa un movimiento
+                        individual, mostrando la fecha en que se realizó, una descripción del movimiento, 
+                        la categoría a la que pertenece (como ventas, inversiones, donaciones, gastos de 
+                        viaje, suministros de oficina, etc.), si es un ingreso o un gasto, y el monto total.
+                        <br>
+                        <br>
+                        Este registro preciso de los últimos 10 movimientos te ayudará a entender mejor las 
+                        finanzas de tu negocio, permitiéndote planificar de manera más efectiva para el 
+                        futuro. Además, mantener un registro detallado de estos movimientos puede ser 
+                        beneficioso para maximizar las deducciones fiscales y optimizar la gestión de ingresos.
+                        <br>
+                        <br>
+                        Recuerda, un buen seguimiento de los ingresos y gastos es esencial para el éxito de 
+                        cualquier emprendedor. Mantén este registro actualizado y utilízalo para tomar 
+                        decisiones informadas sobre tu negocio.</p>
+                        <br>
                     ${contenidoTabla}
                 </body>
             </html>`,
@@ -128,7 +156,7 @@ const Despliegue = () => {
             const contenidoTabla = generarContenidoTabla();
       
             const results = await RNHTMLtoPDF.convert({
-              html: `<html><body><h1>Mi Tabla</h1>${contenidoTabla}</body></html>`,
+              html: `<html><body><h1>Mi Despiegle</h1>${contenidoTabla}</body></html>`,
               fileName: 'tabla_pdf',
               directory: RNFS.DocumentDirectoryPath,
             });
@@ -272,7 +300,7 @@ const styles = StyleSheet.create({
     view:{
         alignItems:'center',
         justifyContent:'space-around',
-        height:250,
+        height:200,
         flexDirection:'row'
     }
 })
