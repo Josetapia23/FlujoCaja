@@ -59,7 +59,7 @@ const GestionGast = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://proyectoswork.com/manejocaja/getNombresIngresos.php',
+          'http://192.168.1.113/backFlujoCaja/getNombresIngresos.php',
           {
             id: idUser,
             tipo: tipo
@@ -96,7 +96,7 @@ const GestionGast = () => {
   //   return new Promise((resolve, reject) => {
   //     axios
   //       .post(
-  //         'https://proyectoswork.com/manejocaja/addCategoria.php',
+  //         'http://192.168.1.113/backFlujoCaja/addCategoria.php',
   //         {
   //           nombreIngreso: getValues('nombre'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
   //           idTipo: 2,
@@ -149,7 +149,7 @@ const GestionGast = () => {
   //   return new Promise((resolve, reject) => {
   //     axios
   //       .post(
-  //         'https://proyectoswork.com/manejocaja/addMovimiento.php',
+  //         'http://192.168.1.113/backFlujoCaja/addMovimiento.php',
   //         {
   //           monto: getValues('monto'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
   //           descripcion: getValues('descripcion'),
@@ -199,7 +199,7 @@ const GestionGast = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://proyectoswork.com/manejocaja/deleteConcepto.php',
+          'http://192.168.1.113/backFlujoCaja/deleteConcepto.php',
           {
             id
           },
@@ -238,7 +238,7 @@ const GestionGast = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://proyectoswork.com/manejocaja/editConcepto.php',
+          'http://192.168.1.113/backFlujoCaja/editConcepto.php',
           {
             newName: nombreCateg,
             idCategory: idConcepto,
@@ -288,7 +288,7 @@ const GestionGast = () => {
 //   return new Promise((resolve, reject) => {
 //   axios
 //     .post(
-//       'https://proyectoswork.com/manejocaja/lis_mov_ingresos3.php',
+//       'http://192.168.1.113/backFlujoCaja/lis_mov_ingresos3.php',
 //       {
 //         idUser: idUser,
 //         idTipo: tipo,

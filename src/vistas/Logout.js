@@ -85,7 +85,7 @@ const Logout = () => {
 
   const cargarDepartamentos = () => {
     axios
-      .post('https://proyectoswork.com/manejocaja/deparMunicipios.php', {
+      .post('http://192.168.1.113/backFlujoCaja/deparMunicipios.php', {
         idDepar: idDepartamento,
       })
       .then((res) => {

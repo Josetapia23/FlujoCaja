@@ -85,7 +85,7 @@ const Gastos = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://proyectoswork.com/manejocaja/getNombresIngresos.php',
+          'http://192.168.1.113/backFlujoCaja/getNombresIngresos.php',
           {
             id: idUser,
             tipo: tipo
@@ -122,7 +122,7 @@ const Gastos = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://proyectoswork.com/manejocaja/addCategoria.php',
+          'http://192.168.1.113/backFlujoCaja/addCategoria.php',
           {
             nombreIngreso: getValues('nombre'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
             idTipo: 2,
@@ -175,7 +175,7 @@ const Gastos = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://proyectoswork.com/manejocaja/addMovimiento.php',
+          'http://192.168.1.113/backFlujoCaja/addMovimiento.php',
           {
             monto: getValues('monto'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
             descripcion: getValues('descripcion'),
@@ -225,7 +225,7 @@ const Gastos = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://proyectoswork.com/manejocaja/deleteConcepto.php',
+          'http://192.168.1.113/backFlujoCaja/deleteConcepto.php',
           {
             id
           },
@@ -264,7 +264,7 @@ const Gastos = () => {
   return new Promise((resolve, reject) => {
   axios
     .post(
-      'https://proyectoswork.com/manejocaja/lis_mov_ingresos3.php',
+      'http://192.168.1.113/backFlujoCaja/lis_mov_ingresos3.php',
       {
         idUser: idUser,
         idTipo: tipo,
@@ -431,7 +431,7 @@ const editarMov = () => {
   return new Promise((resolve, reject) => {
     axios
       .post(
-        'https://proyectoswork.com/manejocaja/editMovimiento.php',
+        'http://192.168.1.113/backFlujoCaja/editMovimiento.php',
         {
           idMov: idMov,
           montoMov: monto,
@@ -475,7 +475,7 @@ const eliminarMov=(id)=>{
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'https://proyectoswork.com/manejocaja/deleteMovimiento.php',
+          'http://192.168.1.113/backFlujoCaja/deleteMovimiento.php',
           {
             id
           },
