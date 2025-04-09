@@ -29,7 +29,7 @@ export const AuthProvider = ({children}) => {
       setIsLoading(true);
       axios
         .post(
-          'http://192.168.1.113/backFlujoCaja/registro.php',
+          'http://192.168.1.116/backFlujoCaja/registro.php',
           {
             nombre,
             edad,
@@ -54,7 +54,7 @@ export const AuthProvider = ({children}) => {
             setTxtErrorEmail(userInfo.message); // Almacena el mensaje de error en el estado
             reject(userInfo.message); // Rechaza la promesa si hay un error en el registro
             // Aquí puedes mostrar el mensaje de error al usuario o realizar una acción adicional
-            //http://192.168.1.113/backFlujoCaja/login.php
+            //http://192.168.1.116/backFlujoCaja/login.php
           }
 
           if (email === userInfo.email) {
@@ -74,7 +74,7 @@ export const AuthProvider = ({children}) => {
   const updateUserInfo = async () => {
     try {
       const response = await axios.post(
-        'http://192.168.1.113/backFlujoCaja/getUserInfo.php',
+        'http://192.168.1.116/backFlujoCaja/getUserInfo.php',
         {
           idUser: userInfo.id,
         }
@@ -95,14 +95,14 @@ export const AuthProvider = ({children}) => {
     return new Promise((resolve, reject) => {
       setIsLoading(true);
       axios
-        .post('http://192.168.1.113/backFlujoCaja/login.php', {
+        .post('http://192.168.1.116/backFlujoCaja/login.php', {
           email,
           contrasena,
         })
         .then(res => {
           // const device = OneSignal.User.pushSubscription.getPushSubscriptionId();
           // AsyncStorage.setItem("tokenDispositivo", device);
-          //http://192.168.1.113/backFlujoCaja/login.php
+          //http://192.168.1.116/backFlujoCaja/login.php
           let userInfo = res.data;
           setIsLoading(false);
           setUserInfo(userInfo);
@@ -134,7 +134,7 @@ export const AuthProvider = ({children}) => {
     try {
       setIsLoading(true);
       const respuesta = await axios.post(
-        'http://192.168.1.113/backFlujoCaja/getDatosEmpresa.php',
+        'http://192.168.1.116/backFlujoCaja/getDatosEmpresa.php',
         { id: userInfo.id }
       );
       const emprendimientoData = respuesta.data;
@@ -166,7 +166,7 @@ export const AuthProvider = ({children}) => {
     try {
       setIsLoading(true);
       const respuesta = await axios.post(
-        'http://192.168.1.113/backFlujoCaja/montosPorHora.php',
+        'http://192.168.1.116/backFlujoCaja/montosPorHora.php',
         {
           idUser: userInfo.id,
           idEmprendimiento: companyInfo.datos.id,
@@ -220,7 +220,7 @@ export const AuthProvider = ({children}) => {
       setIsLoading(true);
       axios
         .post(
-          'http://192.168.1.113/backFlujoCaja/registEmpresa.php',
+          'http://192.168.1.116/backFlujoCaja/registEmpresa.php',
           {
             nombreEmpresa,
             nit,
@@ -241,7 +241,7 @@ export const AuthProvider = ({children}) => {
           AsyncStorage.setItem('companyInfo', JSON.stringify(companyData));
           if (companyData.result === 'success') {
             // Registro exitoso, muestra un mensaje o realiza una acción adicional
-            //http://192.168.1.113/backFlujoCaja/registro.php
+            //http://192.168.1.116/backFlujoCaja/registro.php
             setTokenEmpresa(1);
             setCompanyInfo({
               "pasar":"si",

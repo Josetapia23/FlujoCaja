@@ -62,7 +62,7 @@ const GestionIng = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://192.168.1.113/backFlujoCaja/getNombresIngresos.php',
+          'http://192.168.1.116/backFlujoCaja/getNombresIngresos.php',
           {
             id: idUser,
             tipo: tipo
@@ -103,7 +103,7 @@ const GestionIng = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://192.168.1.113/backFlujoCaja/editConcepto.php',
+          'http://192.168.1.116/backFlujoCaja/editConcepto.php',
           {
             newName: nombreCateg,
             idCategory: idConcepto,
@@ -153,7 +153,7 @@ const GestionIng = () => {
   //   return new Promise((resolve, reject) => {
   //     axios
   //       .post(
-  //         'http://192.168.1.113/backFlujoCaja/addMovimiento.php',
+  //         'http://192.168.1.116/backFlujoCaja/addMovimiento.php',
   //         {
   //           monto: getValues('monto'), //De esta forma obtengo el valor de lo que tenga el imput con name:'nombre'
   //           descripcion: getValues('descripcion'),
@@ -203,7 +203,7 @@ const GestionIng = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://192.168.1.113/backFlujoCaja/deleteConcepto.php',
+          'http://192.168.1.116/backFlujoCaja/deleteConcepto.php',
           {
             id
           },
@@ -242,7 +242,7 @@ const GestionIng = () => {
 //   return new Promise((resolve, reject) => {
 //   axios
 //     .post(
-//       'http://192.168.1.113/backFlujoCaja/lis_mov_ingresos3.php',
+//       'http://192.168.1.116/backFlujoCaja/lis_mov_ingresos3.php',
 //       {
 //         idUser: idUser,
 //         idTipo: tipo,
@@ -432,7 +432,7 @@ const activarModal2 = (id, nombre) => {
 //     return new Promise((resolve, reject) => {
 //       axios
 //         .post(
-//           'http://192.168.1.113/backFlujoCaja/deleteMovimiento.php',
+//           'http://192.168.1.116/backFlujoCaja/deleteMovimiento.php',
 //           {
 //             id
 //           },

@@ -34,7 +34,7 @@ const Company = () => {
     return new Promise((resolve, reject) => {
       axios
         .post(
-          'http://192.168.1.113/backFlujoCaja/EditEmpresa.php',
+          'http://192.168.1.116/backFlujoCaja/EditEmpresa.php',
           {
             idEmpresa: datosEmpresa.id,
             nombreEmpresa: nombreEmpresa,

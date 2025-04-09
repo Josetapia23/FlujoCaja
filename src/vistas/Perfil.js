@@ -33,7 +33,7 @@ const Perfil = () => {
         return new Promise((resolve, reject) => {
           axios
             .post(
-              'http://192.168.1.113/backFlujoCaja/EditUser.php',
+              'http://192.168.1.116/backFlujoCaja/EditUser.php',
               {
                 idUser: userInfo.id,
                 nombreUser: userName,

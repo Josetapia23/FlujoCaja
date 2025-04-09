@@ -43,7 +43,7 @@ const Despliegue = () => {
       const listarMovimientos = async () => {
         setCargando(true);
         try {
-          const res = await axios.post('http://192.168.1.113/backFlujoCaja/listaMovimientos.php', {
+          const res = await axios.post('http://192.168.1.116/backFlujoCaja/listaMovimientos.php', {
             idUser: idUser
           });
       

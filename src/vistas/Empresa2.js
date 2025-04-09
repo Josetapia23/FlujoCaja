@@ -75,7 +75,7 @@ const Empresa2 = () => {
 
   const cargarDepartamentos = () => {
     axios
-      .post('http://192.168.1.113/backFlujoCaja/deparMunicipios.php', {
+      .post('http://192.168.1.116/backFlujoCaja/deparMunicipios.php', {
         idDepar: idDepartamento,
       })
       .then((res) => {
